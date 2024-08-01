@@ -1,0 +1,6 @@
+format: jb-book
+root: index
+parts:
+    - caption: Template
+      chapters:
+          - file: template

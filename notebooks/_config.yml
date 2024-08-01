@@ -1,0 +1,9 @@
+title: Single-cell analysis repository
+author: Philipp Weiler
+execute:
+    execute_notebooks: "off"
+
+repository:
+    url: https://github.com/WeilerP/sc_analysis_template
+html:
+    use_repository_button: true
