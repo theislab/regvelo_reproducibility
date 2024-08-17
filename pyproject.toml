@@ -3,24 +3,33 @@ requires = ['setuptools', 'setuptools_scm']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = "fancypackage"
+name = "rgv_tools"
 version = "0.0.0"
-description = "Fancy Package"
+description = "RegVelo_tools"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Jane Doe"},
+    {name = "Weixu Wang"},
+    {name = "Philipp Weiler"}
 ]
 maintainers = [
-    {name = "Jane Doe", email = "jane.doe@usa.com"},
+    {name = "Weixu Wang", email = "weixu.wang@helmholtz-munich.de"},
 ]
 urls.Documentation = "https://todo.com"  # TODO
-urls.Source = "https://github.com/url/to/repo.git"
-urls.Home-page = "https://github.com/url/to/repo.git"
+urls.Source = "https://github.com/theislab/RegVelo_reproducibility.git"
+urls.Home-page = "https://github.com/theislab/RegVelo_reproducibility.git"
 dependencies = [
+    "jupyterlab",
     "anndata",
     "scanpy",
+    "cellrank",
+    "scvelo",
+    "velovi",
+    "unitvelo",
+    "dynamo-release",
+    "torch",
+    "arboreto",
 ]
 
 [project.optional-dependencies]
@@ -53,7 +62,7 @@ profile = "black"
 use_parentheses = true
 known_num = "networkx,numpy,pandas,scipy,sklearn,statmodels"
 known_plot = "matplotlib,mplscience,mpl_toolkits,seaborn"
-known_bio = "anndata,scanpy"
+known_bio = "anndata,scanpy,cellrank,scvelo,velovi,unitvelo,dynamo,torch,arboreto"
 sections = "FUTURE,STDLIB,THIRDPARTY,NUM,PLOT,BIO,FIRSTPARTY,LOCALFOLDER"
 no_lines_before = "LOCALFOLDER"
 balanced_wrapping = true
