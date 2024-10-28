@@ -5,35 +5,32 @@
 # ## Library imports
 
 # %%
-import torch
-from torch import nn
-import torchsde
-
-import regvelo
-from regvelo import REGVELOVI
-from typing import Literal
-from velovi import preprocess_data, VELOVI
-import numpy as np
-import pandas as pd
-import sklearn
-import anndata
-import anndata as ad
-
-import scvelo as scv
-import scipy
-import seaborn as sns
-import scanpy as sc
-from paths import FIG_DIR, DATA_DIR
-
-# %%
-from arboreto.algo import grnboost2, genie3
-from arboreto.utils import load_tf_names
+import os
 
 # %%
 import celloracle as co
+import torchsde
+from paths import DATA_DIR, FIG_DIR
+from regvelo import REGVELOVI
+
+import numpy as np
+import pandas as pd
+import scipy
+import sklearn
+
+import seaborn as sns
+
+import anndata
+import anndata as ad
+import scanpy as sc
+import scvelo as scv
 
 # %%
-import os
+import torch
+
+# %%
+from arboreto.algo import grnboost2
+from velovi import preprocess_data, VELOVI
 
 # %% [markdown]
 # ## General settings
@@ -104,11 +101,10 @@ class velocity_encoder(torch.nn.Module):
 
     # Drift
     def f(self, t, y):
-        """
-        s: spliced readout of the genes
+        """s: spliced readout of the genes
         K: maximum contribution of regulator j to target gene i,
         n: the Hill coefficient that introduces non-linearity to the model
-        h: the regulator concentration that produces half-maximal regulatory effect (half response)
+        h: the regulator concentration that produces half-maximal regulatory effect (half response).
         """
         y = y.T
         u = y[0 : int(y.shape[0] / 2), 0].ravel()

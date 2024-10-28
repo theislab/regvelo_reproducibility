@@ -4,34 +4,30 @@
 # %% [markdown]
 # ## Library imports
 
-# %%
-import tensorflow
+import math
 import os
-import scanpy as sc
+import random
+from typing import Literal
+
+# %%
+from paths import DATA_DIR, FIG_DIR
+from regvelo import REGVELOVI
+
 import numpy as np
 import pandas as pd
-import scvelo as scv
-import sklearn
-from velovi import preprocess_data, VELOVI
-
-import torch
-from scipy.stats import pearsonr, spearmanr, ttest_ind
-from matplotlib import pyplot as plt
-import seaborn as sns
-import mplscience
-from scipy.stats import ttest_rel
 import scipy
+import sklearn
+from scipy.stats import ttest_ind
 
-from typing import Literal
+import mplscience
+import seaborn as sns
+from matplotlib import pyplot as plt
+
 import anndata
-from sklearn.mixture import GaussianMixture
-from scvelo import logging as logg
-
-import math
-import random
-
-from regvelo import REGVELOVI
-from paths import FIG_DIR, DATA_DIR
+import scanpy as sc
+import scvelo as scv
+import torch
+from velovi import preprocess_data, VELOVI
 
 # %% [markdown]
 # ## General settings
@@ -366,9 +362,9 @@ def sanity_check(
 
 # %%
 def GRN_Jacobian(reg_vae, Ms):
-    net = reg_vae.module.v_encoder.fc1.weight.detach()
-    bias = reg_vae.module.v_encoder.fc1.bias.detach()
-    max_rate = reg_vae.module.v_encoder.alpha_unconstr_max.detach()
+    reg_vae.module.v_encoder.fc1.weight.detach()
+    reg_vae.module.v_encoder.fc1.bias.detach()
+    reg_vae.module.v_encoder.alpha_unconstr_max.detach()
     ## calculate the jacobian matrix respect to each cell
     Jaco_m = []
     for i in range(Ms.shape[0]):

@@ -4,20 +4,23 @@
 # %% [markdown]
 # ## Library imports
 
+import contextlib
+import io
+import os
+import sys
+
 # %%
 # Import needed packages
 import cell2fate as c2f
+from paths import DATA_DIR, FIG_DIR
+
+
+
 import scanpy as sc
-import matplotlib.pyplot as plt
-import os
-import numpy as np
+import scvelo as scv
 import torch
-import anndata as ad, scvelo as scv
-import contextlib, io
-import sys
 
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
@@ -58,7 +61,6 @@ def trainc2fmodel(adatafile, input_path, output_path):
     sc.tl.umap(adata)
     sc.tl.leiden(adata)
     # scv.pp.moments(adata, n_pcs=30, n_neighbors=30)
-    clusters_to_remove = []
     adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
     adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
     adata = c2f.utils.get_training_data(
@@ -71,7 +73,7 @@ def trainc2fmodel(adatafile, input_path, output_path):
     # Compute total velocity
     n_modules = c2f.utils.get_max_modules(adata)
     c2f.Cell2fate_DynamicalModel.setup_anndata(adata, spliced_label="spliced", unspliced_label="unspliced")
-    data = mod.export_posterior(adata)
+    mod.export_posterior(adata)
     adata = mod.compute_module_summary_statistics(adata)
     with contextlib.redirect_stdout(io.StringIO()):
         adata.layers["Spliced Mean"] = mod.samples["post_sample_means"]["mu_expression"][..., 1]

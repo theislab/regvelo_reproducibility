@@ -5,19 +5,21 @@
 # ## Library imports
 
 # %%
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import scvelo as scv
-from scipy.stats import ttest_ind, wilcoxon
-import mplscience
+import os
 
-from paths import FIG_DIR, DATA_DIR
+from paths import DATA_DIR, FIG_DIR
 
 # %%
-import os
+import numpy as np
+import pandas as pd
+from scipy.stats import ttest_ind
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import mplscience
+import seaborn as sns
+
+import scvelo as scv
 
 # %% [markdown]
 # ## General setting

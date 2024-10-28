@@ -4,23 +4,25 @@
 # %% [markdown]
 # ## Library imports
 
+import os
+import sys
+
+import TFvelo as TFv
+from paths import DATA_DIR, FIG_DIR
+
+import numpy as np
+
 # %%
-import pandas as pd
+import scipy
+
+
 import anndata as ad
 import scanpy as sc
-import os, sys
-import numpy as np
-import scvelo as scv
-import matplotlib
-import scipy
-import pickle
 
 # attach your local TFvelo repo directory
 sys.path.append("/home/itg/z.xue/VeloBenchmark/TFvelo")
-import TFvelo as TFv
 
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings

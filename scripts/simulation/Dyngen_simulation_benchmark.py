@@ -4,63 +4,45 @@
 # %% [markdown]
 # ## Import library
 
-# %%
-import tensorflow
-import scanpy as sc
-import numpy as np
-import pandas as pd
-import scvelo as scv
-
-from scipy.spatial.distance import cdist
-import pandas as pd
-from arboreto.utils import load_tf_names
-from arboreto.algo import grnboost2
-from distributed import Client, LocalCluster
-import sklearn
-import scipy.stats as stats
-from typing import Literal
-import anndata
-import scipy
-
-## define function
-import torch
-
-from regvelo import REGVELOVI
-from typing import Literal
-from velovi import preprocess_data, VELOVI
-import anndata
-
-from scipy.spatial.distance import cdist
-import pandas as pd
-from arboreto.utils import load_tf_names
-from arboreto.algo import grnboost2
-from distributed import Client, LocalCluster
-import sklearn
-import scipy.stats as stats
-import seaborn as sns
-
-from sklearn.mixture import GaussianMixture
-from scvelo import logging as logg
 import math
+import os
 import random
-import torch.nn.functional as F
-
-from matplotlib import pyplot as plt
-import seaborn as sns
-import mplscience
-from scipy.stats import ttest_rel
-from scipy.stats import pearsonr, spearmanr, ttest_ind, wilcoxon
 
 # %%
 import sys
-import os
-import unitvelo as utv
-
-sys.path.append(os.getcwd() + "/RegVelo_datasets/VeloVAE")
-import velovae as vv
+from typing import Literal
 
 # %%
-from paths import FIG_DIR, DATA_DIR
+import velovae as vv
+from distributed import Client, LocalCluster
+
+# %%
+from paths import DATA_DIR, FIG_DIR
+from regvelo import REGVELOVI
+
+import numpy as np
+import pandas as pd
+import scipy
+import sklearn
+from scipy.spatial.distance import cdist
+from scipy.stats import wilcoxon
+
+import mplscience
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+import anndata
+import scanpy as sc
+import scvelo as scv
+
+## define function
+import torch
+import unitvelo as utv
+from arboreto.algo import grnboost2
+from velovi import preprocess_data, VELOVI
+
+sys.path.append(os.getcwd() + "/RegVelo_datasets/VeloVAE")
+
 
 # %% [markdown]
 # ## General setting
@@ -328,9 +310,9 @@ def add_regvelo_outputs_to_adata(adata_raw, vae):
 
 
 def GRN_Jacobian(reg_vae, Ms):
-    net = reg_vae.module.v_encoder.fc1.weight.detach()
-    bias = reg_vae.module.v_encoder.fc1.bias.detach()
-    max_rate = reg_vae.module.v_encoder.alpha_unconstr_max.detach()
+    reg_vae.module.v_encoder.fc1.weight.detach()
+    reg_vae.module.v_encoder.fc1.bias.detach()
+    reg_vae.module.v_encoder.alpha_unconstr_max.detach()
     ## calculate the jacobian matrix respect to each cell
     Jaco_m = []
     for i in range(Ms.shape[0]):
@@ -416,11 +398,11 @@ def add_significance2(ax, bottom: int, top: int, significance: str, level: int =
 # ## Import dataset
 
 # %%
-time_corr_all = list()
-gene_time_corr_all = list()
-gene_velo_corr_all = list()
-AUC_GRN_result = list()
-AUC_GRN_result_all = list()
+time_corr_all = []
+gene_time_corr_all = []
+gene_velo_corr_all = []
+AUC_GRN_result = []
+AUC_GRN_result_all = []
 
 # Define the path of the folder you want to check
 folder_path = os.getcwd() + "/RegVelo_datasets/dyngen_simulation/"
