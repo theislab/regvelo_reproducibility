@@ -34,8 +34,6 @@ import unitvelo as utv
 sys.path.append("../..")
 
 
-
-
 # %% [markdown]
 # ## General settings
 
@@ -71,6 +69,7 @@ if SAVE_DATASETS:
 
 # %%
 def add_significance(ax, left: int, right: int, significance: str, level: int = 0, **kwargs):
+    """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
     bracket_height = kwargs.pop("bracket_height", 0.02)
     text_height = kwargs.pop("text_height", 0.01)
@@ -95,6 +94,7 @@ def add_significance(ax, left: int, right: int, significance: str, level: int = 
 
 # %%
 def get_significance(pvalue):
+    """TODO."""
     if pvalue < 0.001:
         return "***"
     elif pvalue < 0.01:
@@ -107,6 +107,7 @@ def get_significance(pvalue):
 
 # %%
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
     velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
@@ -126,6 +127,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
 
 
 def GRN_Jacobian(reg_vae, Ms):
+    """TODO."""
     reg_vae.module.v_encoder.fc1.weight.detach()
     reg_vae.module.v_encoder.fc1.bias.detach()
     reg_vae.module.v_encoder.alpha_unconstr_max.detach()

@@ -35,8 +35,6 @@ from velovi import VELOVI
 sys.path.append("../..")
 
 
-
-
 # %% [markdown]
 # ## General settings
 

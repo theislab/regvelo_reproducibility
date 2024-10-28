@@ -5,25 +5,23 @@
 # ## Library imports
 
 # %%
-import os
 import sys
-import numpy as np
-import pandas as pd
-from velovi import preprocess_data, VELOVI
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-from matplotlib.colors import to_hex
-import scanpy as sc
-import scvelo as scv
 
-sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
+from paths import DATA_DIR
 
 # %%
-from regvelovi import REGVELOVI
-from typing import Literal
-import anndata
+import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt
+import mplscience
+
+import scanpy as sc
+import scvelo as scv
+from velovi import preprocess_data
+
+sys.path.append("../..")
+
 
 # %% [markdown]
 # ## Data loading

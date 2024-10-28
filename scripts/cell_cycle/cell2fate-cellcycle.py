@@ -2,26 +2,21 @@
 # ## Run cell2fate
 
 # %%
-import cell2fate as c2f
-import scanpy as sc
-import numpy as np
-import matplotlib.pyplot as plt
-import os
 import sys
 
 # %%
-import torch
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-import scvelo as scv
-import os
-import anndata as ad
+import cell2fate as c2f
+from paths import DATA_DIR
+
 from sklearn.preprocessing import MinMaxScaler
 
+import seaborn as sns
+
+import scanpy as sc
+import scvelo as scv
+
+# %%
 scaler = MinMaxScaler()
-import anndata as ad
 
 ## General setting
 sns.reset_defaults()
@@ -29,7 +24,6 @@ sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
 
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 
 # %% [markdown]

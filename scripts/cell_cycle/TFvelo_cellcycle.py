@@ -1,29 +1,31 @@
 # %% [markdown]
 # ## Run TFvelo
 
-# %%
-import pandas as pd
-import anndata as ad
-import scanpy as sc
+import sys
+
 import TFvelo as TFv
+from paths import DATA_DIR
 
 import numpy as np
 
-import scvelo as scv
+# %%
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
+# %%
 import matplotlib
 
-# matplotlib.use('AGG')
-import os, sys
-import scipy
+import scanpy as sc
+
+matplotlib.use("AGG")
+
 
 np.set_printoptions(suppress=True)
-from sklearn.preprocessing import MinMaxScaler
 
 scaler = MinMaxScaler()
 
 # from _calculation import get_gams
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## Load the dataset and preprocessing according to input requirements of TFvelo

@@ -3,35 +3,26 @@
 
 # %%
 import os
-
-os.environ["TF_USE_LEGACY_KERAS"] = "True"
-import anndata
-import numpy as np
-import scvelo as scv
-import scanpy as sc
-import sys
-import torch
 import os.path
+import sys
 
-sys.path.insert(1, "../")
 import velovae as vv
-from scipy.sparse import csr_matrix
-import pandas as pd
-import matplotlib.pyplot as plt
+from paths import DATA_DIR
 
-
-# %%
-from torch import nn
 import numpy as np
-import torch
-import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
 import seaborn as sns
 
-import os
-from typing import Literal
-import anndata as ad
 import scanpy as sc
-from sklearn.preprocessing import MinMaxScaler
+import scvelo as scv
+import torch
+
+# %%
+os.environ["TF_USE_LEGACY_KERAS"] = "True"
+
+sys.path.insert(1, "../")
+
 
 scaler = MinMaxScaler()
 
@@ -39,16 +30,15 @@ scaler = MinMaxScaler()
 # ## General setting
 
 # %%
-model_path = f"checkpoints/"
-figure_path = f"figures/"
-data_path = f"data/"
+model_path = "checkpoints/"
+figure_path = "figures/"
+data_path = "data/"
 
 sns.reset_defaults()
 sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
 
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## load dataset

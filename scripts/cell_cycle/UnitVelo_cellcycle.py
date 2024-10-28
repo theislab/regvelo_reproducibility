@@ -1,29 +1,21 @@
 # %% [markdown]
 # ## UnitVelo Import libraries
-#
+
+# %%
+import os
+import sys
+
+from paths import DATA_DIR
+
+import scanpy as sc
+import scvelo as scv
 
 # %%
 import unitvelo as utv
-import anndata
-import scvelo as scv
-import numpy as np
-import os
-import argparse
-import time
-import anndata
-import numpy as np
-import scvelo as scv
-import scanpy as sc
-import sys
-import torch
-import os
-import anndata as ad
-import pandas as pd
 
 os.environ["TF_USE_LEGACY_KERAS"] = "True"
 
 sys.path.append("../..")
-from paths import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## Load cell cycle dataset, run UnitVelo and save the output in adata

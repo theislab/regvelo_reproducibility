@@ -40,9 +40,6 @@ from velovi import preprocess_data, VELOVI
 sys.path.append("../..")
 
 
-
-
-
 # %% [markdown]
 # ## General settings
 
@@ -78,6 +75,7 @@ if SAVE_DATASETS:
 
 # %%
 def fit_scvelo(adata):
+    """TODO."""
     scv.tl.recover_dynamics(adata, fit_scaling=False, var_names=adata.var_names, n_jobs=8)
     adata.var["fit_scaling"] = 1.0
     scv.tl.velocity(adata, mode="dynamical", min_likelihood=-np.inf, min_r2=None)
@@ -85,6 +83,7 @@ def fit_scvelo(adata):
 
 # %%
 def fit_velovi(bdata):
+    """TODO."""
     VELOVI.setup_anndata(bdata, spliced_layer="Ms", unspliced_layer="Mu")
 
     vae = VELOVI(bdata)
@@ -126,6 +125,7 @@ def fit_velovi(bdata):
 
 # %%
 def fit_velovi_data(data, vae):
+    """TODO."""
     bdata = data.copy()
     df = vae.history["elbo_train"].iloc[20:].reset_index().rename(columns={"elbo_train": "elbo"})
     df["set"] = "train"
@@ -163,6 +163,7 @@ def fit_velovi_data(data, vae):
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
+    """TODO."""
     adata.layers[vkey]
     scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
     scv.tl.velocity_confidence(adata, vkey=vkey)
@@ -175,6 +176,7 @@ def compute_confidence(adata, vkey="velocity"):
 
 # %%
 def add_significance2(ax, bottom: int, top: int, significance: str, level: int = 0, **kwargs):
+    """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
     bracket_height = kwargs.pop("bracket_height", 0.02)
     text_height = kwargs.pop("text_height", 0.01)
@@ -200,6 +202,7 @@ def add_significance2(ax, bottom: int, top: int, significance: str, level: int =
 
 # %%
 def get_significance(pvalue):
+    """TODO."""
     if pvalue < 0.001:
         return "***"
     elif pvalue < 0.01:
@@ -212,6 +215,7 @@ def get_significance(pvalue):
 
 # %%
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
     velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
@@ -231,6 +235,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
 
 
 def GRN_Jacobian(reg_vae, Ms):
+    """TODO."""
     reg_vae.module.v_encoder.fc1.weight.detach()
     reg_vae.module.v_encoder.fc1.bias.detach()
     reg_vae.module.v_encoder.alpha_unconstr_max.detach()
