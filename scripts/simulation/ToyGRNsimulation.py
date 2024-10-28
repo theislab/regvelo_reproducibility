@@ -56,6 +56,7 @@ if SAVE_DATASETS:
 
 # %%
 def sign_concordance(GRN, ref_GRN):
+    """TODO."""
     sign_GRN = np.sign(GRN)[GRN != 0]
     sign_ref_GRN = np.sign(ref_GRN)[GRN != 0]
     score = sum(sign_GRN == sign_ref_GRN)
@@ -63,6 +64,7 @@ def sign_concordance(GRN, ref_GRN):
 
 
 def calculate_power_matrix(A, B):
+    """TODO."""
     if len(A) != len(B) or len(A[0]) != len(B[0]):
         raise ValueError("Both matrices must have the same dimensions")
 
@@ -78,7 +80,18 @@ def calculate_power_matrix(A, B):
     return np.array(C)
 
 
+def draw_poisson(n, random_seed):
+    """TODO."""
+    from random import seed, uniform  # draw from poisson
+
+    seed(random_seed)
+    t = np.cumsum([-0.1 * np.log(uniform(0, 1)) for _ in range(n - 1)])
+    return np.insert(t, 0, 0)  # prepend t0=0
+
+
 class velocity_encoder(torch.nn.Module):
+    """TODO."""
+
     noise_type = "scalar"
     sde_type = "ito"
 
@@ -91,6 +104,7 @@ class velocity_encoder(torch.nn.Module):
         beta,
         gamma,
     ):
+        """TODO."""
         super().__init__()
         self.K = K
         self.n = n
@@ -101,11 +115,7 @@ class velocity_encoder(torch.nn.Module):
 
     # Drift
     def f(self, t, y):
-        """s: spliced readout of the genes
-        K: maximum contribution of regulator j to target gene i,
-        n: the Hill coefficient that introduces non-linearity to the model
-        h: the regulator concentration that produces half-maximal regulatory effect (half response).
-        """
+        """TODO."""
         y = y.T
         u = y[0 : int(y.shape[0] / 2), 0].ravel()
         s = y[int(y.shape[0] / 2) :, 0].ravel()
@@ -147,11 +157,13 @@ class velocity_encoder(torch.nn.Module):
 
     # Diffusion
     def g(self, t, y):
+        """TODO."""
         return 0.1 * torch.randn([1, y.shape[1]]).view(1, y.shape[1], 1)
 
 
 # %%
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
     velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
@@ -177,6 +189,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
 
 
 def add_velovi_outputs_to_adata(adata, vae):
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=30)
     velocities = vae.get_velocity(n_samples=30)
 
@@ -259,13 +272,6 @@ for sim_idx in range(100):
     )
 
     random_seed = sim_idx
-
-    def draw_poisson(n, random_seed):
-        from random import seed, uniform  # draw from poisson
-
-        seed(random_seed)
-        t = np.cumsum([-0.1 * np.log(uniform(0, 1)) for _ in range(n - 1)])
-        return np.insert(t, 0, 0)  # prepend t0=0
 
     t = torch.tensor(draw_poisson(1500), random_seed=sim_idx)
 

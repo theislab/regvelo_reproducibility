@@ -50,6 +50,7 @@ mpl.rcParams.update({"font.size": 14})
 
 # %%
 def get_significance(pvalue):
+    """TODO."""
     if pvalue < 0.001:
         return "***"
     elif pvalue < 0.01:
@@ -61,6 +62,7 @@ def get_significance(pvalue):
 
 
 def add_significance2(ax, bottom: int, top: int, significance: str, level: int = 0, **kwargs):
+    """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
     bracket_height = kwargs.pop("bracket_height", 0.02)
     text_height = kwargs.pop("text_height", 0.01)

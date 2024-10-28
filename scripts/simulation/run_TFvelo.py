@@ -4,6 +4,7 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import os
 import sys
 
@@ -14,7 +15,6 @@ import numpy as np
 
 # %%
 import scipy
-
 
 import anndata as ad
 import scanpy as sc
@@ -49,6 +49,7 @@ input_files = os.listdir(input_path)
 
 # %%
 def run_TFvelo(input_path, output_path, input_file):
+    """TODO."""
     adata = ad.read(os.path.join(input_path, input_file))
     print("Start processing " + os.path.join(input_path, input_file))
     adata.layers["spliced"] = adata.layers["counts_spliced"].copy()

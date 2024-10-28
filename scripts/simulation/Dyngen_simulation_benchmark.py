@@ -4,6 +4,7 @@
 # %% [markdown]
 # ## Import library
 
+# %%
 import math
 import os
 import random
@@ -72,6 +73,7 @@ if SAVE_DATASETS:
 
 # %%
 def csgn_groundtruth(adata):
+    """TODO."""
     csgn_array = adata.obsm["regulatory_network_sc"].toarray()
     csgn_tensor = torch.zeros([len(adata.uns["regulators"]), len(adata.uns["targets"]), csgn_array.shape[0]])
 
@@ -91,6 +93,7 @@ def csgn_groundtruth(adata):
 
 
 def csgn_benchmark(GRN, csgn):
+    """TODO."""
     csgn[csgn != 0] = 1
     if len(GRN.shape) > 2:
         print("Input is cell type specific GRN...")
@@ -120,6 +123,7 @@ def csgn_benchmark(GRN, csgn):
 
 
 def csgn_benchmark2(GRN, W, csgn):
+    """TODO."""
     csgn[csgn != 0] = 1
     if len(GRN.shape) > 2:
         print("Input is cell type specific GRN...")
@@ -161,6 +165,7 @@ def sanity_check(
     adata,
     network_mode: Literal["GENIE3", "full_ODE"] = "GENIE3",
 ) -> anndata.AnnData:
+    """TODO."""
     if network_mode == "GENIE3":
         reg_index = [i in adata.var.index.values for i in adata.uns["regulators"]]
         tar_index = [i in adata.var.index.values for i in adata.uns["targets"]]
@@ -243,11 +248,7 @@ def sanity_check(
 
 
 def add_velovi_outputs_to_adata(adata, vae):
-    # This code is adapted on an implementation by Adam Gayoso, Philipp Weilier and Justing Hong from their repository:
-    # https://github.com/YosefLab/velovi_reproducibility
-    # Original function: fit_velovi() in https://github.com/YosefLab/velovi_reproducibility/blob/main/notebooks/estimation_comparison/model_fit.ipynb
-    # License: BSD-3-Clause license
-
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=25)
     velocities = vae.get_velocity(n_samples=25, velo_statistic="mean")
     t = latent_time
@@ -265,6 +266,7 @@ def add_velovi_outputs_to_adata(adata, vae):
 
 
 def add_noise_graph(W, noise_level=0.2):
+    """TODO."""
     W_c = 1 - W
     edge = torch.nonzero(W)
     ## drop edge
@@ -285,11 +287,7 @@ def add_noise_graph(W, noise_level=0.2):
 
 
 def add_regvelo_outputs_to_adata(adata_raw, vae):
-    # This code is adapted on an implementation by Adam Gayoso, Philipp Weilier and Justing Hong from their repository:
-    # https://github.com/YosefLab/velovi_reproducibility
-    # Original function: fit_velovi() in https://github.com/YosefLab/velovi_reproducibility/blob/main/notebooks/estimation_comparison/model_fit.ipynb
-    # License: BSD-3-Clause license
-
+    """TODO."""
     latent_time = vae.get_latent_time(n_samples=25)
     velocities = vae.get_velocity(n_samples=25)
 
@@ -310,6 +308,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae):
 
 
 def GRN_Jacobian(reg_vae, Ms):
+    """TODO."""
     reg_vae.module.v_encoder.fc1.weight.detach()
     reg_vae.module.v_encoder.fc1.bias.detach()
     reg_vae.module.v_encoder.alpha_unconstr_max.detach()
@@ -334,6 +333,7 @@ def GRN_Jacobian(reg_vae, Ms):
 
 
 def calculate_sign_ratio(vector1, vector2):
+    """TODO."""
     if len(vector1) != len(vector2):
         raise ValueError("Both vectors must have the same length.")
     same_sign_count = 0
@@ -350,11 +350,7 @@ def calculate_sign_ratio(vector1, vector2):
 
 # %%
 def get_significance(pvalue):
-    # This code is adapted on an implementation by Adam Gayoso, Philipp Weilier and Justing Hong from their repository:
-    # https://github.com/YosefLab/velovi_reproducibility
-    # Original function: get_significance() in https://github.com/YosefLab/velovi_reproducibility/blob/main/notebooks/estimation_comparison/fucci.ipynb
-    # License: BSD-3-Clause license
-
+    """TODO."""
     if pvalue < 0.001:
         return "***"
     elif pvalue < 0.01:
@@ -366,11 +362,7 @@ def get_significance(pvalue):
 
 
 def add_significance2(ax, bottom: int, top: int, significance: str, level: int = 0, **kwargs):
-    # This code is adapted on an implementation by Adam Gayoso, Philipp Weilier and Justing Hong from their repository:
-    # https://github.com/YosefLab/velovi_reproducibility
-    # Original function: add_significance() in https://github.com/YosefLab/velovi_reproducibility/blob/main/notebooks/estimation_comparison/fucci.ipynb
-    # License: BSD-3-Clause license
-
+    """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
     bracket_height = kwargs.pop("bracket_height", 0.02)
     text_height = kwargs.pop("text_height", 0.01)

@@ -4,6 +4,7 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import contextlib
 import io
 import os
@@ -13,8 +14,6 @@ import sys
 # Import needed packages
 import cell2fate as c2f
 from paths import DATA_DIR, FIG_DIR
-
-
 
 import scanpy as sc
 import scvelo as scv
@@ -47,6 +46,7 @@ input_files = os.listdir(input_path)
 # %%
 # Function for train model and get output
 def trainc2fmodel(adatafile, input_path, output_path):
+    """TODO."""
     adata = sc.read_h5ad(os.path.join(input_path, adatafile))
     adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
     adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
