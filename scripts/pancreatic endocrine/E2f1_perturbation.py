@@ -4,9 +4,9 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import os
 
-# %%
 from paths import DATA_DIR, FIG_DIR
 from regvelo import REGVELOVI
 
@@ -14,7 +14,6 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-# %%
 # %%
 import scipy
 

@@ -4,6 +4,7 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import os
 import random
 import sys
@@ -11,9 +12,8 @@ import warnings
 from collections import Counter
 from typing import Literal, Optional, Sequence, Union
 
-import regvelo
-
 # %%
+import regvelo
 from paths import DATA_DIR, FIG_DIR
 from regvelo import REGVELOVI
 from tqdm import tqdm
