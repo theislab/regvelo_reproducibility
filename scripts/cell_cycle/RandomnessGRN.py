@@ -32,7 +32,7 @@ sys.path.append("../..")
 from paths import DATA_DIR, FIG_DIR
 
 # %%
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 from typing import Literal
 from velovi import preprocess_data, VELOVI
 import anndata
@@ -117,8 +117,8 @@ def get_significance(pvalue):
 
 # %%
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
-    latent_time = vae.get_latent_time(n_samples=30, time_statistic="mean", batch_size=adata_raw.shape[0])
-    velocities = vae.get_velocity(n_samples=30, velo_statistic="mean", batch_size=adata_raw.shape[0])
+    latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
+    velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
     t = latent_time
     scaling = 20 / t.max(0)

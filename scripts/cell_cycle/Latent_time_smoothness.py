@@ -35,7 +35,7 @@ sys.path.append("../..")
 from paths import DATA_DIR, FIG_DIR
 
 # %%
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 from typing import Literal
 from velovi import preprocess_data, VELOVI
 import anndata

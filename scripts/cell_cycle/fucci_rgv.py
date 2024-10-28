@@ -37,7 +37,7 @@ from arboreto.algo import grnboost2
 from distributed import Client, LocalCluster
 
 # %%
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 from typing import Literal
 from velovi import preprocess_data, VELOVI
 import anndata
