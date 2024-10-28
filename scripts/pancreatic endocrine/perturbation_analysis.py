@@ -11,7 +11,7 @@ import statsmodels.api as sm
 
 # %%
 from paths import DATA_DIR, FIG_DIR
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 
 import numpy as np
 import pandas as pd
@@ -98,8 +98,8 @@ def _in_silico_block_simulation(model, adata, gene, regulation_block=True, targe
 
 def add_regvelo_outputs_to_adata(adata_raw, vae, n_samples=30):
     """TODO."""
-    latent_time = vae.get_latent_time(n_samples=n_samples, batch_size=adata_raw.shape[0])
-    velocities = vae.get_velocity(n_samples=n_samples, batch_size=adata_raw.shape[0])
+    latent_time = vae.get_latent_time(n_samples=n_samples, time_statistic="mean", batch_size=adata_raw.shape[0])
+    velocities = vae.get_velocity(n_samples=n_samples, velo_statistic="mean", batch_size=adata_raw.shape[0])
 
     t = latent_time
     scaling = 20 / t.max(0)
@@ -153,6 +153,7 @@ def add_outputs_to_adata(adata, vae):
 # %%
 def threshold_top_k(tensor, k):
     """TODO."""
+    # Flatten the tensor
     flattened_tensor = tensor.flatten()
 
     # Get the indices of the top k positive and negative values

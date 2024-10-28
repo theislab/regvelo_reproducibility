@@ -8,7 +8,7 @@ import os
 
 # %%
 from paths import DATA_DIR, FIG_DIR
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 
 import networkx as nx
 import numpy as np
@@ -88,8 +88,8 @@ def _in_silico_block_simulation(model, adata, gene, regulation_block=True, targe
         ] = effects
     if target_block:
         perturb_GRN[
-            [i == gene for i in adata_target.var.index],
-            (perturb_GRN[[i == gene for i in adata_target.var.index], :].abs() > 1e-3).cpu().numpy().reshape(-1),
+            [i == gene for i in adata.var.index],
+            (perturb_GRN[[i == gene for i in adata.var.index], :].abs() > 1e-3).cpu().numpy().reshape(-1),
         ] = effects
 
     reg_vae_perturb.module.v_encoder.fc1.weight.data = perturb_GRN
@@ -100,8 +100,8 @@ def _in_silico_block_simulation(model, adata, gene, regulation_block=True, targe
 
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
     """TODO."""
-    latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
-    velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
+    latent_time = vae.get_latent_time(n_samples=30, time_statistic="mean", batch_size=adata_raw.shape[0])
+    velocities = vae.get_velocity(n_samples=30, velo_statistic="mean", batch_size=adata_raw.shape[0])
 
     t = latent_time
     scaling = 20 / t.max(0)

@@ -166,6 +166,20 @@ def get_fit_scvelo(adata):
     return scvelo_fit_s, scvelo_fit_u
 
 
+def compute_mse(ms, mu, fit_s, fit_u):
+    """TODO."""
+    mse_s = np.mean((fit_s - ms) ** 2, axis=0)
+    mse_u = np.mean((fit_u - mu) ** 2, axis=0)
+    # scvelo_mse_s = np.mean((scvelo_fit_s - ms) ** 2, axis=0)
+    # scvelo_mse_u = np.mean((scvelo_fit_u - mu) ** 2, axis=0)
+
+    mse_df = pd.DataFrame()
+
+    mse_df["MSE"] = np.concatenate([mse_s, mse_u]).ravel()
+    mse_df["Feature"] = ["Spliced"] * len(mse_s) + ["Unspliced"] * len(mse_u)
+    return mse_df
+
+
 def rgv_expression_fit(
     self,
     adata: Optional[AnnData] = None,
@@ -433,20 +447,6 @@ def TSI_score(points, cluster_key, terminal_states, kernel, all_dict, max_states
     return tsi_score
 
 
-def compute_mse(ms, mu, fit_s, fit_u):
-    """TODO."""
-    mse_s = np.mean((fit_s - ms) ** 2, axis=0)
-    mse_u = np.mean((fit_u - mu) ** 2, axis=0)
-    # scvelo_mse_s = np.mean((scvelo_fit_s - ms) ** 2, axis=0)
-    # scvelo_mse_u = np.mean((scvelo_fit_u - mu) ** 2, axis=0)
-
-    mse_df = pd.DataFrame()
-
-    mse_df["MSE"] = np.concatenate([mse_s, mse_u]).ravel()
-    mse_df["Feature"] = ["Spliced"] * len(mse_s) + ["Unspliced"] * len(mse_u)
-    return mse_df
-
-
 # %%
 ## calculate cosine similarity
 def normalize(vector):
@@ -466,6 +466,7 @@ def cosine_similarity(vec1, vec2):
 
 def cosine_dist(X_mean, Y_mean):
     """TODO."""
+    # Compute KL divergence for each sample
     kl_div = []
     for i in range(X_mean.shape[1]):
         mu_x = X_mean[:, i]
