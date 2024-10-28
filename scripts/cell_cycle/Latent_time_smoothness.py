@@ -6,48 +6,36 @@
 
 # %%
 import os
-import sys
-from tqdm import tqdm
 import random
+import sys
 
-import tensorflow
-import numpy as np
-import pandas as pd
-import torch
-from scipy.stats import pearsonr, spearmanr, ttest_ind
-from sklearn.metrics import accuracy_score
-from velovi import preprocess_data, VELOVI
-
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-from matplotlib.colors import to_hex
-from scipy.stats import wilcoxon
-from sklearn.metrics.pairwise import cosine_similarity
-
-import scanpy as sc
-import scvelo as scv
 import scvi
-from scvelo.plotting.simulation import compute_dynamics
-
-# from _calculation import get_gams
-sys.path.append("../..")
 from paths import DATA_DIR, FIG_DIR
 
 # %%
 from regvelo import REGVELOVI
-from typing import Literal
-from velovi import preprocess_data, VELOVI
-import anndata
+
+import numpy as np
+import pandas as pd
 
 # %%
-import scipy
-import sklearn
-import unitvelo as utv
-import re
+from scipy.stats import wilcoxon
+from sklearn.metrics.pairwise import cosine_similarity
 
-import torch.nn.functional as F
-from scipy.spatial.distance import cdist
+import matplotlib.pyplot as plt
+import mplscience
+import seaborn as sns
+
+import scanpy as sc
+import scvelo as scv
+import torch
+from velovi import VELOVI
+
+# from _calculation import get_gams
+sys.path.append("../..")
+
+
+
 
 # %% [markdown]
 # ## General settings
@@ -84,10 +72,10 @@ if SAVE_DATASETS:
 
 # %%
 def add_significance(ax, left: int, right: int, significance: str, level: int = 0, **kwargs):
-    """
-    Add a significance bracket and label to a plot.
+    """Add a significance bracket and label to a plot.
 
-    Parameters:
+    Parameters
+    ----------
     ax : matplotlib.axes.Axes
         The axes to add the significance to.
     left : int
@@ -101,7 +89,6 @@ def add_significance(ax, left: int, right: int, significance: str, level: int = 
     **kwargs :
         Additional plotting arguments for customization.
     """
-
     bracket_level = kwargs.pop("bracket_level", 1)
     bracket_height = kwargs.pop("bracket_height", 0.02)
     text_height = kwargs.pop("text_height", 0.01)
@@ -126,18 +113,18 @@ def add_significance(ax, left: int, right: int, significance: str, level: int = 
 
 # %%
 def get_significance(pvalue):
-    """
-    Get significance level based on p-value.
+    """Get significance level based on p-value.
 
-    Parameters:
+    Parameters
+    ----------
     pvalue : float
         The p-value to evaluate.
 
-    Returns:
+    Returns
+    -------
     str
         Significance level as a string: '***', '**', '*', or 'n.s.'.
     """
-
     if pvalue < 0.001:
         return "***"
     elif pvalue < 0.01:
@@ -150,10 +137,10 @@ def get_significance(pvalue):
 
 # %%
 def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
-    """
-    Add latent time and velocity outputs from a RegVelo model to an AnnData object.
+    """Add latent time and velocity outputs from a RegVelo model to an AnnData object.
 
-    Parameters:
+    Parameters
+    ----------
     adata_raw : anndata.AnnData
         The raw AnnData object containing gene expression data.
     vae : object
@@ -161,11 +148,11 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
     filter : bool, optional
         Whether to apply filtering (default is False).
 
-    Returns:
+    Returns
+    -------
     anndata.AnnData
         The modified AnnData object with added velocity and latent time data.
     """
-
     latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
     velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
@@ -186,21 +173,21 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
-    """
-    Compute the confidence of velocity estimates in an AnnData object.
+    """Compute the confidence of velocity estimates in an AnnData object.
 
-    Parameters:
+    Parameters
+    ----------
     adata : anndata.AnnData
         The AnnData object containing velocity data in its layers.
     vkey : str, optional
         The key in the layers to access velocity data (default is "velocity").
 
-    Returns:
+    Returns
+    -------
     pandas.DataFrame
         A DataFrame containing the latent time consistency values.
     """
-
-    velo = adata.layers[vkey]
+    adata.layers[vkey]
     scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
     scv.tl.velocity_confidence(adata, vkey=vkey)
 
@@ -212,18 +199,18 @@ def compute_confidence(adata, vkey="velocity"):
 
 # %%
 def fit_velovi(bdata):
-    """
-    Fit the VELOVI model to the provided AnnData object and plot training history.
+    """Fit the VELOVI model to the provided AnnData object and plot training history.
 
-    Parameters:
+    Parameters
+    ----------
     bdata : anndata.AnnData
         The AnnData object containing spliced and unspliced layers for model training.
 
-    Returns:
+    Returns
+    -------
     VELOVI
         The trained VELOVI model instance.
     """
-
     VELOVI.setup_anndata(bdata, spliced_layer="Ms", unspliced_layer="Mu")
 
     vae = VELOVI(bdata)

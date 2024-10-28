@@ -7,44 +7,34 @@
 # %%
 import os
 import sys
-from tqdm import tqdm
 
-import tensorflow
-import numpy as np
-import pandas as pd
-import torch
-from scipy.stats import pearsonr, spearmanr, ttest_ind
-from sklearn.metrics import accuracy_score
-from velovi import preprocess_data, VELOVI
-
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-from matplotlib.colors import to_hex
-
-import scanpy as sc
-import scvelo as scv
 import scvi
-from scvelo.plotting.simulation import compute_dynamics
-
-# from _calculation import get_gams
-sys.path.append("../..")
 from paths import DATA_DIR, FIG_DIR
 
 # %%
 from regvelo import REGVELOVI
-from typing import Literal
-from velovi import preprocess_data, VELOVI
-import anndata
+
+import numpy as np
+import pandas as pd
 
 # %%
 import scipy
-import sklearn
-import unitvelo as utv
-import re
+from scipy.stats import ttest_ind
 
-import torch.nn.functional as F
-from scipy.spatial.distance import cdist
+import matplotlib.pyplot as plt
+import mplscience
+import seaborn as sns
+
+import scanpy as sc
+import scvelo as scv
+import torch
+import unitvelo as utv
+
+# from _calculation import get_gams
+sys.path.append("../..")
+
+
+
 
 # %% [markdown]
 # ## General settings
@@ -136,9 +126,9 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
 
 
 def GRN_Jacobian(reg_vae, Ms):
-    net = reg_vae.module.v_encoder.fc1.weight.detach()
-    bias = reg_vae.module.v_encoder.fc1.bias.detach()
-    max_rate = reg_vae.module.v_encoder.alpha_unconstr_max.detach()
+    reg_vae.module.v_encoder.fc1.weight.detach()
+    reg_vae.module.v_encoder.fc1.bias.detach()
+    reg_vae.module.v_encoder.alpha_unconstr_max.detach()
     ## calculate the jacobian matrix respect to each cell
     Jaco_m = []
     for i in range(Ms.shape[0]):
@@ -185,7 +175,7 @@ W = torch.tensor(np.array(W)).int()
 # %%
 score_v0 = []
 score_t0 = []
-for nrun in range(30):
+for _nrun in range(30):
     reg_vae_r1 = REGVELOVI(adata, W=W.T * 0, soft_constraint=False)
     reg_vae_r1.module.v_encoder.fc1.weight.data = reg_vae.module.v_encoder.fc1.weight.data.detach().cpu().clone()
     reg_vae_r1.module.v_encoder.fc1.bias.data = reg_vae.module.v_encoder.fc1.bias.data.detach().cpu().clone()
@@ -217,7 +207,7 @@ for nrun in range(30):
 score_v = []
 dfs = []
 score_t = []
-for nrun in range(30):
+for _nrun in range(30):
     original_tensor = reg_vae.module.v_encoder.fc1.weight.data.detach().cpu().clone()
     original_shape = original_tensor.shape
     # Flatten the tensor
@@ -262,7 +252,7 @@ for nrun in range(30):
 # %%
 score_v2 = []
 score_t2 = []
-for nrun in range(30):
+for _nrun in range(30):
     reg_vae_r1 = REGVELOVI(adata, W=W.T * 0, soft_constraint=False)
     reg_vae_r1.module.v_encoder.fc1.weight.data = reg_vae.module.v_encoder.fc1.weight.data.detach().cpu().clone() * 0
     reg_vae_r1.module.v_encoder.fc1.bias.data = reg_vae.module.v_encoder.fc1.bias.data.detach().cpu().clone()
