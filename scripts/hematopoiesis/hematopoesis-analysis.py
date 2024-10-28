@@ -4,6 +4,7 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import os
 import sys
 from collections import Counter
@@ -11,11 +12,11 @@ from itertools import chain, product
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Union
 
-import regvelovi
+import regvelo
 
 # %%
 from paths import DATA_DIR, FIG_DIR
-from regvelovi import REGVELOVI
+from regvelo import REGVELOVI
 
 import numpy as np
 import pandas as pd
@@ -81,8 +82,8 @@ def get_var_ranks(
 
 def add_regvelo_outputs_to_adata(adata_raw, vae):
     """TODO."""
-    latent_time = vae.get_latent_time(n_samples=30, time_statistic="mean", batch_size=adata_raw.shape[0])
-    velocities = vae.get_velocity(n_samples=30, velo_statistic="mean", batch_size=adata_raw.shape[0])
+    latent_time = vae.get_latent_time(n_samples=30, batch_size=adata_raw.shape[0])
+    velocities = vae.get_velocity(n_samples=30, batch_size=adata_raw.shape[0])
 
     t = latent_time
     scaling = 20 / t.max(0)
@@ -500,7 +501,7 @@ reg_bdata = reg_bdata[
 ].copy()
 
 # %%
-reg_bdata = regvelovi.preprocess_data(reg_bdata)
+reg_bdata = regvelo.preprocess_data(reg_bdata)
 
 # %%
 gene_name = reg_bdata.var.index.tolist()
