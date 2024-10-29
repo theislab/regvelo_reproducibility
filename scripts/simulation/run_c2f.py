@@ -7,19 +7,13 @@
 # %%
 import contextlib
 import io
-import os
-import sys
 
-# %%
-# Import needed packages
 import cell2fate as c2f
-from paths import DATA_DIR, FIG_DIR
-
 import scanpy as sc
 import scvelo as scv
 import torch
 
-sys.path.append("../..")
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
@@ -27,17 +21,11 @@ sys.path.append("../..")
 # %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation", exist_ok=True)
+    (FIG_DIR / "simulation").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation", exist_ok=True)
-
-# %%
-input_path = DATA_DIR
-output_path = DATA_DIR / "simulation"
-input_files = os.listdir(input_path)
-
+    (DATA_DIR / "simulation").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Function definitions
@@ -45,27 +33,8 @@ input_files = os.listdir(input_path)
 
 # %%
 # Function for train model and get output
-def trainc2fmodel(adatafile, input_path, output_path):
+def train_c2f_model(adata):
     """TODO."""
-    adata = sc.read_h5ad(os.path.join(input_path, adatafile))
-    adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
-    adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
-    adata.X = adata.X.A
-    adata.layers["raw_spliced"] = adata.layers["spliced"]
-    adata.layers["raw_unspliced"] = adata.layers["unspliced"]
-    adata.obs["u_lib_size_raw"] = adata.layers["raw_unspliced"].sum(-1)
-    adata.obs["s_lib_size_raw"] = adata.layers["raw_spliced"].sum(-1)
-    scv.pp.filter_and_normalize(adata, min_shared_counts=10, n_top_genes=90)
-    sc.tl.pca(adata)
-    sc.pp.neighbors(adata)
-    sc.tl.umap(adata)
-    sc.tl.leiden(adata)
-    # scv.pp.moments(adata, n_pcs=30, n_neighbors=30)
-    adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
-    adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
-    adata = c2f.utils.get_training_data(
-        adata, cells_per_cluster=100, cluster_column="leiden", remove_clusters=[], min_shared_counts=10, n_var_genes=90
-    )
     c2f.Cell2fate_DynamicalModel.setup_anndata(adata, spliced_label="spliced", unspliced_label="unspliced")
     n_modules = c2f.utils.get_max_modules(adata)
     mod = c2f.Cell2fate_DynamicalModel(adata, n_modules=n_modules)
@@ -88,14 +57,55 @@ def trainc2fmodel(adatafile, input_path, output_path):
 
 
 # %% [markdown]
-# ## Data loading and processing of one instance
+# ## Data loading
 
 # %%
-adata = trainc2fmodel(input_files[0], input_path, output_path)
-
-# %%
-# obs: Time (hours) and layers: Velocity are your results
+adata = sc.read_h5ad(DATA_DIR / "TODO.h5ad")
 adata
+
+# %% [markdown]
+# ## Data preprocessing
+
+# %%
+adata.X = adata.X.A
+
+adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
+adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
+adata.layers["raw_spliced"] = adata.layers["spliced"]
+adata.layers["raw_unspliced"] = adata.layers["unspliced"]
+
+adata.obs["u_lib_size_raw"] = adata.layers["raw_unspliced"].sum(-1)
+adata.obs["s_lib_size_raw"] = adata.layers["raw_spliced"].sum(-1)
+
+adata
+
+# %%
+scv.pp.filter_and_normalize(adata, min_shared_counts=10, n_top_genes=90)
+sc.tl.pca(adata)
+sc.pp.neighbors(adata)
+adata
+
+# %%
+sc.tl.umap(adata)
+sc.tl.leiden(adata)
+adata
+
+# %%
+# scv.pp.moments(adata, n_pcs=30, n_neighbors=30)
+adata.layers["spliced"] = adata.layers["counts_spliced"].A.copy()
+adata.layers["unspliced"] = adata.layers["counts_unspliced"].A.copy()
+adata = c2f.utils.get_training_data(
+    adata, cells_per_cluster=100, cluster_column="leiden", remove_clusters=[], min_shared_counts=10, n_var_genes=90
+)
+
+# %% [markdown]
+# ## Data analysis
+
+# %%
+adata = train_c2f_model(adata)
+
+# %% [markdown]
+# ## Data saving
 
 # %%
 # save the results
