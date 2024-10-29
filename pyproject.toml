@@ -7,7 +7,7 @@ name = "rgv_tools"
 version = "0.0.0"
 description = "RegVelo_tools"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {file = "LICENSE"}
 authors = [
     {name = "Weixu Wang"},
@@ -62,7 +62,7 @@ profile = "black"
 use_parentheses = true
 known_num = "networkx,numpy,pandas,scipy,sklearn,statmodels"
 known_plot = "matplotlib,mplscience,mpl_toolkits,seaborn"
-known_bio = "anndata,scanpy,cellrank,scvelo,velovi,unitvelo,dynamo,torch,arboreto"
+known_bio = "anndata,scanpy,cellrank,scvelo,velovi,unitvelo,dynamo,torch,arboreto,regvelo"
 sections = "FUTURE,STDLIB,THIRDPARTY,NUM,PLOT,BIO,FIRSTPARTY,LOCALFOLDER"
 no_lines_before = "LOCALFOLDER"
 balanced_wrapping = true
