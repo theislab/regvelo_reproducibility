@@ -6,13 +6,8 @@
 
 # %%
 import math
-import os
 import random
 from typing import Literal
-
-# %%
-from paths import DATA_DIR, FIG_DIR
-from regvelo import REGVELOVI
 
 import numpy as np
 import pandas as pd
@@ -28,7 +23,10 @@ import anndata
 import scanpy as sc
 import scvelo as scv
 import torch
+from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
+
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
@@ -36,22 +34,25 @@ from velovi import preprocess_data, VELOVI
 # %%
 plt.rcParams["svg.fonttype"] = "none"
 
+# %%
 sns.reset_defaults()
 sns.reset_orig()
+
+# %%
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation" / "prior_benchmark", exist_ok=True)
+    (FIG_DIR / "simulation" / "prior_benchmark").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation" / "prior_benchmark", exist_ok=True)
+    (DATA_DIR / "simulation" / "prior_benchmark").mkdir(parents=True, exist_ok=True)
 
 
 # %% [markdown]
-# ## Function defination
+# ## Function definitions
 
 
 # %%
@@ -67,6 +68,7 @@ def get_significance(pvalue):
         return "n.s."
 
 
+# %%
 def add_significance(ax, left: int, right: int, significance: str, level: int = 0, **kwargs):
     """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
@@ -91,6 +93,7 @@ def add_significance(ax, left: int, right: int, significance: str, level: int = 
     )
 
 
+# %%
 def csgn_groundtruth(adata):
     """TODO."""
     csgn_array = adata.obsm["regulatory_network_sc"].toarray()
@@ -111,6 +114,7 @@ def csgn_groundtruth(adata):
     return csgn_tensor
 
 
+# %%
 def csgn_benchmark(GRN, csgn):
     """TODO."""
     csgn[csgn != 0] = 1
@@ -141,6 +145,7 @@ def csgn_benchmark(GRN, csgn):
     return score
 
 
+# %%
 def csgn_benchmark2(GRN, W, csgn):
     """TODO."""
     csgn[csgn != 0] = 1
@@ -180,6 +185,7 @@ def csgn_benchmark2(GRN, W, csgn):
     return score
 
 
+# %%
 def add_noise_graph(W, noise_level=0.2):
     """TODO."""
     W_c = 1 - W
@@ -226,6 +232,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
     return adata
 
 
+# %%
 def add_outputs_to_adata(adata_raw, vae):
     """TODO."""
     adata = adata_raw.copy()
@@ -250,6 +257,7 @@ def add_outputs_to_adata(adata_raw, vae):
     return adata
 
 
+# %%
 def sanity_check(
     adata,
     network_mode: Literal["GENIE3", "full_ODE"] = "GENIE3",
@@ -371,11 +379,14 @@ def GRN_Jacobian(reg_vae, Ms):
 
 
 # %% [markdown]
-# ## Datasets loading
+# ## Data loading
 
 # %%
-adata = sc.read_h5ad("RegVelo_datasets/dyngen_prior/dataset_dyngen_sim.h5ad")
+adata = sc.read_h5ad(DATA_DIR / "dyngen" / "dataset_dyngen_sim.h5ad")
 adata_raw = adata.copy()
+
+# %% [markdown]
+# ## Data preprocessing
 
 # %%
 csgn = csgn_groundtruth(adata)
@@ -407,6 +418,15 @@ adata.uns["Mu"] = adata.layers["Mu"]
 adata_raw.var["highly_variable"] = [adata_raw.var.index[i] in adata.var.index for i in range(adata_raw.shape[1])]
 adata_raw = adata_raw[:, adata_raw.var["highly_variable"]]
 
+# %% [markdown]
+# ## Velocity inference
+
+# %% [markdown]
+# ### Prior GRN
+
+# %% [markdown]
+# #### scVelo
+
 # %%
 ## Run scVelo model (dynamical)
 scv.tl.recover_dynamics(adata, fit_scaling=False, var_names=adata.var_names, n_jobs=1)
@@ -415,7 +435,7 @@ adata.layers["fit_t_dynamical"] = adata.layers["fit_t"].copy()
 scv.tl.velocity(adata, mode="dynamical", min_likelihood=-np.inf, min_r2=None)
 
 # %% [markdown]
-# ## Run veloVI as the baseline
+# #### veloVI
 
 # %%
 VELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
@@ -576,7 +596,7 @@ for i in range(adata.shape[1]):
     corr_velovi_time6.append(scipy.stats.pearsonr(adata_scvelo6.layers["fit_t_velovi"][:, i], adata.obs["sim_time"])[0])
 
 # %% [markdown]
-# ## Add random edges in prior graph
+# ## Perturbed GRN
 
 # %%
 W = adata.uns["skeleton"].copy()
@@ -664,7 +684,13 @@ for i in range(len(W5)):
         reg_vae.save(path)
 
 # %% [markdown]
-# ## Calculate GRN identifiability
+# ## Result analysis
+
+# %% [markdown]
+# ### Correlation analysis
+
+# %% [markdown]
+# ### GRN identifiability
 
 # %%
 cor_all = []
@@ -681,7 +707,7 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all.append(cor.tolist())
 
 # %% [markdown]
-# ## Latent time identifiability
+# ### Latent time
 
 # %%
 cor_all_time = []
@@ -699,7 +725,7 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all_time.append(cor.tolist())
 
 # %% [markdown]
-# ## Velocity identifiability
+# ### Velocity
 
 # %%
 cor_all_velo = []
@@ -717,7 +743,10 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all_velo.append(cor.tolist())
 
 # %% [markdown]
-# ## Calculate GRN prediction accuracy
+# ### Prediction accuracy
+
+# %% [markdown]
+# #### GRN
 
 # %%
 auc_all = []
@@ -749,7 +778,7 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all_prior.append(cor)
 
 # %% [markdown]
-# ## Velocity prediction benchmark
+# #### Velocity
 
 # %%
 cor_all_velo_gt = []
@@ -773,7 +802,7 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all_velo_gt.append(cor)
 
 # %% [markdown]
-# ## Latent time prediction benchmark
+# #### Latent time
 
 # %%
 cor_all_time_gt = []
@@ -793,7 +822,7 @@ for j in ["0_2", "0_4", "0_6", "0_8", "1"]:
     cor_all_time_gt.append(cor)
 
 # %% [markdown]
-# ## Visualize results
+# ## Visualization
 
 # %%
 auc_rgv = auc_all[0] + auc_all[1] + auc_all[2] + auc_all[3] + auc_all[4]
@@ -1069,5 +1098,3 @@ with mplscience.style_context():
             transparent=True,
             bbox_inches="tight",
         )
-
-# %%
