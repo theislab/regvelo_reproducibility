@@ -2,24 +2,17 @@
 # # Perform benchmark on dyngen simulated datasets
 
 # %% [markdown]
-# ## Import library
+# ## Library imports
 
 # %%
 import math
 import os
 import random
-
-# %%
 import sys
 from typing import Literal
 
-# %%
 import velovae as vv
 from distributed import Client, LocalCluster
-
-# %%
-from paths import DATA_DIR, FIG_DIR
-from regvelo import REGVELOVI
 
 import numpy as np
 import pandas as pd
@@ -40,13 +33,16 @@ import scvelo as scv
 import torch
 import unitvelo as utv
 from arboreto.algo import grnboost2
+from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
 
-sys.path.append(os.getcwd() + "/RegVelo_datasets/VeloVAE")
-
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
-# ## General setting
+# ## General settings
+
+# %%
+sys.path.append(os.getcwd() + "/RegVelo_datasets/VeloVAE")
 
 # %%
 sns.reset_defaults()
@@ -59,16 +55,16 @@ plt.rcParams["svg.fonttype"] = "none"
 # %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation" / "dyngen_results", exist_ok=True)
+    (FIG_DIR / "simulation" / "dyngen_results").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation" / "dyngen_results", exist_ok=True)
-    os.makedirs(DATA_DIR / "simulation" / "dyngen_results" / "copy_file", exist_ok=True)
+    (DATA_DIR / "simulation" / "dyngen_results").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / "simulation" / "dyngen_results" / "copy_file").mkdir(parents=True, exist_ok=True)
 
 
 # %% [markdown]
-# ## Define function
+# ## Function definitions
 
 
 # %%
@@ -92,6 +88,7 @@ def csgn_groundtruth(adata):
     return csgn_tensor
 
 
+# %%
 def csgn_benchmark(GRN, csgn):
     """TODO."""
     csgn[csgn != 0] = 1
@@ -122,6 +119,7 @@ def csgn_benchmark(GRN, csgn):
     return score
 
 
+# %%
 def csgn_benchmark2(GRN, W, csgn):
     """TODO."""
     csgn[csgn != 0] = 1
@@ -161,6 +159,7 @@ def csgn_benchmark2(GRN, W, csgn):
     return score
 
 
+# %%
 def sanity_check(
     adata,
     network_mode: Literal["GENIE3", "full_ODE"] = "GENIE3",
@@ -247,6 +246,7 @@ def sanity_check(
     return adata
 
 
+# %%
 def add_velovi_outputs_to_adata(adata, vae):
     """TODO."""
     latent_time = vae.get_latent_time(n_samples=25)
@@ -265,6 +265,7 @@ def add_velovi_outputs_to_adata(adata, vae):
     adata.var["fit_scaling"] = 1.0
 
 
+# %%
 def add_noise_graph(W, noise_level=0.2):
     """TODO."""
     W_c = 1 - W
@@ -286,6 +287,7 @@ def add_noise_graph(W, noise_level=0.2):
     return binary_tensor
 
 
+# %%
 def add_regvelo_outputs_to_adata(adata_raw, vae):
     """TODO."""
     latent_time = vae.get_latent_time(n_samples=25)
@@ -307,6 +309,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae):
     return adata
 
 
+# %%
 def GRN_Jacobian(reg_vae, Ms):
     """TODO."""
     reg_vae.module.v_encoder.fc1.weight.detach()
@@ -332,7 +335,8 @@ def GRN_Jacobian(reg_vae, Ms):
     return Jaco_m
 
 
-def calculate_sign_ratio(vector1, vector2):
+# %%
+def get_sign_ratio(vector1, vector2):
     """TODO."""
     if len(vector1) != len(vector2):
         raise ValueError("Both vectors must have the same length.")
@@ -361,6 +365,7 @@ def get_significance(pvalue):
         return "n.s."
 
 
+# %%
 def add_significance2(ax, bottom: int, top: int, significance: str, level: int = 0, **kwargs):
     """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
@@ -387,26 +392,22 @@ def add_significance2(ax, bottom: int, top: int, significance: str, level: int =
 
 
 # %% [markdown]
-# ## Import dataset
+# ## Data loading
 
 # %%
-time_corr_all = []
-gene_time_corr_all = []
-gene_velo_corr_all = []
-AUC_GRN_result = []
-AUC_GRN_result_all = []
-
-# Define the path of the folder you want to check
-folder_path = os.getcwd() + "/RegVelo_datasets/dyngen_simulation/"
-# Get a list of all files in the folder
-files = os.listdir(folder_path)
-files = [file for file in files if file.endswith(".h5ad")]
+adatas = [file for file in (DATA_DIR / "dyngen").iterdir() if file.endswith(".h5ad")]
 
 # %% [markdown]
 # ## Running Benchmark
 
 # %%
-for adata_name in files:
+gene_time_corr_all = []
+gene_velo_corr_all = []
+AUC_GRN_result = []
+AUC_GRN_result_all = []
+
+# %%
+for adata_name in adatas:
     address = os.getcwd() + "/RegVelo_datasets/dyngen_simulation/" + adata_name
 
     adata = sc.read_h5ad(address)
@@ -508,7 +509,7 @@ for adata_name in files:
         corr.append(
             scipy.stats.pearsonr(np.array(velocity_gt.todense()[:, i]).ravel(), np.array(velocity[:, i]).ravel())
         )
-        # corr.append(calculate_sign_ratio(np.sign(np.array(velocity_gt.todense()[:,i]).ravel()), np.sign(np.array(velocity[:,i]).ravel())))
+        # corr.append(get_sign_ratio(np.sign(np.array(velocity_gt.todense()[:,i]).ravel()), np.sign(np.array(velocity[:,i]).ravel())))
 
     corr = np.array(corr)[:, 0]
     velovi_corr = corr
@@ -541,7 +542,7 @@ for adata_name in files:
         corr.append(
             scipy.stats.pearsonr(np.array(velocity_gt.todense()[:, i]).ravel(), np.array(velocity[:, i]).ravel())
         )
-        # corr.append(calculate_sign_ratio(np.sign(np.array(velocity_gt.todense()[:,i]).ravel()), np.sign(np.array(velocity[:,i]).ravel())))
+        # corr.append(get_sign_ratio(np.sign(np.array(velocity_gt.todense()[:,i]).ravel()), np.sign(np.array(velocity[:,i]).ravel())))
 
     corr = np.array(corr)[:, 0]
     regvelo_corr = corr
@@ -768,10 +769,10 @@ for adata_name in files:
     print("Done " + adata_name + "!")
 
 # %% [markdown]
-# ## Plot benchmark results
+# ## Benchmark analysis
 
 # %% [markdown]
-# ### plot velocity benchmark
+# ### Velocity benchmark
 
 # %%
 TFvelo = pd.read_csv("RegVelo_datasets/dyngen_benchmark/TFvelo_res.csv", index_col=0)
@@ -866,7 +867,7 @@ with mplscience.style_context():
     plt.show()
 
 # %% [markdown]
-# ### plot latent time benchmark
+# ### Latent time benchmark
 
 # %%
 df = pd.read_csv(DATA_DIR / "simulation" / "dyngen_results" / "gene_time_corr_all_final_res.csv", index_col=0)
@@ -925,9 +926,6 @@ df_spliceJAC = pd.read_csv("RegVelo_datasets/dyngen_benchmark/AUROC_res_all_spli
 
 # %%
 df = pd.read_csv(DATA_DIR / "simulation" / "dyngen_results" / "AUROC_res_all_full_final_res.csv", index_col=0)
-
-# %%
-df.shape
 
 # %%
 performance = (
@@ -994,5 +992,3 @@ with mplscience.style_context():
             bbox_inches="tight",
         )
     plt.show()
-
-# %%
