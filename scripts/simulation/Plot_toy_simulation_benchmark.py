@@ -5,11 +5,6 @@
 # ## Library imports
 
 # %%
-import os
-
-from paths import DATA_DIR, FIG_DIR
-
-# %%
 import numpy as np
 import pandas as pd
 from scipy.stats import ttest_ind
@@ -21,31 +16,37 @@ import seaborn as sns
 
 import scvelo as scv
 
+from rgv_tools import DATA_DIR, FIG_DIR
+
 # %% [markdown]
-# ## General setting
+# ## General settings
+
+# %%
+plt.rcParams["svg.fonttype"] = "none"
+plt.rcParams["svg.fonttype"] = "none"
 
 # %%
 sns.reset_defaults()
 sns.reset_orig()
+
+# %%
+mpl.rcParams.update({"font.size": 14})
+
+
+# %%
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
-plt.rcParams["svg.fonttype"] = "none"
 
 # %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation" / "toy_GRN", exist_ok=True)
+    (FIG_DIR / "simulation" / "toy_GRN").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation" / "toy_GRN", exist_ok=True)
-
-# %%
-plt.rcParams["svg.fonttype"] = "none"
-mpl.rcParams.update({"font.size": 14})
-
+    (DATA_DIR / "simulation" / "toy_GRN").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
-# ## Function definations
+# ## Function definitions
 
 
 # %%
@@ -61,6 +62,7 @@ def get_significance(pvalue):
         return "n.s."
 
 
+# %%
 def add_significance2(ax, bottom: int, top: int, significance: str, level: int = 0, **kwargs):
     """TODO."""
     bracket_level = kwargs.pop("bracket_level", 1)
@@ -87,17 +89,14 @@ def add_significance2(ax, bottom: int, top: int, significance: str, level: int =
 
 
 # %% [markdown]
-# ## Import datasets
+# ## Data loading
 
 # %% [markdown]
 # ### latent time correlation benchmark
 
 # %%
-address = DATA_DIR / "simulation" / "toy_GRN" / "latent_time_benchmark_result.csv"
-dat = pd.read_csv(address, index_col=0)
-
-# %%
-dat
+latent_time_df = pd.read_csv(DATA_DIR / "simulation" / "toy_GRN" / "latent_time_benchmark_result.csv", index_col=0)
+latent_time_df.head()
 
 # %%
 with mplscience.style_context():
@@ -107,11 +106,11 @@ with mplscience.style_context():
     colors = sns.color_palette("colorblind", n_colors=3)
     colors = colors + ["lightgrey"] * 1
 
-    sns.violinplot(y="Model", x="Time", data=dat, palette=colors, ax=ax)
+    sns.violinplot(y="Model", x="Time", data=latent_time_df, palette=colors, ax=ax)
 
     ttest_res = ttest_ind(
-        dat.loc[dat.loc[:, "Model"] == "RegVelo", "Time"],
-        dat.loc[dat.loc[:, "Model"] == "scVelo", "Time"],
+        latent_time_df.loc[latent_time_df.loc[:, "Model"] == "RegVelo", "Time"],
+        latent_time_df.loc[latent_time_df.loc[:, "Model"] == "scVelo", "Time"],
         equal_var=False,
         alternative="greater",
     )
@@ -139,11 +138,8 @@ with mplscience.style_context():
 # ### GRN benchmark
 
 # %%
-address = DATA_DIR / "simulation" / "toy_GRN" / "GRN_benchmark_result.csv"
-dat = pd.read_csv(address, index_col=0)
-
-# %%
-dat
+grn_df = pd.read_csv(DATA_DIR / "simulation" / "toy_GRN" / "GRN_benchmark_result.csv", index_col=0)
+grn_df.head()
 
 # %%
 with mplscience.style_context():
@@ -153,11 +149,11 @@ with mplscience.style_context():
     mpl.rcParams.update({"font.size": 14})
 
     # Then, create the grouped boxplot
-    sns.violinplot(y="Model", x="GRN", data=dat, color="lightpink", ax=ax)
+    sns.violinplot(y="Model", x="GRN", data=grn_df, color="lightpink", ax=ax)
 
     ttest_res = ttest_ind(
-        dat.loc[dat.loc[:, "Model"] == "RegVelo", "GRN"],
-        dat.loc[dat.loc[:, "Model"] == "Correlation", "GRN"],
+        grn_df.loc[grn_df.loc[:, "Model"] == "RegVelo", "GRN"],
+        grn_df.loc[grn_df.loc[:, "Model"] == "Correlation", "GRN"],
         equal_var=False,
         alternative="greater",
     )
@@ -188,16 +184,16 @@ with mplscience.style_context():
 # ### Velocity correlation
 
 # %%
-address = DATA_DIR / "simulation" / "toy_GRN" / "velocity_benchmark.csv"
-dat = pd.read_csv(address, index_col=0)
+velo_df = pd.read_csv(DATA_DIR / "simulation" / "toy_GRN" / "velocity_benchmark.csv", index_col=0)
+velo_df.head()
 
 # %%
-velo_rgv = dat["RegVelo"]
-velo_velovi = dat["veloVI"]
-velo_scv = dat["scVelo"]
+velo_rgv = velo_df["RegVelo"]
+velo_velovi = velo_df["veloVI"]
+velo_scv = velo_df["scVelo"]
 
 # %%
-dat = pd.DataFrame(
+velo_df = pd.DataFrame(
     {
         "Velo_cor": np.array(velo_rgv).tolist() + np.array(velo_velovi).tolist() + np.array(velo_scv).tolist(),
         "Model": ["RegVelo"] * 100 + ["veloVI"] * 100 + ["scVelo"] * 100,
@@ -209,7 +205,7 @@ with mplscience.style_context():
     sns.set_style(style="whitegrid")
     fig, ax = plt.subplots(figsize=(3, 2))
     # pal = {"RegVelo":"#f3e1eb","veloVI":"#b5bbe3","scVelo":"#0fcfc0"}
-    sns.violinplot(data=dat, y="Model", x="Velo_cor", ax=ax)
+    sns.violinplot(data=velo_df, y="Model", x="Velo_cor", ax=ax)
     plt.ylabel("")
     plt.xlabel("Pearson correlation")
 
@@ -254,9 +250,3 @@ with mplscience.style_context():
             transparent=True,
             bbox_inches="tight",
         )
-
-# %%
-
-# %%
-
-# %%
