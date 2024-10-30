@@ -8,10 +8,11 @@
 import contextlib
 import io
 
+import torch
+
 import cell2fate as c2f
 import scanpy as sc
 import scvelo as scv
-import torch
 
 from rgv_tools import DATA_DIR, FIG_DIR
 

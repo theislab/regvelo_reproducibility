@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import scipy
 import sklearn
+import torch
 from scipy.stats import ttest_ind
 
 import mplscience
@@ -22,7 +23,6 @@ from matplotlib import pyplot as plt
 import anndata
 import scanpy as sc
 import scvelo as scv
-import torch
 from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
 

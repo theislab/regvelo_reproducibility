@@ -18,6 +18,9 @@ import numpy as np
 import pandas as pd
 import scipy
 import sklearn
+
+## define function
+import torch
 from scipy.spatial.distance import cdist
 from scipy.stats import wilcoxon
 
@@ -28,9 +31,6 @@ from matplotlib import pyplot as plt
 import anndata
 import scanpy as sc
 import scvelo as scv
-
-## define function
-import torch
 import unitvelo as utv
 from arboreto.algo import grnboost2
 from regvelo import REGVELOVI

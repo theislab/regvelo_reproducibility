@@ -5,22 +5,22 @@
 # ## Library imports
 
 # %%
-import celloracle as co
-import torchsde
 from paths import DATA_DIR, FIG_DIR
 
 import numpy as np
 import pandas as pd
 import scipy
 import sklearn
+import torch
+import torchsde
 
 import seaborn as sns
 
 import anndata
 import anndata as ad
+import celloracle as co
 import scanpy as sc
 import scvelo as scv
-import torch
 from arboreto.algo import grnboost2
 from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
