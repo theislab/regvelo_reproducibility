@@ -5,13 +5,9 @@
 # ## Library imports
 
 # %%
-import os
-
-# %%
 import celloracle as co
 import torchsde
 from paths import DATA_DIR, FIG_DIR
-from regvelo import REGVELOVI
 
 import numpy as np
 import pandas as pd
@@ -24,12 +20,9 @@ import anndata
 import anndata as ad
 import scanpy as sc
 import scvelo as scv
-
-# %%
 import torch
-
-# %%
 from arboreto.algo import grnboost2
+from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
 
 # %% [markdown]
@@ -38,16 +31,18 @@ from velovi import preprocess_data, VELOVI
 # %%
 sns.reset_defaults()
 sns.reset_orig()
+
+# %%
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
 
 # %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation" / "toy_GRN", exist_ok=True)
+    (FIG_DIR / "simulation" / "toy_GRN").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation" / "toy_GRN", exist_ok=True)
+    (DATA_DIR / "simulation" / "toy_GRN").mkdir(parents=True, exist_ok=True)
 
 
 # %% [markdown]
@@ -63,6 +58,7 @@ def sign_concordance(GRN, ref_GRN):
     return score
 
 
+# %%
 def calculate_power_matrix(A, B):
     """TODO."""
     if len(A) != len(B) or len(A[0]) != len(B[0]):
@@ -80,6 +76,7 @@ def calculate_power_matrix(A, B):
     return np.array(C)
 
 
+# %%
 def draw_poisson(n, random_seed):
     """TODO."""
     from random import seed, uniform  # draw from poisson
@@ -89,6 +86,7 @@ def draw_poisson(n, random_seed):
     return np.insert(t, 0, 0)  # prepend t0=0
 
 
+# %%
 class velocity_encoder(torch.nn.Module):
     """TODO."""
 
@@ -188,6 +186,7 @@ def add_regvelo_outputs_to_adata(adata_raw, vae, filter=False):
     return adata
 
 
+# %%
 def add_velovi_outputs_to_adata(adata, vae):
     """TODO."""
     latent_time = vae.get_latent_time(n_samples=30)
@@ -549,5 +548,3 @@ if SAVE_DATASETS:
 dat = pd.DataFrame({"RegVelo": velo_rgv, "scVelo": velo_scv, "veloVI": velo_velovi})
 if SAVE_DATASETS:
     dat.to_csv(DATA_DIR / "simulation" / "toy_GRN" / "velocity_benchmark.csv")
-
-# %%
