@@ -5,8 +5,6 @@
 # ## Library imports
 
 # %%
-from paths import DATA_DIR, FIG_DIR
-
 import numpy as np
 import pandas as pd
 import scipy
@@ -16,14 +14,15 @@ import torchsde
 
 import seaborn as sns
 
-import anndata
-import anndata as ad
 import celloracle as co
 import scanpy as sc
 import scvelo as scv
+from anndata import AnnData
 from arboreto.algo import grnboost2
 from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
+
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
@@ -304,7 +303,7 @@ for sim_idx in range(100):
     pre_s = pd.DataFrame(pre_s.numpy())
     pre_u = pd.DataFrame(pre_u.numpy())
     gt_velo = np.array(pre_u) * beta - np.array(pre_s) * gamma
-    adata = ad.AnnData(np.array(pre_s))
+    adata = AnnData(np.array(pre_s))
 
     ## Preprocessing
     adata.layers["Ms"] = np.array(pre_s)
