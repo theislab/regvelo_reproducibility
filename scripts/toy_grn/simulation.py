@@ -11,7 +11,6 @@ import scipy
 import sklearn
 import torch
 import torchsde
-from torch.distributions.multivariate_normal import MultivariateNormal
 
 import seaborn as sns
 
@@ -24,8 +23,7 @@ from regvelo import REGVELOVI
 from velovi import preprocess_data, VELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.datasets import VelocityEncoder
-from rgv_tools.datasets._simulate import draw_poisson
+from rgv_tools.datasets import get_sde_parameters, VelocityEncoder
 
 # %% [markdown]
 # ## General settings
@@ -155,43 +153,7 @@ for sim_idx in range(100):
     torch.cuda.empty_cache()
     torch.manual_seed(sim_idx)
 
-    ## simulate alpha beta and gamma
-    n_vars = 6
-    mu = torch.tensor([5, 0.5, 0.125], dtype=torch.float32).log()
-    R = torch.tensor([[1.0, 0.2, 0.2], [0.2, 1.0, 0.8], [0.2, 0.8, 1.0]], dtype=torch.float32)
-    C = torch.tensor([0.4, 0.4, 0.4], dtype=torch.float32)[:, None]
-    cov = C * C.T * R
-    distribution = MultivariateNormal(loc=mu, covariance_matrix=cov)
-    alpha, beta, gamma = distribution.sample(sample_shape=torch.Size([n_vars])).exp().T
-
-    mean_alpha = alpha.mean()
-    coef_m = torch.tensor(
-        [
-            [0, 1, -mean_alpha, 2, 2],
-            [1, 0, -mean_alpha, 2, 2],
-            [0, 2, mean_alpha, 2, 4],
-            [0, 3, mean_alpha, 2, 4],
-            [2, 3, -mean_alpha, 2, 2],
-            [3, 2, -mean_alpha, 2, 2],
-            [1, 4, mean_alpha, 2, 4],
-            [1, 5, mean_alpha, 2, 4],
-            [4, 5, -mean_alpha, 2, 2],
-            [5, 4, -mean_alpha, 2, 2],
-        ]
-    )
-
-    n_regulators = 6
-    n_targets = 6
-    K = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
-    n = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
-    h = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
-
-    K[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 2]
-    n[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 3]
-    h[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 4]
-
-    t = draw_poisson(1500, seed=sim_idx)
-
+    K, n, h, beta, gamma, t = get_sde_parameters(n_obs=1500, n_vars=6, seed=sim_idx)
     alpha_b = torch.zeros((6,), dtype=torch.float32)
     sde = VelocityEncoder(K=K, n=n, h=h, alpha_b=alpha_b, beta=beta, gamma=gamma)
 

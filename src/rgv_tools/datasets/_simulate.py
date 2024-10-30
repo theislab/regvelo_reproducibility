@@ -1,5 +1,6 @@
 import torch
 from torch import Tensor
+from torch.distributions.multivariate_normal import MultivariateNormal
 from torch.distributions.uniform import Uniform
 
 
@@ -11,6 +12,45 @@ def draw_poisson(n: int, seed: int) -> Tensor:
     distribution = Uniform(low=torch.finfo(torch.float32).eps, high=1)
     t = torch.cumsum(-0.1 * distribution.sample(sample_shape=torch.Size([n - 1])).log(), dim=0)
     return torch.cat([torch.zeros(size=(1,)), t], dim=0)
+
+
+def get_sde_parameters(n_obs: int, n_vars: int, seed: int):
+    mu = torch.tensor([5, 0.5, 0.125], dtype=torch.float32).log()
+    R = torch.tensor([[1.0, 0.2, 0.2], [0.2, 1.0, 0.8], [0.2, 0.8, 1.0]], dtype=torch.float32)
+    C = torch.tensor([0.4, 0.4, 0.4], dtype=torch.float32)[:, None]
+    cov = C * C.T * R
+    distribution = MultivariateNormal(loc=mu, covariance_matrix=cov)
+    alpha, beta, gamma = distribution.sample(sample_shape=torch.Size([n_vars])).exp().T
+
+    mean_alpha = alpha.mean()
+    coef_m = torch.tensor(
+        [
+            [0, 1, -mean_alpha, 2, 2],
+            [1, 0, -mean_alpha, 2, 2],
+            [0, 2, mean_alpha, 2, 4],
+            [0, 3, mean_alpha, 2, 4],
+            [2, 3, -mean_alpha, 2, 2],
+            [3, 2, -mean_alpha, 2, 2],
+            [1, 4, mean_alpha, 2, 4],
+            [1, 5, mean_alpha, 2, 4],
+            [4, 5, -mean_alpha, 2, 2],
+            [5, 4, -mean_alpha, 2, 2],
+        ]
+    )
+
+    n_regulators = 6
+    n_targets = 6
+    K = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
+    n = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
+    h = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
+
+    K[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 2]
+    n[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 3]
+    h[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 4]
+
+    t = draw_poisson(n_obs, seed=seed)
+
+    return K, n, h, beta, gamma, t
 
 
 class VelocityEncoder(torch.nn.Module):
