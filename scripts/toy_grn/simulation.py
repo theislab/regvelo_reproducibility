@@ -11,6 +11,7 @@ import scipy
 import sklearn
 import torch
 import torchsde
+from torch.distributions.multivariate_normal import MultivariateNormal
 
 import seaborn as sns
 
@@ -156,58 +157,43 @@ for sim_idx in range(100):
 
     ## simulate alpha beta and gamma
     n_vars = 6
+    mu = torch.tensor([5, 0.5, 0.125], dtype=torch.float32).log()
+    R = torch.tensor([[1.0, 0.2, 0.2], [0.2, 1.0, 0.8], [0.2, 0.8, 1.0]], dtype=torch.float32)
+    C = torch.tensor([0.4, 0.4, 0.4], dtype=torch.float32)[:, None]
+    cov = C * C.T * R
+    distribution = MultivariateNormal(loc=mu, covariance_matrix=cov)
+    alpha, beta, gamma = distribution.sample(sample_shape=torch.Size([n_vars])).exp().T
 
-    mu = np.array([np.log(5), np.log(0.5), np.log(0.125)])
-
-    R = np.array([[1.0, 0.2, 0.2], [0.2, 1.0, 0.8], [0.2, 0.8, 1.0]])
-
-    C = np.array([0.4, 0.4, 0.4])[:, None]
-
-    cov = C.dot(C.T) * R
-
-    alpha, beta, gamma = np.exp(np.random.multivariate_normal(mu, cov, size=n_vars).T)  # multivariate log-normal
-    # beta /= 3
-    # gamma /= 10
-    beta_list.append(beta)
-    gamma_list.append(gamma)
-
-    ##
-    n_regulators = n_targets = 6
-    coef_m = np.array(
+    mean_alpha = alpha.mean()
+    coef_m = torch.tensor(
         [
-            [0, 1, -alpha.mean(), 2, 2],
-            [1, 0, -alpha.mean(), 2, 2],
-            [0, 2, alpha.mean(), 2, 4],
-            [0, 3, alpha.mean(), 2, 4],
-            [2, 3, -alpha.mean(), 2, 2],
-            [3, 2, -alpha.mean(), 2, 2],
-            [1, 4, alpha.mean(), 2, 4],
-            [1, 5, alpha.mean(), 2, 4],
-            [4, 5, -alpha.mean(), 2, 2],
-            [5, 4, -alpha.mean(), 2, 2],
+            [0, 1, -mean_alpha, 2, 2],
+            [1, 0, -mean_alpha, 2, 2],
+            [0, 2, mean_alpha, 2, 4],
+            [0, 3, mean_alpha, 2, 4],
+            [2, 3, -mean_alpha, 2, 2],
+            [3, 2, -mean_alpha, 2, 2],
+            [1, 4, mean_alpha, 2, 4],
+            [1, 5, mean_alpha, 2, 4],
+            [4, 5, -mean_alpha, 2, 2],
+            [5, 4, -mean_alpha, 2, 2],
         ]
     )
 
-    random_seed = sim_idx
+    n_regulators = 6
+    n_targets = 6
+    K = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
+    n = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
+    h = torch.zeros([n_targets, n_regulators], dtype=torch.float32)
 
-    t = torch.tensor(draw_poisson(1500), random_seed=sim_idx)
+    K[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 2]
+    n[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 3]
+    h[coef_m[:, 1].int(), coef_m[:, 0].int()] = coef_m[:, 4]
 
-    K = np.zeros([n_targets, n_regulators])
-    n = np.zeros([n_targets, n_regulators])
-    h = np.zeros([n_targets, n_regulators])
+    t = draw_poisson(1500, seed=sim_idx)
 
-    K[np.array(coef_m[:, 1], dtype=int), np.array(coef_m[:, 0], dtype=int)] = coef_m[:, 2]
-    n[np.array(coef_m[:, 1], dtype=int), np.array(coef_m[:, 0], dtype=int)] = coef_m[:, 3]
-    h[np.array(coef_m[:, 1], dtype=int), np.array(coef_m[:, 0], dtype=int)] = coef_m[:, 4]
-
-    sde = VelocityEncoder(
-        K=torch.tensor(K, dtype=torch.float32),
-        n=torch.tensor(n, dtype=torch.float32),
-        h=torch.tensor(h, dtype=torch.float32),
-        alpha_b=torch.tensor([1, 1, 1, 1, 1, 1], dtype=torch.float32) * 0,
-        beta=torch.tensor(beta, dtype=torch.float32),
-        gamma=torch.tensor(gamma, dtype=torch.float32),
-    )
+    alpha_b = torch.zeros((6,), dtype=torch.float32)
+    sde = VelocityEncoder(K=K, n=n, h=h, alpha_b=alpha_b, beta=beta, gamma=gamma)
 
     ## set up G batches, Each G represent a module (a target gene centerred regulon)
     ## infer the observe gene expression through ODE solver based on x0, t, and velocity_encoder
@@ -221,7 +207,7 @@ for sim_idx in range(100):
 
     pre_s = pd.DataFrame(pre_s.numpy())
     pre_u = pd.DataFrame(pre_u.numpy())
-    gt_velo = np.array(pre_u) * beta - np.array(pre_s) * gamma
+    gt_velo = np.array(pre_u) * beta.numpy() - np.array(pre_s) * gamma.numpy()
     adata = AnnData(np.array(pre_s))
 
     ## Preprocessing

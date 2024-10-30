@@ -1,17 +1,16 @@
-import numpy as np
 import torch
-from numpy.typing import ArrayLike
 from torch import Tensor
+from torch.distributions.uniform import Uniform
 
 
 # Adapted from https://github.com/theislab/scvelo/blob/22b6e7e6cdb3c321c5a1be4ab2f29486ba01ab4f/scvelo/datasets/_simulate.py#L77
-def draw_poisson(n: int, random_seed: int) -> ArrayLike:
+def draw_poisson(n: int, seed: int) -> Tensor:
     """TODO."""
-    from random import seed, uniform
+    torch.random.manual_seed(seed)
 
-    seed(random_seed)
-    t = np.cumsum([-0.1 * np.log(uniform(0, 1)) for _ in range(n - 1)])
-    return np.insert(t, 0, 0)
+    distribution = Uniform(low=torch.finfo(torch.float32).eps, high=1)
+    t = torch.cumsum(-0.1 * distribution.sample(sample_shape=torch.Size([n - 1])).log(), dim=0)
+    return torch.cat([torch.zeros(size=(1,)), t], dim=0)
 
 
 class VelocityEncoder(torch.nn.Module):
