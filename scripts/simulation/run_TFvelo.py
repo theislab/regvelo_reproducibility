@@ -9,33 +9,32 @@ import os
 import sys
 
 import TFvelo as TFv
-from paths import DATA_DIR, FIG_DIR
 
 import numpy as np
-
-# %%
 import scipy
 
 import anndata as ad
 import scanpy as sc
 
+from rgv_tools import DATA_DIR, FIG_DIR
+
 # attach your local TFvelo repo directory
 sys.path.append("/home/itg/z.xue/VeloBenchmark/TFvelo")
-
-sys.path.append("../..")
 
 # %% [markdown]
 # ## General settings
 
 # %%
-np.set_printoptions(suppress=True)
 SAVE_FIGURES = True
 if SAVE_FIGURES:
-    os.makedirs(FIG_DIR / "simulation", exist_ok=True)
+    (FIG_DIR / "simulation").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATASETS = True
 if SAVE_DATASETS:
-    os.makedirs(DATA_DIR / "simulation", exist_ok=True)
+    (DATA_DIR / "simulation").mkdir(parents=True, exist_ok=True)
+
+# %%
+np.set_printoptions(suppress=True)
 
 # %%
 input_path = DATA_DIR
@@ -48,35 +47,8 @@ input_files = os.listdir(input_path)
 
 
 # %%
-def run_TFvelo(input_path, output_path, input_file):
+def run_TFvelo(adata):
     """TODO."""
-    adata = ad.read(os.path.join(input_path, input_file))
-    print("Start processing " + os.path.join(input_path, input_file))
-    adata.layers["spliced"] = adata.layers["counts_spliced"].copy()
-    adata.layers["unspliced"] = adata.layers["counts_unspliced"].copy()
-
-    if "spliced" in adata.layers:
-        adata.layers["total"] = adata.layers["spliced"] + adata.layers["unspliced"]
-    elif "new" in adata.layers:
-        adata.layers["total"] = np.array(adata.layers["total"].todense())
-    else:
-        adata.layers["total"] = adata.X
-    adata.layers["count"] = adata.X.copy()
-    adata.layers["total_raw"] = adata.layers["total"].copy()
-    n_cells, n_genes = adata.X.shape
-    sc.pp.filter_genes(adata, min_cells=int(n_cells / 50))
-    sc.pp.filter_cells(adata, min_genes=int(n_genes / 50))
-    TFv.pp.filter_and_normalize(adata, min_shared_counts=20, n_top_genes=2000, log=True)  # include the following steps
-    adata.X = adata.layers["total"].copy()
-
-    gene_names = []
-    for tmp in adata.var_names:
-        gene_names.append(tmp.upper())
-    adata.var_names = gene_names
-    adata.var_names_make_unique()
-    adata.obs_names_make_unique()
-
-    TFv.pp.moments(adata, n_pcs=30, n_neighbors=30)
     adata.X = adata.X.A
     n_gene = adata.shape[1]
     adata.varm["TFs"] = np.full([n_gene, n_gene], "blank")
@@ -137,13 +109,54 @@ def run_TFvelo(input_path, output_path, input_file):
 
 
 # %% [markdown]
+# ## Data loading
+
+# %%
+adata = ad.read(DATA_DIR / "TODO" / "TODO.h5ad")
+adata
+
+# %% [markdown]
+# ## Data processing
+
+# %%
+adata.layers["spliced"] = adata.layers["counts_spliced"].copy()
+adata.layers["unspliced"] = adata.layers["counts_unspliced"].copy()
+
+if "spliced" in adata.layers:
+    adata.layers["total"] = adata.layers["spliced"] + adata.layers["unspliced"]
+elif "new" in adata.layers:
+    adata.layers["total"] = np.array(adata.layers["total"].todense())
+else:
+    adata.layers["total"] = adata.X
+adata.layers["count"] = adata.X.copy()
+adata.layers["total_raw"] = adata.layers["total"].copy()
+
+# %%
+n_cells, n_genes = adata.X.shape
+sc.pp.filter_genes(adata, min_cells=int(n_cells / 50))
+sc.pp.filter_cells(adata, min_genes=int(n_genes / 50))
+
+# %%
+TFv.pp.filter_and_normalize(adata, min_shared_counts=20, n_top_genes=2000, log=True)  # include the following steps
+
+# %%
+adata.X = adata.layers["total"].copy()
+
+gene_names = []
+for tmp in adata.var_names:
+    gene_names.append(tmp.upper())
+adata.var_names = gene_names
+adata.var_names_make_unique()
+adata.obs_names_make_unique()
+
+# %%
+TFv.pp.moments(adata, n_pcs=30, n_neighbors=30)
+
+# %% [markdown]
 # ## Data loading and processing of one instance
 
 # %%
-adata = run_TFvelo(input_path, output_path, input_files[0])
-
-# %%
-# fit_t and velocity are the computed results
+adata = run_TFvelo(adata)
 adata
 
 # %%
