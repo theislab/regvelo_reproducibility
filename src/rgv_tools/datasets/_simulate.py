@@ -1,17 +1,28 @@
+import numpy as np
 import torch
 from torch import Tensor
 from torch.distributions.multivariate_normal import MultivariateNormal
-from torch.distributions.uniform import Uniform
 
 
 # Adapted from https://github.com/theislab/scvelo/blob/22b6e7e6cdb3c321c5a1be4ab2f29486ba01ab4f/scvelo/datasets/_simulate.py#L77
 def draw_poisson(n: int, seed: int) -> Tensor:
-    """TODO."""
+    """TODO.
+
+    Torch-based implementation generates time steps that do not increase strictly monotonically.
+    from torch.distributions.uniform import Uniform
+
     torch.random.manual_seed(seed)
 
     distribution = Uniform(low=torch.finfo(torch.float32).eps, high=1)
     t = torch.cumsum(-0.1 * distribution.sample(sample_shape=torch.Size([n - 1])).log(), dim=0)
     return torch.cat([torch.zeros(size=(1,)), t], dim=0)
+    """
+    from random import seed, uniform
+
+    seed(seed)
+    t = np.cumsum([-0.1 * np.log(uniform(0, 1)) for _ in range(n - 1)])
+    t = np.insert(t, 0, 0)
+    return torch.tensor(t)
 
 
 def get_sde_parameters(n_obs: int, n_vars: int, seed: int):
