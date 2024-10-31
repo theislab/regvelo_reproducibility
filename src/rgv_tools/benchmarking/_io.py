@@ -21,7 +21,7 @@ def get_data_subset(adata: AnnData, column: str, group: str | int) -> AnnData:
     """
     obs_mask = adata.obs[column] == group
 
-    adata_subset = adata[obs_mask, :]
+    adata_subset = adata[obs_mask, :].copy()
     for parameter in ["true_beta", "true_gamma"]:
         adata_subset.var[parameter] = adata.uns[group][parameter]
     del adata_subset.uns
