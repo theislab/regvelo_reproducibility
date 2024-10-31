@@ -1,3 +1,5 @@
+import numpy as np
+
 from anndata import AnnData
 
 
@@ -25,3 +27,23 @@ def get_data_subset(adata: AnnData, column: str, group: str | int) -> AnnData:
     del adata_subset.uns
 
     return adata_subset.to_memory()
+
+
+def set_output(adata, vae, n_samples: int = 1, batch_size: int | None = None) -> None:
+    latent_time = vae.get_latent_time(n_samples=n_samples, batch_size=batch_size)
+    velocities = vae.get_velocity(n_samples=n_samples, batch_size=batch_size)
+
+    t = latent_time.values
+    scaling = 20 / t.max(0)
+
+    adata.layers["velocity"] = velocities / scaling
+    adata.layers["latent_time_velovi"] = latent_time
+
+    rates = vae.get_rates()
+    if "alpha" in rates:
+        adata.var["fit_alpha"] = rates["alpha"] / scaling
+    adata.var["fit_beta"] = rates["beta"] / scaling
+    adata.var["fit_gamma"] = rates["gamma"] / scaling
+
+    adata.layers["fit_t"] = latent_time * scaling[np.newaxis, :]
+    adata.var["fit_scaling"] = 1.0
