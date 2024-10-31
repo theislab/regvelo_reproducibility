@@ -30,6 +30,8 @@ def get_sde_parameters(n_obs: int, n_vars: int, seed: int):
     R = torch.tensor([[1.0, 0.2, 0.2], [0.2, 1.0, 0.8], [0.2, 0.8, 1.0]], dtype=torch.float32)
     C = torch.tensor([0.4, 0.4, 0.4], dtype=torch.float32)[:, None]
     cov = C * C.T * R
+
+    torch.manual_seed(seed)
     distribution = MultivariateNormal(loc=mu, covariance_matrix=cov)
     alpha, beta, gamma = distribution.sample(sample_shape=torch.Size([n_vars])).exp().T
 
