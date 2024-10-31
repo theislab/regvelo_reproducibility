@@ -3,7 +3,7 @@ import numpy as np
 from anndata import AnnData
 
 
-def get_data_subset(adata: AnnData, column: str, group: str | int) -> AnnData:
+def get_data_subset(adata: AnnData, column: str, group: str | int, uns_keys: list[str]) -> AnnData:
     """Subset dask-backed data for toy GRN.
 
     Parameters
@@ -22,9 +22,14 @@ def get_data_subset(adata: AnnData, column: str, group: str | int) -> AnnData:
     obs_mask = adata.obs[column] == group
 
     adata_subset = adata[obs_mask, :].copy()
-    for parameter in ["true_beta", "true_gamma"]:
-        adata_subset.var[parameter] = adata.uns[group][parameter]
-    del adata_subset.uns
+    uns = {}
+    for parameter in uns_keys:
+        value = adata.uns[group][parameter]
+        if value.shape == (adata_subset.n_vars,):
+            adata_subset.var[parameter] = value
+        else:
+            uns[parameter] = value
+    adata_subset.uns = uns
 
     return adata_subset.to_memory()
 
