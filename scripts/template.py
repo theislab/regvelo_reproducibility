@@ -6,10 +6,10 @@
 # %% [markdown]
 # ## Library imports
 
-from fancypackage import DATA_DIR, FIG_DIR
-
 # %%
 import scanpy as sc
+
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
