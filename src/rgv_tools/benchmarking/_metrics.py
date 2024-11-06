@@ -77,8 +77,8 @@ def get_time_correlation(ground_truth: ArrayLike, estimated: ArrayLike) -> float
     return scipy.stats.spearmanr(ground_truth, estimated)[0]
 
 
-def get_grn_correlation(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
-    """Compute Pearson correlation between ground truth and estimated values.
+def get_grn_auroc(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
+    """Compute AUROC for .
 
     Parameters
     ----------

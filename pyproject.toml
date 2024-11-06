@@ -21,7 +21,7 @@ urls.Source = "https://github.com/theislab/RegVelo_reproducibility.git"
 urls.Home-page = "https://github.com/theislab/RegVelo_reproducibility.git"
 dependencies = [
     "jupyterlab",
-    "anndata",
+    "git+https://github.com/scverse/anndata.git@0.11.0rc3",
     "scanpy",
     "cellrank",
     "scvelo",
@@ -32,7 +32,11 @@ dependencies = [
     "torchsde",
     "arboreto",
     "zarr",
-    "dask",
+    "distributed==2024.2.1",
+    "dask==2024.2.1",
+    "dask-expr==0.5.3",
+    "Cython",
+    "celloracle"
 ]
 
 [project.optional-dependencies]
