@@ -1,6 +1,7 @@
 from typing import Callable
 
 import numpy as np
+import scipy
 from numpy.typing import ArrayLike
 
 
@@ -56,3 +57,20 @@ def get_velocity_correlation(
         return correlation
     elif callable(aggregation):
         return aggregation(correlation)
+
+
+def get_time_correlation(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
+    """Compute Spearman correlation between ground truth and estimated values.
+
+    Parameters
+    ----------
+    ground_truth
+        Array of ground truth value.
+    estimated
+        Array of estimated values.
+
+    Returns
+    -------
+    Spearman correlation.
+    """
+    return scipy.stats.spearmanr(ground_truth, estimated)[0]
