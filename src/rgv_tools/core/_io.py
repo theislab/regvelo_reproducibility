@@ -1,10 +1,10 @@
 from pathlib import Path
 
-import dask.array as da
 import zarr
 
 from anndata import AnnData
-from anndata.experimental import read_elem
+from anndata.experimental import read_elem_as_dask
+from anndata.io import read_elem
 
 
 def read_as_dask(store: Path | str, layers: str | list[str]) -> AnnData:
@@ -31,11 +31,11 @@ def read_as_dask(store: Path | str, layers: str | list[str]) -> AnnData:
         varm=read_elem(group["varm"]),
     )
 
-    adata.X = da.from_zarr(group["X"])
+    adata.X = read_elem_as_dask(group["X"])
 
     if isinstance(layers, str):
         layers = [layers]
     for layer in layers:
-        adata.layers[layer] = da.from_zarr(group[f"layers/{layer}"])
+        adata.layers[layer] = read_elem_as_dask(group[f"layers/{layer}"])
 
     return adata
