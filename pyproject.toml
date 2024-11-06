@@ -36,7 +36,8 @@ dependencies = [
     "dask==2024.2.1",
     "dask-expr==0.5.3",
     "Cython",
-    "celloracle"
+    "celloracle",
+    "mplscience"
 ]
 
 [project.optional-dependencies]
