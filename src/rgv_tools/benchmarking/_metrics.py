@@ -3,6 +3,7 @@ from typing import Callable
 import numpy as np
 import scipy
 from numpy.typing import ArrayLike
+from sklearn.metrics import roc_auc_score
 
 
 def pearsonr(x: ArrayLike, y: ArrayLike, axis: int = 0) -> ArrayLike:
@@ -74,3 +75,24 @@ def get_time_correlation(ground_truth: ArrayLike, estimated: ArrayLike) -> float
     Spearman correlation.
     """
     return scipy.stats.spearmanr(ground_truth, estimated)[0]
+
+
+def get_grn_auroc(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
+    """Compute AUROC for .
+
+    Parameters
+    ----------
+    ground_truth
+        Array of ground truth value.
+    estimated
+        Array of estimated values.
+
+    Returns
+    -------
+    AUROC score.
+    """
+    mask = np.where(~np.eye(ground_truth.shape[0], dtype=bool))
+    ground_truth = ground_truth[mask].astype(bool).astype(float)
+    ground_truth[ground_truth != 0] = 1
+
+    return roc_auc_score(ground_truth, estimated[mask])
