@@ -57,8 +57,6 @@ velocity_correlation = []
 time_correlation = []
 grn_correlation = []
 
-parameters = []
-
 for dataset in tqdm(adata.obs["dataset"].cat.categories):
     adata_subset = get_data_subset(
         adata=adata, column="dataset", group=dataset, uns_keys=["true_beta", "true_gamma", "true_K"]
@@ -79,18 +77,14 @@ for dataset in tqdm(adata.obs["dataset"].cat.categories):
     vae.train()
 
     set_output(adata_subset, vae, n_samples=30, batch_size=adata.n_obs)
-    _parameters = adata_subset.var[["fit_beta", "fit_gamma"]].copy()
-    _parameters["dataset"] = dataset
-    _parameters.index = _parameters.index + f"-dataset_{dataset}"
-    parameters.append(_parameters)
-    del _parameters
 
-    # estimated_velocity = adata_subset.layers["unspliced"] * adata_subset.var["fit_beta"].values - adata_subset.layers["spliced"] * adata_subset.var["fit_gamma"].values
+    estimated_velocity = (
+        adata_subset.layers["unspliced"] * adata_subset.var["fit_beta"].values
+        - adata_subset.layers["spliced"] * adata_subset.var["fit_gamma"].values
+    )
     velocity_correlation.append(
         get_velocity_correlation(
-            ground_truth=adata_subset.layers["true_velocity"],
-            estimated=adata_subset.layers["velocity"],
-            aggregation=np.mean,
+            ground_truth=adata_subset.layers["true_velocity"], estimated=estimated_velocity, aggregation=np.mean
         )
     )
     time_correlation.append(
@@ -111,4 +105,3 @@ if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation, "time": time_correlation, "grn": grn_correlation}).to_parquet(
         path=DATA_DIR / "toy_grn" / "results" / "regvelo_correlation.parquet"
     )
-    pd.concat(parameters).to_parquet(path=DATA_DIR / "toy_grn" / "results" / "regvelo_rates.parquet")
