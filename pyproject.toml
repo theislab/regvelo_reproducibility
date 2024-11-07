@@ -7,7 +7,7 @@ name = "rgv_tools"
 version = "0.0.0"
 description = "RegVelo_tools"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {file = "LICENSE"}
 authors = [
     {name = "Weixu Wang"},
@@ -21,7 +21,7 @@ urls.Source = "https://github.com/theislab/RegVelo_reproducibility.git"
 urls.Home-page = "https://github.com/theislab/RegVelo_reproducibility.git"
 dependencies = [
     "jupyterlab",
-    "anndata",
+    "anndata>=0.11.0",
     "scanpy",
     "cellrank",
     "scvelo",
@@ -30,6 +30,13 @@ dependencies = [
     "dynamo-release",
     "torch",
     "arboreto",
+    "zarr",
+    "distributed==2024.2.1",
+    "dask==2024.2.1",
+    "dask-expr==0.5.3",
+    "Cython",
+    "celloracle",
+    "mplscience"
 ]
 
 [project.optional-dependencies]
@@ -60,9 +67,9 @@ exclude = '''
 [tool.isort]
 profile = "black"
 use_parentheses = true
-known_num = "networkx,numpy,pandas,scipy,sklearn,statmodels"
+known_num = "networkx,numpy,pandas,scipy,sklearn,statmodels,torch,torchsde"
 known_plot = "matplotlib,mplscience,mpl_toolkits,seaborn"
-known_bio = "anndata,scanpy,cellrank,scvelo,velovi,unitvelo,dynamo,torch,arboreto"
+known_bio = "anndata,cell2fate,celloracle,cellrank,scanpy,scvelo,velovi,unitvelo,dynamo,arboreto,regvelo"
 sections = "FUTURE,STDLIB,THIRDPARTY,NUM,PLOT,BIO,FIRSTPARTY,LOCALFOLDER"
 no_lines_before = "LOCALFOLDER"
 balanced_wrapping = true
