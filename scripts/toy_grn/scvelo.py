@@ -46,7 +46,7 @@ if SAVE_DATA:
 
 # %%
 adata = read_as_dask(
-    store=DATA_DIR / "toy_grn" / "raw" / "mini_adata.zarr", layers=["unspliced", "Mu", "spliced", "Ms", "true_velocity"]
+    store=DATA_DIR / "toy_grn" / "raw" / "adata.zarr", layers=["unspliced", "Mu", "spliced", "Ms", "true_velocity"]
 )
 adata
 
@@ -56,8 +56,6 @@ adata
 # %%
 velocity_correlation = []
 time_correlation = []
-
-parameters = []
 
 for dataset in tqdm(adata.obs["dataset"].cat.categories):
     adata_subset = get_data_subset(adata=adata, column="dataset", group=dataset, uns_keys=["true_beta", "true_gamma"])
@@ -74,18 +72,13 @@ for dataset in tqdm(adata.obs["dataset"].cat.categories):
     adata_subset.var["fit_scaling"] = 1.0
     scv.tl.velocity(adata_subset, mode="dynamical", min_likelihood=-np.inf, min_r2=None)
 
-    _parameters = adata_subset.var[["fit_beta", "fit_gamma"]].copy()
-    _parameters["dataset"] = dataset
-    _parameters.index = _parameters.index + f"-dataset_{dataset}"
-    parameters.append(_parameters)
-    del _parameters
-
-    # estimated_velocity = adata_subset.layers["unspliced"] * adata_subset.var["fit_beta"].values - adata_subset.layers["spliced"] * adata_subset.var["fit_gamma"].values
+    estimated_velocity = (
+        adata_subset.layers["unspliced"] * adata_subset.var["fit_beta"].values
+        - adata_subset.layers["spliced"] * adata_subset.var["fit_gamma"].values
+    )
     velocity_correlation.append(
         get_velocity_correlation(
-            ground_truth=adata_subset.layers["true_velocity"],
-            estimated=adata_subset.layers["velocity"],
-            aggregation=np.mean,
+            ground_truth=adata_subset.layers["true_velocity"], estimated=estimated_velocity, aggregation=np.mean
         )
     )
     time_correlation.append(
@@ -102,4 +95,3 @@ if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation, "time": time_correlation}).to_parquet(
         path=DATA_DIR / "toy_grn" / "results" / "scvelo_correlation.parquet"
     )
-    pd.concat(parameters).to_parquet(path=DATA_DIR / "toy_grn" / "results" / "scvelo_rates.parquet")
