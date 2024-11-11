@@ -40,11 +40,11 @@ adata = read_as_dask(store=DATA_DIR / "toy_grn" / "raw" / "adata.zarr", layers=[
 adata
 
 # %% [markdown]
-# ## Velocity pipeline
+# ## Pseudotime pipeline
 
 # %%
-velocity_correlation = []
 time_correlation = []
+
 for dataset in tqdm(adata.obs["dataset"].cat.categories):
     adata_subset = get_data_subset(adata=adata, column="dataset", group=dataset, uns_keys=[])
 
