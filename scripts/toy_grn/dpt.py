@@ -1,7 +1,7 @@
 # %% [markdown]
 # # DPT benchmark on toy GRN
 #
-# Notbook benchmarks latent time inference using DPT with toy GRN data.
+# Notebook benchmarks latent time inference using DPT on toy GRN data.
 
 # %% [markdown]
 # ## Library imports
@@ -19,15 +19,15 @@ from rgv_tools.benchmarking import get_data_subset, get_time_correlation
 from rgv_tools.core import read_as_dask
 
 # %% [markdown]
-# ## General settings
-
-# %% [markdown]
 # ## Constants
+
+# %%
+DATASET = "toy_grn"
 
 # %%
 SAVE_DATA = True
 if SAVE_DATA:
-    (DATA_DIR / "toy_grn" / "results").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Function definitions
@@ -36,7 +36,7 @@ if SAVE_DATA:
 # ## Data loading
 
 # %%
-adata = read_as_dask(store=DATA_DIR / "toy_grn" / "raw" / "adata.zarr", layers=[])
+adata = read_as_dask(store=DATA_DIR / DATASET / "raw" / "adata.zarr", layers=[])
 adata
 
 # %% [markdown]
@@ -65,6 +65,4 @@ for dataset in tqdm(adata.obs["dataset"].cat.categories):
 
 # %%
 if SAVE_DATA:
-    pd.DataFrame({"time": time_correlation}).to_parquet(
-        path=DATA_DIR / "toy_grn" / "results" / "dpt_correlation.parquet"
-    )
+    pd.DataFrame({"time": time_correlation}).to_parquet(path=DATA_DIR / DATASET / "results" / "dpt_correlation.parquet")

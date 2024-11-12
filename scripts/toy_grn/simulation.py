@@ -1,5 +1,7 @@
 # %% [markdown]
-# # Simulate a toy GRN to benchmark velocity, latent time and GRN inference
+# # Simulation of toy GRN and cellular dynamics
+#
+# Notebooks simulate a toy GRN to benchmark velocity, latent time and GRN inference
 
 # %% [markdown]
 # ## Library imports

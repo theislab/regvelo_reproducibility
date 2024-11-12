@@ -1,7 +1,7 @@
 # %% [markdown]
 # # RegVelo benchmark on toy GRN
 #
-# Notbook benchmarks velocity, latent time and GRN inference using RegVelo with toy GRN data.
+# Notebook benchmarks velocity, latent time and GRN inference using RegVelo on toy GRN data.
 
 # %% [markdown]
 # ## Library imports
@@ -27,15 +27,15 @@ from rgv_tools.benchmarking import (
 from rgv_tools.core import read_as_dask
 
 # %% [markdown]
-# ## General settings
-
-# %% [markdown]
 # ## Constants
+
+# %%
+DATASET = "toy_grn"
 
 # %%
 SAVE_DATA = True
 if SAVE_DATA:
-    (DATA_DIR / "toy_grn" / "results").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
 # %% [markdown]
 # ## Function definitions
@@ -45,7 +45,7 @@ if SAVE_DATA:
 
 # %%
 adata = read_as_dask(
-    store=DATA_DIR / "toy_grn" / "raw" / "adata.zarr", layers=["unspliced", "Mu", "spliced", "Ms", "true_velocity"]
+    store=DATA_DIR / DATASET / "raw" / "adata.zarr", layers=["unspliced", "Mu", "spliced", "Ms", "true_velocity"]
 )
 adata
 
@@ -103,5 +103,5 @@ for dataset in tqdm(adata.obs["dataset"].cat.categories):
 # %%
 if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation, "time": time_correlation, "grn": grn_correlation}).to_parquet(
-        path=DATA_DIR / "toy_grn" / "results" / "regvelo_correlation.parquet"
+        path=DATA_DIR / DATASET / "results" / "regvelo_correlation.parquet"
     )
