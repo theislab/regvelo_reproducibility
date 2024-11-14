@@ -103,7 +103,7 @@ with mplscience.style_context():
     )
 
     ttest_res = ttest_ind(
-        correlation_df["velovi_velocity"],
+        correlation_df["regvelo_velocity"],
         correlation_df["scvelo_velocity"],
         equal_var=False,
         alternative="greater",
