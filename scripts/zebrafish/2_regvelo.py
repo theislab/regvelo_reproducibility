@@ -41,17 +41,17 @@ if SAVE_DATA:
 adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 
 # %% [markdown]
-# ## Run regvelo
+# ## Velocity pipeline
 
 # %%
-## prepare skeleton
+# Prepare skeleton
 W = adata.uns["skeleton"].copy()
 W = torch.tensor(np.array(W)).int()
 
-## prepare TF
+# Prepare TF
 TF = adata.var_names[adata.var["TF"]]
 
-## prepare model
+# Prepare model
 REGVELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
 vae = REGVELOVI(adata, W=W.T, regulators=TF, soft_constraint=False)
 
