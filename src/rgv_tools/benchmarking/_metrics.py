@@ -3,32 +3,59 @@ from typing import Callable
 import numpy as np
 import scipy
 from numpy.typing import ArrayLike
+from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import roc_auc_score
 
 
-def pearsonr(x: ArrayLike, y: ArrayLike, axis: int = 0) -> ArrayLike:
-    """Compute Pearson correlation between axes of two arrays.
+def compute_average_correlations(matrices, method="p"):
+    """Compute average correlations between pairs of matrices.
 
     Parameters
     ----------
-    x
-        Input array.
-    y
-        Input array.
-    axis
-        Axis along which Pearson correlation is computed.
+    matrices
+        List of NumPy arrays, where each matrix should have the same shape.
+    method
+        Correlation method to use:
+        - `"p"`: Pearson correlation.
+        - `"sp"`: Spearman correlation.
+        Defaults to `"p"`.
 
     Returns
     -------
-    Axis-wise Pearson correlations.
+    list of float
+        A list of average correlation values for each pair of matrices.
+
+    Notes
+    -----
+    - Matrices must have the same shape for valid comparison.
+    - Transposed columns of matrices are used to compute pairwise correlations.
     """
-    centered_x = x - np.mean(x, axis=axis, keepdims=True)
-    centered_y = y - np.mean(y, axis=axis, keepdims=True)
+    n = len(matrices)
+    assert all(mat.shape == matrices[0].shape for mat in matrices), "All matrices must have the same shape."
 
-    r_num = np.add.reduce(centered_x * centered_y, axis=axis)
-    r_den = np.sqrt((centered_x * centered_x).sum(axis=axis) * (centered_y * centered_y).sum(axis=axis))
+    correlations_list = []
 
-    return r_num / r_den
+    # Iterate through each pair of matrices
+    for i in range(n):
+        for j in range(i + 1, n):  # Avoid duplicate pairs
+            mat1, mat2 = matrices[i], matrices[j]
+
+            # Calculate average correlation for paired columns
+            if method == "p":
+                col_correlations = [
+                    pearsonr(col1, col2)[0]  # Pearson correlation coefficient
+                    for col1, col2 in zip(mat1.T, mat2.T)  # Transpose for column access
+                ]
+            if method == "sp":
+                col_correlations = [
+                    spearmanr(col1, col2)[0]  # Pearson correlation coefficient
+                    for col1, col2 in zip(mat1.T, mat2.T)  # Transpose for column access
+                ]
+
+            avg_corr = np.mean(col_correlations)
+            correlations_list.append(avg_corr)
+
+    return correlations_list
 
 
 def get_velocity_correlation(
