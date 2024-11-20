@@ -72,8 +72,10 @@ vk = cr.kernels.VelocityKernel(adata)
 vk.compute_transition_matrix()
 ck = cr.kernels.ConnectivityKernel(adata).compute_transition_matrix()
 
+kernel = 0.8 * vk + 0.2 * ck
+
 # %%
-estimator = cr.estimators.GPCCA(vk)
+estimator = cr.estimators.GPCCA(kernel)
 # evaluate the fate prob on original space
 estimator.compute_macrostates(n_states=8, cluster_key="cell_type")
 estimator.set_terminal_states(TERMINAL_STATES)
@@ -208,8 +210,9 @@ set_output(adata, vae, n_samples=30, batch_size=adata.n_obs)
 vk = cr.kernels.VelocityKernel(adata)
 vk.compute_transition_matrix()
 ck = cr.kernels.ConnectivityKernel(adata).compute_transition_matrix()
+kernel = 0.8 * vk + 0.2 * ck
 
-estimator = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
+estimator = cr.estimators.GPCCA(kernel)
 ## evaluate the fate prob on original space
 estimator.compute_macrostates(n_states=8, cluster_key="cell_type")
 estimator.set_terminal_states(TERMINAL_STATES)
