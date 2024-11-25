@@ -29,6 +29,17 @@ SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
+# %%
+TERMINAL_STATES = [
+    "mNC_head_mesenchymal",
+    "mNC_arch2",
+    "mNC_hox34",
+    "Pigment",
+]
+
+single_ko = ["elk3", "erf", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
+multiple_ko = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
+
 # %% [markdown]
 # ## Data loading
 
@@ -36,19 +47,14 @@ if SAVE_DATA:
 adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 
 # %% [markdown]
-# ## Perturbation prediction (single)
+# ## Perturbation prediction
+
+# %% [markdown]
+# ### Single gene knockout
 
 # %%
-terminal_states = [
-    "mNC_head_mesenchymal",
-    "mNC_arch2",
-    "mNC_hox34",
-    "Pigment",
-]
-
-gene_list = ["elk3", "erf", "etv2", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
-gene_list = set(gene_list).intersection(adata.var_names)
-gene_list = list(gene_list)
+single_ko = set(single_ko).intersection(adata.var_names)
+single_ko = list(single_ko)
 
 # %%
 for nrun in range(3):
@@ -61,7 +67,7 @@ for nrun in range(3):
     pval_save = DATA_DIR / DATASET / "results" / pval_name
 
     ## Perturbation
-    d = TFScanning(model, adata, 8, "cell_type", terminal_states, gene_list, 0)
+    d = TFScanning(model, adata, 8, "cell_type", TERMINAL_STATES, single_ko, 0)
 
     coef = pd.DataFrame(np.array(d["coefficient"]))
     coef.index = d["TF"]
@@ -69,16 +75,15 @@ for nrun in range(3):
     pval = pd.DataFrame(np.array(d["pvalue"]))
     pval.index = d["TF"]
     pval.columns = get_list_name(d["pvalue"][0])
-    coef = coef.loc[gene_list, :]
+    coef = coef.loc[single_ko, :]
 
     coef.to_csv(coef_save)
     pval.to_csv(pval_save)
 
 # %% [markdown]
-# ## Perturbation prediction (Multiple)
+# ### Multiple knockout
 
 # %%
-multiple_ko = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
 multiple_ko_list = split_elements(multiple_ko)
 
 # %%
@@ -92,7 +97,7 @@ for nrun in [0, 1, 2]:
     pval_save = DATA_DIR / DATASET / "results" / pval_name
 
     ## Perturbatiom
-    d = Multiple_TFScanning(model, adata, 8, "cell_type", terminal_states, multiple_ko_list, 0)
+    d = Multiple_TFScanning(model, adata, 8, "cell_type", TERMINAL_STATES, multiple_ko_list, 0)
     coef = pd.DataFrame(np.array(d["coefficient"]))
     coef.index = d["TF"]
     coef.columns = get_list_name(d["coefficient"][0])
@@ -102,3 +107,7 @@ for nrun in [0, 1, 2]:
 
     coef.to_csv(coef_save)
     pval.to_csv(pval_save)
+
+# %%
+
+# %%
