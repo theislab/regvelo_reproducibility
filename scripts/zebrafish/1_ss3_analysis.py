@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Basic preprocessing and analysis of the zebrafish data
 #
-# Notebook preprocesses the zebrafish Smart-seq3 dataset.
+# Notebook: preprocesses the zebrafish Smart-seq3 dataset.
 
 # %% [markdown]
 # ## Library imports
@@ -45,7 +45,7 @@ if SAVE_DATA:
     (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
 
 # %%
-SAVE_FIGURES = False
+SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
@@ -62,7 +62,7 @@ prior_net = pd.read_csv(DATA_DIR / DATASET / "raw" / "prior_GRN.csv", index_col=
 keep_list = pd.read_csv(DATA_DIR / DATASET / "raw" / "new_tf.csv", sep=";").iloc[:, 0].tolist()
 
 # %%
-sc.pp.neighbors(adata, n_neighbors=30, n_pcs=50)
+sc.pp.neighbors(adata, n_neighbors=30)
 scv.pp.moments(adata)
 
 # %%
@@ -134,31 +134,24 @@ with mplscience.style_context():
 adata = prior_GRN_import(adata, prior_net).copy()
 
 # %%
-adata_raw = adata.copy()
+velocity_genes = preprocess_data(adata).var_names.tolist()
+
+# %%
+adata.var["TF"] = np.isin(adata.var_names, TF_list)
 
 # %%
 ## velocity_r2 positive genes
-adata = preprocess_data(adata, filter_on_r2=True)
-adata = filter_genes_with_upstream_regulators(adata)
+sg = np.union1d(list(set(keep_list).intersection(adata.var_names)), velocity_genes)
 
 ## Filtering genes, only keep velocity_r2 positive genes and TFs
-gene_list = np.unique(keep_list + adata.var_names.tolist())
-gene_list = set(gene_list).intersection(adata_raw.var_names)
-gene_list = list(gene_list)
+adata = adata[:, sg].copy()
 
 # %%
-adata = adata_raw[:, gene_list].copy()
-scv.tl.velocity(adata)
 adata = filter_genes_with_upstream_regulators(adata)
 adata = preprocess_data(adata, filter_on_r2=False)
 
 # %%
-TF_list = set(TF_list).intersection(adata.var_names)
-TF_list = list(TF_list)
-print("final number of TF: " + str(len(TF_list)))
-
-# %%
-adata.var["TF"] = np.isin(adata.var_names, TF_list)
+scv.tl.velocity(adata)
 
 # %% [markdown]
 # ## Save dataset
@@ -166,3 +159,5 @@ adata.var["TF"] = np.isin(adata.var_names, TF_list)
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+
+# %%
