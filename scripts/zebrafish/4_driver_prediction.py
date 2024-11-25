@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Ealy driver perturbation prediction
+# # Early driver perturbation prediction
 #
-# Notebook analyses early drivers including nr2f5, sox9b, twist1b, and ets1.
+# Notebook for analyzing early drivers' dynamics including nr2f5, sox9b, twist1b, and ets1.
 
 # %% [markdown]
 # ## Library imports
@@ -59,7 +59,7 @@ TERMINAL_STATES = [
 ]
 
 # %% [markdown]
-# ## Data Loading
+# ## Data loading
 
 # %%
 adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_regvelo.h5ad")
@@ -281,7 +281,7 @@ with mplscience.style_context():
         plt.axvline(x=i + 0.5, color="gray", linestyle="--")
 
     # Label settings
-    plt.ylabel("Perturbation coefficient", fontsize=14)
+    plt.ylabel("Depletion score", fontsize=14)
     plt.xlabel("TF", fontsize=14)
     plt.xticks(fontsize=14)  # Increase font size of x-axis tick labels
     plt.yticks(fontsize=14)  # Increase font size of y-axis tick labels
@@ -298,3 +298,5 @@ with mplscience.style_context():
         )
     # Show the plot
     plt.show()
+
+# %%
