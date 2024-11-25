@@ -1,13 +1,12 @@
 # %% [markdown]
 # # Perturbation prediction benchmark
 #
-# Notebook compares perturbation prediction.
+# Notebook for comparing perturbation prediction.
 
 # %% [markdown]
 # ## Library imports
 
 # %%
-import numpy as np
 import pandas as pd
 import scipy
 
@@ -19,6 +18,8 @@ import scanpy as sc
 import scvelo as scv
 
 from rgv_tools import DATA_DIR, FIG_DIR
+from rgv_tools.benchmarking import perturb_prediction
+from rgv_tools.core import METHOD_PALETTE_PERTURBATION
 
 # %% [markdown]
 # ## General settings
@@ -41,45 +42,21 @@ if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
 
-# %% [markdown]
-# ## Function definitions
-
+# %%
+single_ko = ["elk3", "erf", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
+multiple_ko = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
 
 # %%
-def perturb_prediction(coef, perturbation, gene_list):
-    """TODO."""
-    gt = perturbation.loc[[i in coef.index for i in perturbation.loc[:, "sgRNA_group"]], :].copy()
-    gt = gt.loc[
-        [i in ["Pigment_gch2_high", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"] for i in gt.loc[:, "cell_anno"]],
-        :,
-    ]
-
-    ## zero-center the likelihood of different panel.
-    for tf in gene_list:
-        gt.loc[[i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"] = gt.loc[
-            [i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"
-        ] - np.mean(gt.loc[[i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"])
-
-    terminal_states = ["Pigment", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"]
-    coef = coef.loc[:, terminal_states]
-    coef.columns = ["Pigment_gch2_high", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"]
-    pred_effect = []
-    TF = []
-    for i in range(gt.shape[0]):
-        ts = gt.iloc[i, 0]
-        tf = gt.iloc[i, 2]
-        effect = coef.loc[tf, ts]
-        pred_effect.append(effect)
-        TF.append(tf)
-    pred = pd.DataFrame({"TF": TF, "effect": pred_effect})
-    return scipy.stats.spearmanr(pred.iloc[:, 1], gt.iloc[:, 1])[0]
-
+METHODS = ["RegVelo", "Dynamo (KO)", "Dynamo (perturbation)", "celloracle"]
 
 # %% [markdown]
 # ## Data loading
 
+# %% [markdown]
+# ### Single knockout
+
 # %%
-gene_list = ["elk3", "erf", "etv2", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
+gene_list = single_ko
 perturbation = pd.read_csv(DATA_DIR / DATASET / "raw" / "df_median_meld_likelihood_new.csv")
 
 # %% [markdown]
@@ -110,10 +87,10 @@ for nrun in range(3):
     method.append("RegVelo")
 
 # %% [markdown]
-# ### multiple knock-out
+# ### Multiple knock-out
 
 # %%
-gene_list = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
+gene_list = multiple_ko
 
 # %% [markdown]
 # #### predict perturbation
@@ -131,10 +108,10 @@ score_m.append(perturb_prediction(1 - coef_perturb_co, perturbation, gene_list))
 method.append("celloracle")
 
 score_m.append(perturb_prediction(coef_perturb_dyn, perturbation, gene_list))
-method.append("Dynamo(perturbation)")
+method.append("Dynamo (perturbation)")
 
 score_m.append(perturb_prediction(1 - coef_KO_dyn, perturbation, gene_list))
-method.append("Dynamo(KO)")
+method.append("Dynamo (KO)")
 
 # %%
 for nrun in range(3):
@@ -153,15 +130,6 @@ dat2["Experimental class"] = "Multiple TF knock-out"
 df = pd.concat([dat, dat2], axis=0)
 
 # %%
-colors = [
-    (0.00392156862745098, 0.45098039215686275, 0.6980392156862745),
-    (0.9254901960784314, 0.8823529411764706, 0.2),
-    (0.33725490196078434, 0.7058823529411765, 0.9137254901960784),
-    (0.792156862745098, 0.5686274509803921, 0.3803921568627451),
-]
-
-# %%
-order = ["RegVelo", "Dynamo (KO)", "Dynamo (perturbation)", "celloracle"]
 with mplscience.style_context():
     sns.set_style(style="whitegrid")
     fig, ax = plt.subplots(figsize=(4, 5))
@@ -172,8 +140,8 @@ with mplscience.style_context():
         y="Experimental class",
         x="spearman_correlation",
         hue="method",
-        hue_order=order,
-        palette=colors,
+        hue_order=METHODS,
+        palette=METHOD_PALETTE_PERTURBATION,
         ax=ax,
         ci=None,
     )
@@ -184,7 +152,7 @@ with mplscience.style_context():
         y="Experimental class",
         x="spearman_correlation",
         hue="method",
-        hue_order=order,
+        hue_order=METHODS,
         dodge=True,
         color="black",
         ax=ax,
@@ -194,8 +162,8 @@ with mplscience.style_context():
     # Remove the duplicate legend
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(
-        handles[4 : (4 + len(colors))],
-        labels[4 : (4 + len(colors))],
+        handles[4 : (4 + len(METHOD_PALETTE_PERTURBATION))],
+        labels[4 : (4 + len(METHOD_PALETTE_PERTURBATION))],
         bbox_to_anchor=(0.5, -0.1),
         loc="upper center",
         ncol=2,
@@ -228,3 +196,5 @@ scipy.stats.ttest_ind(fc, fc * 0, equal_var=False, alternative="greater")
 # %%
 adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 sc.pl.umap(adata, color=["gch2", "sox6"])
+
+# %%
