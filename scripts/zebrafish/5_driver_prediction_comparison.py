@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Driver ranking benchmark
 #
-# Notebook benchmarks driver ranking.
+# Benchmark driver ranking.
 
 # %% [markdown]
 # ## Library import
@@ -22,6 +22,15 @@ import scvelo as scv
 from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
+# ## General settings
+
+# %%
+plt.rcParams["svg.fonttype"] = "none"
+sns.reset_defaults()
+sns.reset_orig()
+scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
+
+# %% [markdown]
 # ## Constants
 
 # %%
@@ -39,15 +48,6 @@ TERMINAL_STATES = [
     "mNC_hox34",
     "Pigment",
 ]
-
-# %% [markdown]
-# ## General setting
-
-# %%
-plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
-scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
 # ## Data loading
@@ -183,3 +183,5 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "AUROC_ranking.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
+
+# %%
