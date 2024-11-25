@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Terminal state identification
 #
-# Notebook compares model performance based on for terminal state identification.
+# Compares model performance based on terminal state identification.
 
 # %% [markdown]
 # ## Library imports
@@ -9,7 +9,6 @@
 # %%
 import numpy as np
 import pandas as pd
-import pytorch_lightning as pl
 from scipy.stats import ttest_ind
 
 import matplotlib.pyplot as plt
@@ -20,16 +19,18 @@ from matplotlib import rcParams
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
+import scvi
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import stair_vec, TSI_score
+from rgv_tools.benchmarking import plot_TSI, TSI_score
+from rgv_tools.core import METHOD_PALETTE_TSI
 from rgv_tools.plotting._significance import add_significance, get_significance
 
 # %% [markdown]
 # ## General setting
 
 # %%
-pl.seed_everything(0)
+scvi.settings.seed = 0
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
@@ -52,31 +53,33 @@ FIGURE_FORMATE = "svg"
 # %%
 VELOCITY_METHODS = ["regvelo", "scvelo", "velovi"]
 
-# %% [markdown]
-# ## Data loading
-
 # %%
-vks = {}
-
-for method in VELOCITY_METHODS:
-    adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / f"adata_run_{method}.h5ad")
-    ## construct graph
-    vk = cr.kernels.VelocityKernel(adata).compute_transition_matrix()
-    vks[method] = vk
-
-# %% [markdown]
-# ## Terminal state identification
-
-# %%
-terminal_states = [
+TERMINAL_STATES = [
     "mNC_head_mesenchymal",
     "mNC_arch2",
     "mNC_hox34",
     "Pigment",
 ]
 
+# %% [markdown]
+# ## Data loading
+
+# %%
+ks = {}
+
+for method in VELOCITY_METHODS:
+    adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / f"adata_run_{method}.h5ad")
+    ## construct graph
+    vk = cr.kernels.VelocityKernel(adata).compute_transition_matrix()
+    ck = cr.kernels.ConnectivityKernel(adata).compute_transition_matrix()
+    ks[method] = 0.8 * vk + 0.2 * ck
+
+# %% [markdown]
+# ## Terminal state identification
+
+# %%
 # define threshold from 0.1 to 1
-points = np.linspace(0.1, 1, 21)[:20]
+thresholds = np.linspace(0.1, 1, 21)[:20]
 
 # %%
 estimators = {}
@@ -84,8 +87,8 @@ tsi = {}
 
 # %%
 for method in VELOCITY_METHODS:
-    estimators[method] = cr.estimators.GPCCA(vks[method])
-    tsi[method] = TSI_score(adata, points, "cell_type", terminal_states, estimators[method])
+    estimators[method] = cr.estimators.GPCCA(ks[method])
+    tsi[method] = TSI_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
 
 # %%
 df = pd.DataFrame(
@@ -129,9 +132,9 @@ with mplscience.style_context():
 # ## Visualize terminal states
 
 # %%
-pre_value_rgv = stair_vec(adata, estimators["regvelo"], 0.8, terminal_states, "cell_type")
-pre_value_scv = stair_vec(adata, estimators["scvelo"], 0.8, terminal_states, "cell_type")
-pre_value_vi = stair_vec(adata, estimators["velovi"], 0.8, terminal_states, "cell_type")
+tsi_rgv_curve = plot_TSI(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_scv_curve = plot_TSI(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_vi_curve = plot_TSI(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "cell_type")
 
 # %% [markdown]
 # ## Plotting
@@ -140,16 +143,14 @@ pre_value_vi = stair_vec(adata, estimators["velovi"], 0.8, terminal_states, "cel
 df = pd.DataFrame(
     {
         "number_macrostate": range(0, 12),
-        "RegVelo": [0] + pre_value_rgv,
-        "veloVI": [0] + pre_value_vi,
-        "scVelo": [0] + pre_value_scv,
+        "RegVelo": [0] + tsi_rgv_curve,
+        "veloVI": [0] + tsi_vi_curve,
+        "scVelo": [0] + tsi_scv_curve,
     }
 )
 
 # %%
 df = pd.melt(df, ["number_macrostate"])
-colors = sns.color_palette("colorblind", n_colors=3)
-colors = colors + [(0.8274509803921568, 0.8274509803921568, 0.8274509803921568)]
 
 # %%
 # Set figure size
@@ -164,7 +165,7 @@ with mplscience.style_context():
         y="value",
         hue="variable",
         style="variable",
-        palette=colors,
+        palette=METHOD_PALETTE_TSI,
         drawstyle="steps-post",
         data=df,
         linewidth=3,
@@ -187,3 +188,5 @@ with mplscience.style_context():
             FIG_DIR / DATASET / "state_identification_update.svg", format="svg", transparent=True, bbox_inches="tight"
         )
     plt.show()
+
+# %%
