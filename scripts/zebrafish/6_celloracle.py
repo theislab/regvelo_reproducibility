@@ -1,7 +1,7 @@
 # %% [markdown]
 # # CellOracle-based perturbation prediction
 #
-# Notebook predicts TF perturbation effects with CellOracle.
+# Notebook for predicts TF perturbation effects with CellOracle.
 
 # %% [markdown]
 # ## Library imports
@@ -13,171 +13,15 @@ import pandas as pd
 import celloracle as co
 import scanpy as sc
 import scvelo as scv
-from celloracle.applications import Gradient_calculator, Oracle_development_module
-from scvelo import logging as logg
+from celloracle.applications import Gradient_calculator
 
 from rgv_tools import DATA_DIR
-
-# %% [markdown]
-# ## Function definitions
-
-
-# %%
-def split_elements(character_list):
-    """TODO."""
-    result_list = []
-    for element in character_list:
-        if "_" in element:
-            parts = element.split("_")
-            result_list.append(parts)
-        else:
-            result_list.append([element])
-    return result_list
-
-
-# %%
-def combine_elements(split_list):
-    """TODO."""
-    result_list = []
-    for parts in split_list:
-        combined_element = "_".join(parts)
-        result_list.append(combined_element)
-    return result_list
-
-
-# %%
-def pipeline(gene_for_KO):
-    """TODO."""
-    # 1. Simulate KO
-    oracle.simulate_shift(perturb_condition={gene_for_KO: 0}, ignore_warning=True, n_propagation=3)
-    oracle.estimate_transition_prob(n_neighbors=n_neighbors, knn_random=True, sampled_fraction=1)
-    oracle.calculate_embedding_shift(sigma_corr=0.05)
-
-    ## calculate overall score
-    dev = Oracle_development_module()
-    # Load development flow
-    dev.load_differentiation_reference_data(gradient_object=gradient)
-    # Load simulation result
-    dev.load_perturb_simulation_data(oracle_object=oracle, n_neighbors=n_neighbors)
-    # Calculate inner product
-    dev.calculate_inner_product()
-    dev.calculate_digitized_ip(n_bins=10)
-
-    # Save results in a hdf5 file.
-    ps_max = dev.get_negative_PS_p_value(return_ps_sum=True, plot=False)[1]
-
-    # Do simulation for all conditions.
-    Lineage = []
-    PS_score = []
-    for lineage_name, cell_idx in index_dictionary.items():
-        dev = Oracle_development_module()
-        # Load development flow
-        dev.load_differentiation_reference_data(gradient_object=gradient)
-        # Load simulation result
-        dev.load_perturb_simulation_data(
-            oracle_object=oracle, cell_idx_use=cell_idx, name=lineage_name, n_neighbors=n_neighbors
-        )
-        # Calculate inner product
-        dev.calculate_inner_product()
-        dev.calculate_digitized_ip(n_bins=10)
-
-        # Save results in a hdf5 file.
-        ps = dev.get_negative_PS_p_value(return_ps_sum=True, plot=False)[1]
-        ps = ps / ps_max
-        Lineage.append(lineage_name)
-        PS_score.append(ps)
-
-    df = pd.DataFrame({"Lineage": Lineage, "PS_score": PS_score})
-    df.index = Lineage
-
-    return df
-
-
-# %%
-def pipeline2(gene_for_KO):
-    """TODO."""
-    oracle.simulate_shift(perturb_condition={key: 0 for key in gene_for_KO}, ignore_warning=True, n_propagation=3)
-    oracle.estimate_transition_prob(n_neighbors=n_neighbors, knn_random=True, sampled_fraction=1)
-    oracle.calculate_embedding_shift(sigma_corr=0.05)
-
-    ## calculate overall score
-    dev = Oracle_development_module()
-    # Load development flow
-    dev.load_differentiation_reference_data(gradient_object=gradient)
-    # Load simulation result
-    dev.load_perturb_simulation_data(oracle_object=oracle, n_neighbors=n_neighbors)
-    # Calculate inner product
-    dev.calculate_inner_product()
-    dev.calculate_digitized_ip(n_bins=10)
-
-    # Save results in a hdf5 file.
-    ps_max = dev.get_negative_PS_p_value(return_ps_sum=True, plot=False)[1]
-
-    # Do simulation for all conditions.
-    Lineage = []
-    PS_score = []
-    for lineage_name, cell_idx in index_dictionary.items():
-        dev = Oracle_development_module()
-        # Load development flow
-        dev.load_differentiation_reference_data(gradient_object=gradient)
-        # Load simulation result
-        dev.load_perturb_simulation_data(
-            oracle_object=oracle, cell_idx_use=cell_idx, name=lineage_name, n_neighbors=n_neighbors
-        )
-        # Calculate inner product
-        dev.calculate_inner_product()
-        dev.calculate_digitized_ip(n_bins=10)
-
-        # Save results in a hdf5 file.
-        ps = dev.get_negative_PS_p_value(return_ps_sum=True, plot=False)[1]
-        ps = ps / ps_max
-        Lineage.append(lineage_name)
-        PS_score.append(ps)
-
-    df = pd.DataFrame({"Lineage": Lineage, "PS_score": PS_score})
-    df.index = Lineage
-
-    return df
-
-
-# %%
-def TFScanning_perturbation(adata, n_states, cluster_label, terminal_states, TF):
-    """TODO."""
-    coef = []
-    for tf in TF:
-        ## TODO: mask using dynamo
-        ## each time knock-out a TF
-        df = pipeline(tf)
-        coef.append(df.loc[:, "PS_score"])
-        logg.info("Done " + tf)
-    d = {"TF": TF, "coefficient": coef}
-    # df = pd.DataFrame(data=d)
-    return d
-
-
-# %%
-def Multiple_TFScanning_perturbation(data, n_states, cluster_label, terminal_states, TF_pair):
-    """TODO."""
-    coef = []
-    for tf in TF_pair:
-        ## TODO: mask using dynamo
-        ## each time knock-out a TF
-        df = pipeline2(tf)
-        coef.append(df.loc[:, "PS_score"])
-        logg.info("Done " + combine_elements([tf])[0])
-    d = {"TF": combine_elements(TF_pair), "coefficient": coef}
-    # df = pd.DataFrame(data=d)
-    return d
-
-
-# %%
-def get_list_name(lst):
-    """TODO."""
-    names = []
-    for name, _ in lst.items():
-        names.append(name)
-    return names
-
+from rgv_tools.perturbation import (
+    get_list_name,
+    Multiple_TFScanning_perturbation_co,
+    split_elements,
+    TFScanning_perturbation_co,
+)
 
 # %% [markdown]
 # ## Constants
@@ -189,6 +33,18 @@ DATASET = "zebrafish"
 SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
+
+# %%
+TERMINAL_STATES = [
+    "mNC_head_mesenchymal",
+    "mNC_arch2",
+    "mNC_hox34",
+    "Pigment",
+]
+
+# %%
+single_ko = ["elk3", "erf", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
+multiple_ko = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
 
 # %% [markdown]
 # ## Data loading
@@ -317,28 +173,20 @@ index_dictionary = {
 # ## Perturbation prediction
 
 # %% [markdown]
-# #### single knock-out
+# ### single knock-out
 
 # %%
-n_propagation = 3
 n_neighbors = 30
 
-gene_list = ["elk3", "erf", "fli1a", "mitfa", "nr2f5", "rarga", "rxraa", "smarcc1a", "tfec", "nr2f2"]
-
-terminal_states = [
-    "mNC_head_mesenchymal",
-    "mNC_arch2",
-    "mNC_hox34",
-    "Pigment",
-]
-
 # %%
-gene_list = set(gene_list).intersection(adata.var_names)
-gene_list = list(gene_list)
+single_ko = set(single_ko).intersection(adata.var_names)
+single_ko = list(single_ko)
 
 # %%
 ## celloracle perturbation
-d = TFScanning_perturbation(adata, 8, "cell_type", terminal_states, gene_list)
+d = TFScanning_perturbation_co(
+    adata, 8, "cell_type", TERMINAL_STATES, single_ko, oracle, gradient, index_dictionary, n_neighbors
+)
 
 # %%
 coef = pd.DataFrame(np.array(d["coefficient"]))
@@ -346,21 +194,27 @@ coef.index = d["TF"]
 coef.columns = get_list_name(d["coefficient"][0])
 
 # %% [markdown]
-# #### double knock-out
+# ### multiple knock-out
 
 # %%
-multiple_ko = ["fli1a_elk3", "mitfa_tfec", "tfec_mitfa_bhlhe40", "fli1a_erf_erfl3", "erf_erfl3"]
 multiple_ko_list = split_elements(multiple_ko)
 
 # %%
-d = Multiple_TFScanning_perturbation(adata, 8, "cell_type", terminal_states, multiple_ko_list)
+d = Multiple_TFScanning_perturbation_co(
+    adata, 8, "cell_type", TERMINAL_STATES, multiple_ko_list, oracle, gradient, index_dictionary, n_neighbors
+)
 
 # %%
 coef_multiple = pd.DataFrame(np.array(d["coefficient"]))
 coef_multiple.index = d["TF"]
 coef_multiple.columns = get_list_name(d["coefficient"][0])
 
+# %% [markdown]
+# ## Save dataset
+
 # %%
 if SAVE_DATA:
     coef.to_csv(DATA_DIR / DATASET / "results" / "celloracle_perturb_single.csv")
     coef_multiple.to_csv(DATA_DIR / DATASET / "results" / "celloracle_perturb_multiple.csv")
+
+# %%
