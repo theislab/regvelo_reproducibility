@@ -124,6 +124,7 @@ def RegulationScanning(
     TF: List[str],
     target: List[str],
     effect: float = 1e-3,
+    method: str = "likelihood",
 ) -> Dict[str, Union[List[str], List[pd.Series]]]:
     """Perform transcription factor scanning and perturbation analysis on a gene regulatory network.
 
@@ -234,7 +235,7 @@ def RegulationScanning(
         fate_prob = fate_prob * arr
 
         fate_prob2.index = [i + "_perturb" for i in fate_prob2.index]
-        test_result = abundance_test(fate_prob, fate_prob2)
+        test_result = abundance_test(fate_prob, fate_prob2, method=method)
         coef.append(test_result.loc[:, "coefficient"])
         pvalue.append(test_result.loc[:, "FDR adjusted p-value"])
         logg.info("Done " + gene)

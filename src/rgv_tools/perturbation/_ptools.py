@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
 import torch
-from scipy.stats import ranksums
+from scipy.stats import ranksums, ttest_ind
 from sklearn.metrics import roc_auc_score
 
 import cellrank as cr
@@ -130,8 +130,7 @@ def abundance_test(prob_raw: pd.DataFrame, prob_pert: pd.DataFrame, method: str 
         else:
             pval = ranksums(pred[np.array(y) == 0], pred[np.array(y) == 1])[1]
             if method == "t-statistics":
-                score = np.mean(pred[np.array(y) == 0]) - np.mean(pred[np.array(y) == 1])
-                score = score / np.sqrt(np.std(pred[np.array(y) == 1]) ** 2 + np.std(pred[np.array(y) == 0]) ** 2)
+                score = ttest_ind(pred[np.array(y) == 0], pred[np.array(y) == 1])[0]
             elif method == "likelihood":
                 score = roc_auc_score(y, pred)
             else:
@@ -227,6 +226,7 @@ def TFScanning(
     terminal_states: Optional[List[str]],
     TF: List[str],
     effect: float = 1e-3,
+    method: str = "likelihood",
 ) -> Dict[str, Union[List[str], List[pd.Series]]]:
     """Perform transcription factor scanning and perturbation analysis on a gene regulatory network.
 
@@ -350,7 +350,7 @@ def TFScanning(
         fate_prob = fate_prob * arr
 
         fate_prob2.index = [i + "_perturb" for i in fate_prob2.index]
-        test_result = abundance_test(fate_prob, fate_prob2)
+        test_result = abundance_test(fate_prob, fate_prob2, method)
         coef.append(test_result.loc[:, "coefficient"])
         pvalue.append(test_result.loc[:, "FDR adjusted p-value"])
         logg.info("Done " + tf)
@@ -370,6 +370,7 @@ def Multiple_TFScanning(
     terminal_states: Optional[List[str]],
     TF_pair: List[List[str]],
     effect: float = 1e-3,
+    method: str = "likelihood",
 ) -> Dict[str, Union[List[str], List[float]]]:
     """Performs multiple transcription factor (TF) scanning with perturbation analysis.
 
@@ -456,7 +457,7 @@ def Multiple_TFScanning(
         fate_prob = fate_prob * arr
 
         fate_prob2.index = [i + "_perturb" for i in fate_prob2.index]
-        test_result = abundance_test(fate_prob, fate_prob2)
+        test_result = abundance_test(fate_prob, fate_prob2, method=method)
         coef.append(test_result.loc[:, "coefficient"])
         pvalue.append(test_result.loc[:, "FDR adjusted p-value"])
         logg.info(f"Done {combine_elements([tf_pair])[0]}")

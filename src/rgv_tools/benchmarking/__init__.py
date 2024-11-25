@@ -4,16 +4,32 @@ from ._metrics import (
     get_grn_auroc,
     get_time_correlation,
     get_velocity_correlation,
+    perturb_prediction,
 )
-from ._tsi import stair_vec, TSI_score
+from ._ranking import (
+    get_aucs,
+    get_gene_ranks,
+    get_optimal_auc,
+    get_rank_threshold,
+    get_var_ranks,
+    plot_gene_ranking,
+)
+from ._tsi import plot_TSI, TSI_score
 
 __all__ = [
     "get_data_subset",
     "get_grn_auroc",
     "get_time_correlation",
     "get_velocity_correlation",
+    "perturb_prediction",
     "set_output",
     "TSI_score",
-    "stair_vec",
+    "plot_TSI",
     "compute_average_correlations",
+    "get_var_ranks",
+    "get_optimal_auc",
+    "get_gene_ranks",
+    "get_rank_threshold",
+    "plot_gene_ranking",
+    "get_aucs",
 ]

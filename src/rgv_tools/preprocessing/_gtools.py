@@ -6,7 +6,7 @@ from scipy.spatial.distance import cdist
 from anndata import AnnData
 
 
-def prior_GRN_import(adata: AnnData, gt_net: pd.DataFrame) -> AnnData:
+def prior_GRN_import(adata: AnnData, gt_net: pd.DataFrame, keep_dim=False) -> AnnData:
     """Constructs a gene regulatory network (GRN) based on ground-truth interactions and gene expression data in `adata`.
 
     Parameters
@@ -17,18 +17,32 @@ def prior_GRN_import(adata: AnnData, gt_net: pd.DataFrame) -> AnnData:
     - gt_net: pd.DataFrame
         A DataFrame representing the ground-truth regulatory network with regulators as columns
         and targets as rows.
+    - keep_dim: boolean
+        A boolean variable represeting if keep the output adata has the same dimensions.
 
     Returns
     -------
     - AnnData: A modified `AnnData` object containing the GRN information,
                with network-related metadata stored in `uns`.
     """
+    if keep_dim:
+        regulators = adata.var.index.tolist()
+        targets = adata.var.index.tolist()
+        skeleton = pd.DataFrame(np.zeros([len(regulators), len(targets)]), index=regulators, columns=targets)
+        skeleton.loc[
+            list(set(regulators).intersection(gt_net.index)), list(set(targets).intersection(gt_net.columns))
+        ] = gt_net.loc[
+            list(set(regulators).intersection(gt_net.index)), list(set(targets).intersection(gt_net.columns))
+        ]
+        gt_net = skeleton.copy()
+
     # Filter indices based on the ground-truth network
     regulator_index = [gene in gt_net.columns for gene in adata.var.index]
     target_index = [gene in gt_net.index for gene in adata.var.index]
 
     # Compute correlation matrix for genes
-    corr_m = 1 - cdist(adata.X.todense().T, adata.X.todense().T, metric="correlation")
+    GEX = adata.layers["Ms"]
+    corr_m = 1 - cdist(GEX.T, GEX.T, metric="correlation")
     corr_m = torch.tensor(corr_m).float()
     corr_m = corr_m[target_index][:, regulator_index]
     corr_m[torch.isnan(corr_m)] = 0  # Replace NaNs with zero
@@ -40,12 +54,17 @@ def prior_GRN_import(adata: AnnData, gt_net: pd.DataFrame) -> AnnData:
     # Threshold and clean the network
     GRN_final = (GRN_final.abs() >= 0.01).astype(int)
     np.fill_diagonal(GRN_final.values, 0)  # Remove self-loops
-    GRN_final = GRN_final.loc[GRN_final.sum(axis=1) > 0, GRN_final.sum(axis=0) > 0]
 
-    # Prepare a matrix with all unique genes from the final network
-    genes = np.unique(GRN_final.index.to_list() + GRN_final.columns.to_list())
-    W = pd.DataFrame(0, index=genes, columns=genes, dtype=float)
-    W.loc[GRN_final.columns, GRN_final.index] = GRN_final.T
+    if keep_dim:
+        W = pd.DataFrame(np.zeros([len(regulators), len(targets)]), index=regulators, columns=targets)
+        W.loc[GRN_final.index.tolist(), GRN_final.columns.tolist()] = GRN_final.T
+    else:
+        GRN_final = GRN_final.loc[GRN_final.sum(axis=1) > 0, GRN_final.sum(axis=0) > 0]
+
+        # Prepare a matrix with all unique genes from the final network
+        genes = np.unique(GRN_final.index.to_list() + GRN_final.columns.to_list())
+        W = pd.DataFrame(0, index=genes, columns=genes, dtype=float)
+        W.loc[GRN_final.columns, GRN_final.index] = GRN_final.T
 
     # Subset the original data to genes in the network and set final properties
     reg_bdata = adata[:, W.index].copy()

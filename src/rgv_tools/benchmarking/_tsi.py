@@ -27,7 +27,7 @@ def generate_sequence(k: int, n: int) -> List[int]:
     return sequence
 
 
-def stair_vec(
+def plot_TSI(
     adata: AnnData,
     kernel: Any,
     threshold: float,
@@ -87,7 +87,6 @@ def stair_vec(
         except:
             # Log error and repeat the last valid value or use 0 if empty
             pre_value.append(pre_value[-1] if pre_value else 0)
-            raise
 
     return pre_value
 
@@ -132,7 +131,7 @@ def TSI_score(
 
     for threshold in points:
         # Compute the staircase function for the current threshold
-        pre_value = stair_vec(adata, kernel, threshold, terminal_states, cluster_key, max_states)
+        pre_value = plot_TSI(adata, kernel, threshold, terminal_states, cluster_key, max_states)
         y_values = [0] + pre_value
 
         # Calculate the area under the staircase function

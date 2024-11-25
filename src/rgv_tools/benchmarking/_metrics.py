@@ -1,6 +1,7 @@
 from typing import Callable
 
 import numpy as np
+import pandas as pd
 import scipy
 from numpy.typing import ArrayLike
 from scipy.stats import pearsonr, spearmanr
@@ -123,3 +124,32 @@ def get_grn_auroc(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
     ground_truth[ground_truth != 0] = 1
 
     return roc_auc_score(ground_truth, estimated[mask])
+
+
+def perturb_prediction(coef, perturbation, gene_list):
+    """TODO."""
+    gt = perturbation.loc[[i in coef.index for i in perturbation.loc[:, "sgRNA_group"]], :].copy()
+    gt = gt.loc[
+        [i in ["Pigment_gch2_high", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"] for i in gt.loc[:, "cell_anno"]],
+        :,
+    ]
+
+    ## zero-center the likelihood of different panel.
+    for tf in gene_list:
+        gt.loc[[i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"] = gt.loc[
+            [i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"
+        ] - np.mean(gt.loc[[i in tf for i in gt.loc[:, "sgRNA_group"]], "median_likelihood"])
+
+    terminal_states = ["Pigment", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"]
+    coef = coef.loc[:, terminal_states]
+    coef.columns = ["Pigment_gch2_high", "mNC_hox34", "mNC_arch2", "mNC_head_mesenchymal"]
+    pred_effect = []
+    TF = []
+    for i in range(gt.shape[0]):
+        ts = gt.iloc[i, 0]
+        tf = gt.iloc[i, 2]
+        effect = coef.loc[tf, ts]
+        pred_effect.append(effect)
+        TF.append(tf)
+    pred = pd.DataFrame({"TF": TF, "effect": pred_effect})
+    return scipy.stats.spearmanr(pred.iloc[:, 1], gt.iloc[:, 1])[0]
