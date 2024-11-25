@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Perturb-seq data analysis
 #
-# Notebook analyses zebrafish Perturb-seq data.
+# Notebook for analyzing zebrafish Perturb-seq data.
 
 # %% [markdown]
 # ## Library imports
