@@ -1,5 +1,7 @@
 # %% [markdown]
 # # elf1 perturbation simulation
+#
+# Notebook for analyzing elf1 perturbation effects and regulatory circut
 
 # %% [markdown]
 # ## Library imports
@@ -29,6 +31,18 @@ from rgv_tools.perturbation import (
 )
 
 # %% [markdown]
+# ## General settings
+
+# %%
+# %matplotlib inline
+
+# %%
+plt.rcParams["svg.fonttype"] = "none"
+sns.reset_defaults()
+sns.reset_orig()
+scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
+
+# %% [markdown]
 # ## Constants
 
 # %%
@@ -44,6 +58,14 @@ SAVE_FIGURES = False
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
+# %%
+TERMINAL_STATES = [
+    "mNC_head_mesenchymal",
+    "mNC_arch2",
+    "mNC_hox34",
+    "Pigment",
+]
+
 # %% [markdown]
 # ## Data loading
 
@@ -53,43 +75,44 @@ adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_regvelo.h5ad"
 # %% [markdown]
 # ## elf1 perturbation simulation
 
+# %% [markdown]
+# ### Model loading
+
 # %%
-model = DATA_DIR / DATASET / "processed" / "rgv_hard_model_all"
+model = DATA_DIR / DATASET / "processed" / "rgv_model"
 vae = REGVELOVI.load(model, adata)
 set_output(adata, vae)
 
+# %% [markdown]
+# ### Calculate cell fate probabilities on original vector field
+
 # %%
-terminal_states = [
-    "mNC_head_mesenchymal",
-    "mNC_arch2",
-    "mNC_hox34",
-    "Pigment",
-]
 vk = cr.kernels.VelocityKernel(adata)
 vk.compute_transition_matrix()
 ck = cr.kernels.ConnectivityKernel(adata).compute_transition_matrix()
-g_raw = cr.estimators.GPCCA(vk)
+estimator = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
 ## evaluate the fate prob on original space
-g_raw.compute_macrostates(n_states=7, cluster_key="cell_type")
-g_raw.set_terminal_states(terminal_states)
-g_raw.compute_fate_probabilities()
-g_raw.plot_fate_probabilities(same_plot=False)
+estimator.compute_macrostates(n_states=7, cluster_key="cell_type")
+estimator.set_terminal_states(TERMINAL_STATES)
+estimator.compute_fate_probabilities()
+estimator.plot_fate_probabilities(same_plot=False)
+
+# %% [markdown]
+# ### Calculate cell fate probabilities on perturbed vector field
 
 # %%
-## Elf1
 adata_target_perturb, reg_vae_perturb = in_silico_block_simulation(model, adata, "elf1")
 
-n_states = 7
+# %%
 vk = cr.kernels.VelocityKernel(adata_target_perturb)
 vk.compute_transition_matrix()
 ck = cr.kernels.ConnectivityKernel(adata_target_perturb).compute_transition_matrix()
-kernel = 0.8 * vk + 0.2 * ck
 
-g = cr.estimators.GPCCA(kernel)
+estimator_p = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
 ## evaluate the fate prob on original space
-g.compute_macrostates(n_states=n_states, cluster_key="cell_type")
-g.set_terminal_states(terminal_states)
-g.compute_fate_probabilities()
+estimator_p.compute_macrostates(n_states=7, cluster_key="cell_type")
+estimator_p.set_terminal_states(TERMINAL_STATES)
+estimator_p.compute_fate_probabilities()
 ## visualize coefficient
 cond1_df = pd.DataFrame(
     adata_target_perturb.obsm["lineages_fwd"], columns=adata_target_perturb.obsm["lineages_fwd"].names.tolist()
@@ -114,7 +137,7 @@ final_df["Score"] = 0.5 - final_df["Score"]
 # %%
 color_label = "cell_type"
 df = pd.DataFrame(final_df["Score"])
-df.columns = ["coefficient"]
+df.columns = ["Depletion score"]
 df["Cell type"] = final_df["Terminal state"]
 order = df["Cell type"].tolist()
 
@@ -126,7 +149,7 @@ with mplscience.style_context():
     fig, ax = plt.subplots(figsize=(2, 2))
     sns.barplot(
         data=df,
-        y="coefficient",
+        y="Depletion score",
         x="Cell type",
         palette=subset_palette,
         order=order,
@@ -157,15 +180,8 @@ targets = GRN.loc[:, "elf1"]
 targets = np.array(targets.index.tolist())[np.array(targets) != 0]
 
 # %%
-terminal_states = [
-    "mNC_head_mesenchymal",
-    "mNC_arch2",
-    "mNC_hox34",
-    "Pigment",
-]
-
 print("inferring perturbation...")
-perturb_screening = RegulationScanning(model, adata, 7, "cell_type", terminal_states, "elf1", targets, 0)
+perturb_screening = RegulationScanning(model, adata, 7, "cell_type", TERMINAL_STATES, "elf1", targets, 0)
 coef = pd.DataFrame(np.array(perturb_screening["coefficient"]))
 coef.index = perturb_screening["target"]
 coef.columns = get_list_name(perturb_screening["coefficient"][0])
@@ -260,3 +276,5 @@ with mplscience.style_context():
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "results" / "elf1_screening.csv")
+
+# %%
