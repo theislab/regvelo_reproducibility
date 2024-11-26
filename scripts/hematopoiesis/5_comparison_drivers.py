@@ -22,6 +22,7 @@ from regvelo import REGVELOVI
 from rgv_tools import DATA_DIR, FIG_DIR
 from rgv_tools.benchmarking import set_output
 from rgv_tools.core import METHOD_PALETTE_DRIVER
+from rgv_tools.perturbation import aggregate_model_predictions
 
 # %% [markdown]
 # ## General settings
@@ -56,23 +57,7 @@ adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad
 TF = adata.var_names[adata.var["TF"]]
 
 # %%
-coef = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_0", index_col=0)
-coef2 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_1", index_col=0)
-coef3 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_2", index_col=0)
-coef4 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_3", index_col=0)
-coef5 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_4", index_col=0)
-
-coef6 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_5", index_col=0)
-coef7 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_6", index_col=0)
-coef8 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_7", index_col=0)
-coef9 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_8", index_col=0)
-coef10 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_9", index_col=0)
-
-coef11 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_10", index_col=0)
-coef12 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_11", index_col=0)
-coef13 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_12", index_col=0)
-coef14 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_13", index_col=0)
-coef15 = pd.read_csv(DATA_DIR / DATASET / "results" / "coef_14", index_col=0)
+regvelo_prediction = aggregate_model_predictions(DATA_DIR / DATASET / "results")
 
 # %%
 HSC_Mon_ranking = pd.read_csv(DATA_DIR / DATASET / "results" / "HSC_Mon_ranking.csv", index_col=0)
@@ -86,66 +71,30 @@ ery_auc_rgv = []
 mon_auc_rgv = []
 
 # %%
-dfs = [coef, coef2, coef3, coef4, coef5]
-coef_all_rep1 = pd.concat(dfs).groupby(level=0).mean()
+for coef in regvelo_prediction:
+    ## ranking Erythroid drivers
+    driver = Ery_driver
+    cell_fate = "Ery"
 
-dfs = [coef6, coef7, coef8, coef9, coef10]
-coef_all_rep2 = pd.concat(dfs).groupby(level=0).mean()
+    ID = set(driver).intersection(set(coef.index.tolist()))
+    label = np.zeros(coef.shape[0])
+    label[[i for i in range(coef.shape[0]) if coef.index.tolist()[i] in list(ID)]] = 1
 
-dfs = [coef11, coef12, coef13, coef14, coef15]
-coef_all_rep3 = pd.concat(dfs).groupby(level=0).mean()
+    score = coef.copy().loc[:, cell_fate]
+    score[np.isnan(score)] = 0
+    ery_auc_rgv.append(roc_auc_score(label, (score)))
 
-# %%
-driver = Ery_driver
-cell_fate = "Ery"
+    ## ranking Monocyte drivers
+    driver = Mon_driver
+    cell_fate = "Mon"
 
-# %%
-ID = set(driver).intersection(set(coef_all_rep1.index.tolist()))
-label = np.zeros(coef_all_rep1.shape[0])
-label[[i for i in range(coef_all_rep1.shape[0]) if coef_all_rep1.index.tolist()[i] in list(ID)]] = 1
+    ID = set(driver).intersection(set(coef.index.tolist()))
+    label = np.zeros(coef.shape[0])
+    label[[i for i in range(coef.shape[0]) if coef.index.tolist()[i] in list(ID)]] = 1
 
-# %%
-# Calculate AUROC
-score_raw = coef_all_rep1.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_ery = roc_auc_score(label, (score_raw))
-ery_auc_rgv.append(auroc_ery)
-
-score_raw = coef_all_rep2.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_ery = roc_auc_score(label, (score_raw))
-ery_auc_rgv.append(auroc_ery)
-
-score_raw = coef_all_rep3.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_ery = roc_auc_score(label, (score_raw))
-ery_auc_rgv.append(auroc_ery)
-ery_auc_rgv
-
-# %%
-driver = Mon_driver
-cell_fate = "Mon"
-
-ID = set(driver).intersection(set(coef_all_rep1.index.tolist()))
-label = np.zeros(coef_all_rep1.shape[0])
-label[[i for i in range(coef_all_rep1.shape[0]) if coef_all_rep1.index.tolist()[i] in list(ID)]] = 1
-
-# Calculate AUROC
-score_raw = coef_all_rep1.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_mon = roc_auc_score(label, (score_raw))
-mon_auc_rgv.append(auroc_mon)
-
-score_raw = coef_all_rep2.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_mon = roc_auc_score(label, (score_raw))
-mon_auc_rgv.append(auroc_mon)
-
-score_raw = coef_all_rep3.copy().loc[:, cell_fate]
-score_raw[np.isnan(score_raw)] = 0
-auroc_mon = roc_auc_score(label, (score_raw))
-mon_auc_rgv.append(auroc_mon)
-mon_auc_rgv
+    score = coef.copy().loc[:, cell_fate]
+    score[np.isnan(score)] = 0
+    mon_auc_rgv.append(roc_auc_score(label, (score)))
 
 # %% [markdown]
 # ## CellRank's driver identification
