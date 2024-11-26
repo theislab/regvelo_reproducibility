@@ -2,6 +2,7 @@ from ._deg import DEG
 from ._grn import inferred_GRN, RegulationScanning
 from ._ptools import (
     abundance_test,
+    aggregate_model_predictions,
     combine_elements,
     get_list_name,
     in_silico_block_simulation,
@@ -34,4 +35,5 @@ __all__ = [
     "TFScanning_perturbation_dyn",
     "Multiple_TFScanning_KO_dyn",
     "Multiple_TFScanning_perturbation_dyn",
+    "aggregate_model_predictions",
 ]
