@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List, Optional, Union
 
 import numpy as np
@@ -465,3 +466,50 @@ def Multiple_TFScanning(
 
     d = {"TF": combine_elements(TF_pair), "coefficient": coef, "pvalue": pvalue}
     return d
+
+
+##########################
+# Function: aggregate_model_predictions
+def aggregate_model_predictions(path, method="likelihood", n_aggregation=5):
+    """Aggregate prediction results of multiple regression model runs.
+
+    Parameters
+    ----------
+    - path (str): The directory containing CSV files with prediction results.
+    - method (str): The aggregation method, either "t-statistics" (median) or "likelihood" (mean).
+    - n_aggregation (int): Number of model runs to aggregate per group.
+
+    Returns
+    -------
+    - List[pd.DataFrame]: A list of aggregated prediction results, one per aggregation group.
+
+    Raises
+    ------
+    - NotImplementedError: If the specified method is not supported.
+    """
+    # Identify and sort prediction result files
+    prediction_files = [f for f in os.listdir(path) if f.startswith("coef_")]
+    prediction_files = sorted(prediction_files, key=lambda x: int(x.split("_")[1].split(".")[0]))
+
+    # Group files for aggregation
+    grouped_runs = [prediction_files[i : i + n_aggregation] for i in range(0, len(prediction_files), n_aggregation)]
+
+    aggregated_predictions = []
+    for group in grouped_runs:
+        group_predictions = []
+        for run_file in group:
+            # Load prediction results
+            prediction_data = pd.read_csv(os.path.join(path, run_file), index_col=0)
+            group_predictions.append(prediction_data)
+
+        # Perform aggregation based on the specified method
+        if method == "t-statistics":
+            aggregated_result = pd.concat(group_predictions).groupby(level=0).median()
+        elif method == "likelihood":
+            aggregated_result = pd.concat(group_predictions).groupby(level=0).mean()
+        else:
+            raise NotImplementedError("Supported methods are 't-statistics' and 'likelihood'.")
+
+        aggregated_predictions.append(aggregated_result)
+
+    return aggregated_predictions
