@@ -7,12 +7,12 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import torch
 
+import anndata as ad
 import scanpy as sc
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR
@@ -39,22 +39,22 @@ if SAVE_DATA:
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 
 # %% [markdown]
 # ## Run RegVelo
 
 # %%
 ## prepare skeleton
-W = adata.uns["skeleton"].copy()
-W = torch.tensor(np.array(W)).int()
+skeleton = adata.uns["skeleton"].copy()
+skeleton = torch.tensor(np.array(skeleton)).int()
 
 ## prepare TF
-TF = adata.var_names[adata.var["TF"]]
+tfs = adata.var_names[adata.var["tf"]]
 
 ## prepare model
 REGVELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
-vae = REGVELOVI(adata, W=W.T, regulators=TF)
+vae = REGVELOVI(adata, W=skeleton.T, regulators=tfs)
 
 # %%
 vae.train()
@@ -77,7 +77,3 @@ sc.tl.pca(adata, layer="Ms")
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_regvelo_unregularized.h5ad")
-
-# %%
-
-# %%

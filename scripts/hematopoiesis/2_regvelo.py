@@ -7,8 +7,6 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import pandas as pd
 import torch
@@ -16,8 +14,10 @@ import torch
 import matplotlib.pyplot as plt
 import mplscience
 
+import anndata as ad
 import cellrank as cr
 import scanpy as sc
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
@@ -38,38 +38,38 @@ DATASET = "hematopoiesis"
 # %%
 SAVE_DATA = True
 if SAVE_DATA:
-    (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
+# %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
 # %%
 ## four terminal states consistently recovered by all three methods
-terminal_states = ["Mon", "Meg", "Bas", "Ery"]
+TERMINAL_STATES = ["Mon", "Meg", "Bas", "Ery"]
 
 # %% [markdown]
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
-adata_full = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
+adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+adata_full = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
 
 # %% [markdown]
 # ## Run RegVelo
 
 # %%
 ## prepare skeleton
-W = adata.uns["skeleton"].copy()
-W = torch.tensor(np.array(W)).int()
+skeleton = adata.uns["skeleton"].copy()
+skeleton = torch.tensor(np.array(skeleton)).int()
 
 ## prepare TF
-TF = adata.var_names[adata.var["TF"]]
+tfs = adata.var_names[adata.var["tf"]]
 
 ## prepare model
 REGVELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
-vae = REGVELOVI(adata, W=W.T, regulators=TF, lam2=1)
+vae = REGVELOVI(adata, W=skeleton.T, regulators=tfs, lam2=1)
 
 # %%
 vae.train()
@@ -115,7 +115,7 @@ vk.compute_transition_matrix()
 estimator = cr.estimators.GPCCA(vk)  ## We used vk here due to we want to benchmark on velocity
 estimator.compute_macrostates(n_states=5, cluster_key="cell_type")
 
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINAL_STATES)
 estimator.compute_fate_probabilities()
 
 estimator.adata = adata_full.copy()
@@ -154,5 +154,3 @@ if SAVE_DATA:
 if SAVE_DATA:
     path = DATA_DIR / DATASET / "processed" / "rgv_model"
     vae.save(path)
-
-# %%
