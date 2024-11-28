@@ -1,127 +1,118 @@
 import numpy as np
 import pandas as pd
-import torch
 from scipy.spatial.distance import cdist
 
 from anndata import AnnData
 
 
-def prior_GRN_import(adata: AnnData, gt_net: pd.DataFrame, keep_dim=False) -> AnnData:
-    """Constructs a gene regulatory network (GRN) based on ground-truth interactions and gene expression data in `adata`.
+def get_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) -> AnnData:
+    """Constructs a gene regulatory network (GRN) based on ground-truth interactions and gene expression data.
 
     Parameters
     ----------
-    - adata: AnnData
-        An annotated data matrix where `adata.X` contains gene expression data,
-        and `adata.var` has gene identifiers.
-    - gt_net: pd.DataFrame
-        A DataFrame representing the ground-truth regulatory network with regulators as columns
-        and targets as rows.
-    - keep_dim: boolean
+    adata
+        An annotated data matrix where `adata.X` contains gene expression data, and `adata.var` has gene identifiers.
+    gt_net
+        A DataFrame representing the ground-truth regulatory network with regulators as columns and targets as rows.
+    keep_dim
         A boolean variable represeting if keep the output adata has the same dimensions.
 
     Returns
     -------
-    - AnnData: A modified `AnnData` object containing the GRN information,
-               with network-related metadata stored in `uns`.
+    A modified `AnnData` object containing the GRN information, with network-related metadata stored in `uns`.
     """
+    regulator_mask = adata.var_names.isin(gt_net.columns)
+    regulators = adata.var_names[regulator_mask]
+
+    target_mask = adata.var_names.isin(gt_net.index)
+    targets = adata.var_names[target_mask]
+
     if keep_dim:
-        regulators = adata.var.index.tolist()
-        targets = adata.var.index.tolist()
-        skeleton = pd.DataFrame(np.zeros([len(regulators), len(targets)]), index=regulators, columns=targets)
-        skeleton.loc[
-            list(set(regulators).intersection(gt_net.index)), list(set(targets).intersection(gt_net.columns))
-        ] = gt_net.loc[
-            list(set(regulators).intersection(gt_net.index)), list(set(targets).intersection(gt_net.columns))
-        ]
+        skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
+        skeleton.loc[regulators, targets] = gt_net.loc[regulators, targets]
+
         gt_net = skeleton.copy()
 
-    # Filter indices based on the ground-truth network
-    regulator_index = [gene in gt_net.columns for gene in adata.var.index]
-    target_index = [gene in gt_net.index for gene in adata.var.index]
-
     # Compute correlation matrix for genes
-    GEX = adata.layers["Ms"]
-    corr_m = 1 - cdist(GEX.T, GEX.T, metric="correlation")
-    corr_m = torch.tensor(corr_m).float()
-    corr_m = corr_m[target_index][:, regulator_index]
-    corr_m[torch.isnan(corr_m)] = 0  # Replace NaNs with zero
+    gex = adata.layers["Ms"]
+    correlation = 1 - cdist(gex.T, gex.T, metric="correlation")
+    correlation = correlation[np.ix_(target_mask, regulator_mask)]
+    correlation[np.isnan(correlation)] = 0
 
     # Filter ground-truth network and combine with correlation matrix
-    filtered_gt_net = gt_net.loc[adata.var.index[target_index], adata.var.index[regulator_index]]
-    GRN_final = filtered_gt_net * pd.DataFrame(corr_m, index=filtered_gt_net.index, columns=filtered_gt_net.columns)
+    grn = gt_net.loc[targets, regulators] * correlation
 
     # Threshold and clean the network
-    GRN_final = (GRN_final.abs() >= 0.01).astype(int)
-    np.fill_diagonal(GRN_final.values, 0)  # Remove self-loops
+    grn = (grn.abs() >= 0.01).astype(int)
+    np.fill_diagonal(grn.values, 0)  # Remove self-loops
 
     if keep_dim:
-        W = pd.DataFrame(np.zeros([len(regulators), len(targets)]), index=regulators, columns=targets)
-        W.loc[GRN_final.index.tolist(), GRN_final.columns.tolist()] = GRN_final.T
+        skeleton = pd.DataFrame(0, index=regulators, columns=targets, dtype=float)
+        skeleton.loc[grn.index, grn.columns] = grn.T
     else:
-        GRN_final = GRN_final.loc[GRN_final.sum(axis=1) > 0, GRN_final.sum(axis=0) > 0]
+        grn = grn.loc[grn.sum(axis=1) > 0, grn.sum(axis=0) > 0]
 
         # Prepare a matrix with all unique genes from the final network
-        genes = np.unique(GRN_final.index.to_list() + GRN_final.columns.to_list())
-        W = pd.DataFrame(0, index=genes, columns=genes, dtype=float)
-        W.loc[GRN_final.columns, GRN_final.index] = GRN_final.T
+        genes = grn.index.union(grn.columns).unique()
+        skeleton = pd.DataFrame(0, index=genes, columns=genes, dtype=float)
+        skeleton.loc[grn.columns, grn.index] = grn.T
 
     # Subset the original data to genes in the network and set final properties
-    reg_bdata = adata[:, W.index].copy()
-    W = torch.tensor(W.loc[reg_bdata.var.index, reg_bdata.var.index].values)
+    adata = adata[:, skeleton.index].copy()
+    skeleton = skeleton.loc[adata.var_names, adata.var_names].values
 
-    reg_bdata.uns["regulators"] = reg_bdata.var.index.to_numpy()
-    reg_bdata.uns["targets"] = reg_bdata.var.index.to_numpy()
-    reg_bdata.uns["skeleton"] = W.numpy()
-    reg_bdata.uns["network"] = np.ones((len(reg_bdata.var.index), len(reg_bdata.var.index)))
+    adata.uns["regulators"] = adata.var_names.to_numpy()
+    adata.uns["targets"] = adata.var_names.to_numpy()
+    adata.uns["skeleton"] = skeleton
+    adata.uns["network"] = np.ones((adata.n_vars, adata.n_vars))
 
-    return reg_bdata
+    return adata
 
 
 def filter_genes_with_upstream_regulators(adata: AnnData) -> AnnData:
-    """Filter genes in an AnnData object to ensure each gene has upstream regulators. The function iteratively refines the skeleton matrix to maintain only genes with regulatory connections. Merely used by `soft_constraint = False` regvelo model.
+    """Filter genes in an AnnData object to ensure each gene has upstream regulators.
+
+    The function iteratively refines the skeleton matrix to maintain only genes with regulatory connections. Only used
+    by `soft_constraint=False` RegVelo model.
 
     Parameters
     ----------
     adata
-        Annotated data object (AnnData) containing gene expression data,
-        a skeleton matrix of regulatory interactions, and a list of regulators.
+        Annotated data object (AnnData) containing gene expression data, a skeleton matrix of regulatory interactions,
+        and a list of regulators.
 
     Returns
     -------
     adata
-        Updated AnnData object with filtered genes and a refined skeleton matrix
-        where all genes have at least one upstream regulator.
+        Updated AnnData object with filtered genes and a refined skeleton matrix where all genes have at least one
+        upstream regulator.
     """
     # Initial filtering based on regulators
-    gene_names = adata.var.index.tolist()
-    full_names = adata.uns["regulators"]
-    indices = [name in gene_names for name in full_names]
+    var_mask = adata.var_names.isin(adata.uns["regulators"])
 
     # Filter genes based on `full_names`
-    filtered_genes = [name for name, keep in zip(full_names, indices) if keep]
-    adata = adata[:, filtered_genes].copy()
+    adata = adata[:, var_mask].copy()
 
     # Update skeleton matrix
-    skeleton = adata.uns["skeleton"]
-    skeleton = skeleton[np.ix_(indices, indices)]
+    skeleton = adata.uns["skeleton"].values
+    skeleton = skeleton[np.ix_(var_mask, var_mask)]
     adata.uns["skeleton"] = skeleton
 
     # Iterative refinement
     while adata.uns["skeleton"].sum(0).min() == 0:
         # Update filtering based on skeleton
-        skeleton = np.array(adata.uns["skeleton"])
-        regulators_indicator = skeleton.sum(0) > 0
+        skeleton = adata.uns["skeleton"]
+        mask = skeleton.sum(0) > 0
 
-        regulators = [gene for gene, keep in zip(adata.var.index.tolist(), regulators_indicator) if keep]
+        regulators = adata.var_names[mask].tolist()
         print(f"Number of genes: {len(regulators)}")
 
         # Filter skeleton and update `adata`
-        skeleton = skeleton[np.ix_(regulators_indicator, regulators_indicator)]
+        skeleton = skeleton[np.ix_(mask, mask)]
         adata.uns["skeleton"] = skeleton
 
         # Update adata with filtered genes
-        adata = adata[:, regulators_indicator].copy()
+        adata = adata[:, mask].copy()
         adata.uns["regulators"] = regulators
         adata.uns["targets"] = regulators
 

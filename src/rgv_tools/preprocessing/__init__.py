@@ -1,3 +1,3 @@
-from ._gtools import filter_genes_with_upstream_regulators, prior_GRN_import
+from ._gtools import filter_genes_with_upstream_regulators, get_prior_grn
 
-__all__ = ["prior_GRN_import", "filter_genes_with_upstream_regulators"]
+__all__ = ["filter_genes_with_upstream_regulators", "get_prior_grn"]
