@@ -9,11 +9,19 @@
 # %%
 import numpy as np
 
+import anndata as ad
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
 
 from rgv_tools import DATA_DIR
+
+# %% [markdown]
+# ## General settings
+
+# %%
+sc.settings.verbosity = 2
+scv.settings.verbosity = 3
 
 # %% [markdown]
 # ## Constants
@@ -24,23 +32,17 @@ DATASET = "hematopoiesis"
 # %%
 SAVE_DATA = True
 if SAVE_DATA:
-    (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
 # %%
-terminal_states = [
-    "Mon",
-    "Meg",
-    "Bas",
-    "Ery",
-]
+TERMINAL_STATES = ["Mon", "Meg", "Bas", "Ery"]
 
 # %% [markdown]
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
-adata_full = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
+adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+adata_full = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
 
 # %% [markdown]
 # ## Run scVelo
@@ -67,7 +69,7 @@ vk.compute_transition_matrix()
 estimator = cr.estimators.GPCCA(vk)  ## We used vk here due to we want to benchmark on velocity
 
 estimator.compute_macrostates(n_states=5, cluster_key="cell_type")
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINAL_STATES)
 
 estimator.compute_fate_probabilities()
 estimator.adata = adata_full.copy()
@@ -97,9 +99,3 @@ if SAVE_DATA:
 # %%
 if SAVE_DATA:
     scv_ranking.to_csv(DATA_DIR / DATASET / "results" / "scv_ranking.csv")
-
-# %%
-
-# %%
-
-# %%
