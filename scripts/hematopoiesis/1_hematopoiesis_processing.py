@@ -19,7 +19,7 @@ import scvelo as scv
 from velovi import preprocess_data
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.preprocessing import get_prior_grn
+from rgv_tools.preprocessing import set_prior_grn
 
 # %% [markdown]
 # ## General settings
@@ -105,8 +105,7 @@ adata.var.drop(columns=["velocity_gamma", "velocity_qreg_ratio", "velocity_r2", 
 # ## RegVelo preprocessing
 
 # %%
-adata = get_prior_grn(adata, gt_net)
-adata
+set_prior_grn(adata, gt_net)
 
 # %%
 velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
