@@ -16,7 +16,7 @@ METHOD_PALETTE = {
     "celloracle": "#949494",
 }
 
-METHOD_PALETTE_DRIVER = {"RegVelo(PS)": "#0173b2", "RegVelo(CR)": "#d55e00", "dynamo(LAP)": "#cc78bc"}
+METHOD_PALETTE_DRIVER = {"RegVelo (PS)": "#0173b2", "RegVelo (CR)": "#d55e00", "dynamo (LAP)": "#cc78bc"}
 
 METHOD_PALETTE_RANKING = {
     "RegVelo": "#0173b2",

@@ -185,7 +185,7 @@ data = pd.DataFrame(
     {
         "AUROC": ery_auc_rgv + mon_auc_rgv + ery_auc_cr + mon_auc_cr + [auroc_ery_dynamo, auroc_mon_dynamo],
         "Terminal state": ["Ery"] * 3 + ["Mon"] * 3 + ["Ery"] * 3 + ["Mon"] * 3 + ["Ery", "Mon"],
-        "Method": ["RegVelo(PS)"] * 6 + ["RegVelo(CR)"] * 6 + ["dynamo(LAP)"] * 2,
+        "Method": ["RegVelo (PS)"] * 6 + ["RegVelo( CR)"] * 6 + ["dynamo (LAP)"] * 2,
     }
 )
 
