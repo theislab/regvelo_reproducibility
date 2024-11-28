@@ -7,6 +7,7 @@
 # ## Library imports
 
 # %%
+import numpy as np
 import pandas as pd
 import torch
 
@@ -66,7 +67,7 @@ time_correlation = [
 # %%
 grn_estimate = vae.module.v_encoder.GRN_Jacobian(torch.tensor(adata.layers["spliced"].mean(0)).to("cuda:0"))
 grn_estimate = grn_estimate.cpu().detach().numpy()
-grn_correlation = [get_grn_auroc(ground_truth=adata.varm["true_skeleton"].toarray(), estimated=grn_estimate)]
+grn_correlation = [get_grn_auroc(ground_truth=adata.varm["true_skeleton"].toarray(), estimated=np.abs(grn_estimate).T)]
 
 # %%
 scv.tl.velocity_graph(adata, vkey="velocity", n_jobs=1)
