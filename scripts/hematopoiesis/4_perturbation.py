@@ -9,13 +9,12 @@
 # %%
 import shutil
 
-import scvi
-
 import numpy as np
 import pandas as pd
 import torch
 
 import scanpy as sc
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
@@ -105,7 +104,7 @@ for nrun in range(0, 15):
             pval.to_csv(pval_save)
 
             break
-        except:
+        except:  # noqa E722
             # If an error is raised, increment a and try again, and need to recompute double knock-out reults
             print("perturbation screening has error, retraining model...")
             shutil.rmtree(model)
@@ -114,11 +113,3 @@ for nrun in range(0, 15):
             vae.train()
             print("save model...")
             vae.save(model)
-
-# %%
-
-# %%
-
-# %%
-
-# %%
