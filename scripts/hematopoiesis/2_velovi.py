@@ -7,16 +7,16 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
 import mplscience
 
+import anndata as ad
 import cellrank as cr
 import scanpy as sc
+import scvi
 from velovi import VELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
@@ -24,6 +24,9 @@ from rgv_tools.benchmarking import set_output
 
 # %% [markdown]
 # ## General settings
+
+# %%
+sc.settings.verbosity = 2
 
 # %%
 scvi.settings.seed = 0
@@ -37,27 +40,22 @@ DATASET = "hematopoiesis"
 # %%
 SAVE_DATA = True
 if SAVE_DATA:
-    (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
+# %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
 # %%
-terminal_states = [
-    "Mon",
-    "Meg",
-    "Bas",
-    "Ery",
-]
+TERMINALS_STATES = ["Mon", "Meg", "Bas", "Ery"]
 
 # %% [markdown]
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
-adata_full = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
+adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+adata_full = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
 
 # %% [markdown]
 # ## Run veloVI
@@ -111,7 +109,7 @@ vk.compute_transition_matrix()
 estimator = cr.estimators.GPCCA(vk)  ## We used vk here due to we want to benchmark on velocity
 
 estimator.compute_macrostates(n_states=5, cluster_key="cell_type")
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINALS_STATES)
 
 estimator.compute_fate_probabilities()
 estimator.adata = adata_full.copy()
@@ -142,9 +140,3 @@ if SAVE_DATA:
 if SAVE_DATA:
     uncertainty.to_csv(DATA_DIR / DATASET / "results" / "uncertainty_vi.csv")
     vi_ranking.to_csv(DATA_DIR / DATASET / "results" / "vi_ranking.csv")
-
-# %%
-
-# %%
-
-# %%
