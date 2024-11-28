@@ -28,8 +28,6 @@ from rgv_tools.plotting._significance import get_significance
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
@@ -133,9 +131,3 @@ with mplscience.style_context():
             FIG_DIR / DATASET / "terminal_states_noise_ratio.svg", format="svg", transparent=True, bbox_inches="tight"
         )
     plt.show()
-
-# %%
-
-# %%
-
-# %%

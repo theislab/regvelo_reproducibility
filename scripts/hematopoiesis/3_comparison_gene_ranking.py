@@ -10,7 +10,6 @@
 import pandas as pd
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 import scvelo as scv
 
@@ -30,8 +29,6 @@ from rgv_tools.core import METHOD_PALETTE_RANKING
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
@@ -40,11 +37,12 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # %%
 DATASET = "hematopoiesis"
 
+# %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
-FIGURE_FORMATE = "svg"
+FIGURE_FORMAT = "svg"
 
 # %%
 TERMINAL_STATES = ["Ery", "Mon"]
@@ -187,8 +185,8 @@ plot_gene_ranking(
     methods=methods,
     palette=pal,
     TERMINAL_STATES=TERMINAL_STATES,
-    path=FIG_DIR / DATASET / "Gene Ranking.svg",
-    format="svg",
+    path=FIG_DIR / DATASET / f"Gene Ranking.{FIGURE_FORMAT}",
+    format=FIGURE_FORMAT,
 )
 
 # %%
@@ -208,9 +206,3 @@ _, auc_rel_df = get_aucs(
     gene_ranking_dfs=dfs, optimal_aucs=optimal_aucs, methods=methods, TERMINAL_STATES=TERMINAL_STATES
 )
 auc_rel_df
-
-# %%
-
-# %%
-
-# %%

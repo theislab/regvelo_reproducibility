@@ -33,8 +33,6 @@ from rgv_tools.utils._stools import reverse_cluster, reverse_cluster_dict
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
@@ -665,5 +663,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "state_identification.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
