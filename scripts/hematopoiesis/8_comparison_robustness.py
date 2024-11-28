@@ -207,5 +207,3 @@ scipy.stats.ttest_ind(time_rgv, time_vi, alternative="greater")
 
 # %%
 scipy.stats.ttest_ind(confi_rgv, confi_vi, alternative="greater")
-
-# %%
