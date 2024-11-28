@@ -79,7 +79,7 @@ adata
 # %%
 with mplscience.style_context():
     fig, ax = plt.subplots(figsize=(6, 4))
-    sc.pl.scatter(adata, basis="fle", color="cell_type", frameon=False, ax=ax)
+    sc.pl.scatter(adata, basis="draw_graph_fa", color="cell_type", frameon=False, ax=ax)
 
     if SAVE_FIGURES:
         fig.savefig(
