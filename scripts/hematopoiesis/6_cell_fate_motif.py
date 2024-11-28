@@ -33,8 +33,6 @@ from rgv_tools.perturbation import in_silico_block_simulation, inferred_GRN
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
@@ -48,12 +46,13 @@ SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
 
+# %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
 # %%
-terminal_states = ["Meg", "Mon", "Bas", "Ery", "Neu"]
+TERMINAL_STATES = ["Meg", "Mon", "Bas", "Ery", "Neu"]
 
 # %% [markdown]
 # ## Data loading
@@ -79,7 +78,7 @@ ck = cr.kernels.ConnectivityKernel(adata).compute_transition_matrix()
 estimator = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
 ## evaluate the fate prob on original space
 estimator.compute_macrostates(n_states=7, cluster_key="cell_type")
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINAL_STATES)
 estimator.compute_fate_probabilities()
 
 # %%
@@ -100,7 +99,7 @@ ck = cr.kernels.ConnectivityKernel(adata_perturb).compute_transition_matrix()
 estimator = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
 ## evaluate the fate prob on original space
 estimator.compute_macrostates(n_states=7, cluster_key="cell_type")
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINAL_STATES)
 estimator.compute_fate_probabilities()
 
 # %%
@@ -149,7 +148,7 @@ ck = cr.kernels.ConnectivityKernel(adata_perturb).compute_transition_matrix()
 estimator = cr.estimators.GPCCA(0.8 * vk + 0.2 * ck)
 ## evaluate the fate prob on original space
 estimator.compute_macrostates(n_states=7, cluster_key="cell_type")
-estimator.set_terminal_states(terminal_states)
+estimator.set_terminal_states(TERMINAL_STATES)
 estimator.compute_fate_probabilities()
 
 # %%
