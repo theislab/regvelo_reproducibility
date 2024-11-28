@@ -7,12 +7,11 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import torch
 
 import scanpy as sc
+import scvi
 from regvelo import REGVELOVI
 from velovi import VELOVI
 
@@ -36,6 +35,7 @@ SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
 
+# %%
 SAVE_FIGURES = True
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
