@@ -12,111 +12,132 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 import mplscience
-import seaborn as sns
 
+import anndata as ad
 import scanpy as sc
 import scvelo as scv
 from velovi import preprocess_data
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.preprocessing import prior_GRN_import
+from rgv_tools.preprocessing import get_prior_grn
 
 # %% [markdown]
 # ## General settings
 
 # %%
+sc.settings.verbosity = 2
+scv.settings.verbosity = 3
+
+# %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
-scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
 # ## Constants
 
 # %%
 DATASET = "hematopoiesis"
+
+# %%
 SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
 
+# %%
 SAVE_FIGURES = False
 if SAVE_FIGURES:
     (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
+
+FIGURE_FORMAT = "svg"
 
 # %% [markdown]
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "raw" / "hsc_dynamo_adata.h5ad")
-TF = pd.read_csv(DATA_DIR / DATASET / "raw" / "allTFs_hg38.csv", header=None)
+adata = ad.io.read_h5ad(DATA_DIR / DATASET / "raw" / "hsc_dynamo_adata.h5ad")
+adata
+
+# %%
+tfs = pd.read_csv(DATA_DIR / DATASET / "raw" / "allTFs_hg38.csv", header=None)
 gt_net = pd.read_csv(DATA_DIR / DATASET / "raw" / "skeleton.csv", index_col=0)
 
 # %% [markdown]
 # ## Visualization
 
-# %%
-with mplscience.style_context():
-    fig, ax = plt.subplots(figsize=(6, 4))
-    sc.pl.scatter(adata, basis="draw_graph_fa", color="cell_type", frameon=False, ax=ax)
-
-    if SAVE_FIGURES:
-        fig.savefig(FIG_DIR / DATASET / "intro_figure.svg", format="svg", transparent=True, bbox_inches="tight")
-
 # %% [markdown]
 # ## Preprocessing
 
 # %%
-scv.pp.filter_and_normalize(adata, min_shared_counts=10, n_top_genes=2000)
+scv.pp.filter_and_normalize(adata, min_shared_counts=10, log=False, n_top_genes=2000)
+
+# %%
 sc.pp.neighbors(adata, n_neighbors=50)
+
+# %%
 scv.pp.moments(adata, n_pcs=None, n_neighbors=None)
-
-# %% [markdown]
-# ## Load prior gene regulatory graph
+adata
 
 # %%
-reg_bdata = prior_GRN_import(adata, gt_net)
+with mplscience.style_context():
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sc.pl.scatter(adata, basis="fle", color="cell_type", frameon=False, ax=ax)
+
+    if SAVE_FIGURES:
+        fig.savefig(
+            FIG_DIR / DATASET / f"intro_figure.{FIGURE_FORMAT}",
+            format=FIGURE_FORMAT,
+            transparent=True,
+            bbox_inches="tight",
+        )
 
 # %%
-velocity_genes = preprocess_data(reg_bdata).var_names.tolist()
+scv.tl.velocity(adata)
+
+# %%
+if SAVE_DATA:
+    adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
+
+del adata.uns["velocity_params"]
+del adata.layers["velocity"]
+del adata.layers["variance_velocity"]
+adata.var.drop(columns=["velocity_gamma", "velocity_qreg_ratio", "velocity_r2", "velocity_genes"], inplace=True)
 
 # %% [markdown]
 # ## RegVelo preprocessing
 
 # %%
-TF_GRN = reg_bdata.var_names[reg_bdata.uns["skeleton"].T.sum(0) != 0].tolist()
-TF = list(set(TF.iloc[:, 0].tolist()).intersection(TF_GRN))
-reg_bdata.var["TF"] = np.isin(reg_bdata.var_names, TF)
+adata = get_prior_grn(adata, gt_net)
+adata
+
+# %%
+velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
+
+# %%
+tf_grn = adata.var_names[adata.uns["skeleton"].T.sum(0) != 0].tolist()
+tf = list(set(tfs.iloc[:, 0].tolist()).intersection(tf_grn))
+adata.var["tf"] = adata.var_names.isin(tfs)
 
 # %% [markdown]
 # Select genes that are either part of the transcription factor (TF) list or `velocity_genes`
 
 # %%
-sg = np.union1d(reg_bdata.var_names[reg_bdata.var["TF"]], velocity_genes)
-
-reg_bdata = reg_bdata[:, sg].copy()
-
-# %%
-reg_bdata = preprocess_data(reg_bdata, filter_on_r2=False)
+var_mask = np.union1d(adata.var_names[adata.var["tf"]], velocity_genes)
+adata = adata[:, var_mask].copy()
 
 # %%
-gene_name = reg_bdata.var_names
-full_name = reg_bdata.uns["regulators"]
-index = np.isin(full_name, gene_name)
-filtered_names = full_name[index]
+adata = preprocess_data(adata, filter_on_r2=False)
+
+# %%
+mask = adata.var_names.isin(adata.uns["regulators"])
 
 # Filter the skeleton matrix `W` based on the selected indices
-W = reg_bdata.uns["skeleton"][index][:, index]
+skeleton = adata.uns["skeleton"][np.ix_(mask, mask)]
 
 # Update the filtered values in `uns`
-reg_bdata.uns.update({"skeleton": W, "regulators": gene_name.values, "targets": gene_name.values})
-
-# %%
-scv.tl.velocity(adata)  ## estimate velocity genes
+adata.uns.update({"skeleton": skeleton, "regulators": adata.var_names.tolist(), "targets": adata.var_names.tolist()})
 
 # %% [markdown]
 # ## Save dataset
 
 # %%
 if SAVE_DATA:
-    reg_bdata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
-    adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
+    adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
