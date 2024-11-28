@@ -101,7 +101,7 @@ score_df = pd.concat(score_df)
 # %%
 if SAVE_DATA:
     pd.DataFrame({"time": time_correlation}, index=adata.obs_names).to_parquet(
-        path=DATA_DIR / DATASET / "results" / "velovi_correlation.parquet"
+        path=DATA_DIR / DATASET / "results" / "regvelo_correlation.parquet"
     )
-    adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "velovi_confidence.parquet")
-    score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "velovi_cbc.parquet")
+    adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_confidence.parquet")
+    score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_cbc.parquet")
