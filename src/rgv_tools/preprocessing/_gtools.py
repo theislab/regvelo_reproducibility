@@ -29,7 +29,7 @@ def get_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
 
     if keep_dim:
         skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
-        skeleton.loc[regulators, targets] = gt_net.loc[regulators, targets]
+        skeleton.loc[targets, regulators] = gt_net.loc[targets, regulators]
 
         gt_net = skeleton.copy()
 
@@ -47,8 +47,8 @@ def get_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
     np.fill_diagonal(grn.values, 0)  # Remove self-loops
 
     if keep_dim:
-        skeleton = pd.DataFrame(0, index=regulators, columns=targets, dtype=float)
-        skeleton.loc[grn.index, grn.columns] = grn.T
+        skeleton = pd.DataFrame(0, index=targets, columns=regulators, dtype=float)
+        skeleton.loc[grn.columns, grn.index] = grn.T
     else:
         grn = grn.loc[grn.sum(axis=1) > 0, grn.sum(axis=0) > 0]
 
@@ -59,7 +59,7 @@ def get_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
 
     # Subset the original data to genes in the network and set final properties
     adata = adata[:, skeleton.index].copy()
-    skeleton = skeleton.loc[adata.var_names, adata.var_names].values
+    skeleton = skeleton.loc[adata.var_names, adata.var_names]
 
     adata.uns["regulators"] = adata.var_names.to_numpy()
     adata.uns["targets"] = adata.var_names.to_numpy()
