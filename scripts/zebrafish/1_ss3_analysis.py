@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Basic preprocessing and analysis of the zebrafish data
 #
-# Notebook: preprocesses the zebrafish Smart-seq3 dataset.
+# Notebook preprocesses the zebrafish Smart-seq3 dataset.
 
 # %% [markdown]
 # ## Library imports
@@ -12,26 +12,23 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 import mplscience
-import seaborn as sns
 
 import scanpy as sc
 import scvelo as scv
 from velovi import preprocess_data
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.preprocessing import (
-    filter_genes_with_upstream_regulators,
-    prior_GRN_import,
-)
+from rgv_tools.preprocessing import filter_genes, set_prior_grn
 
 # %% [markdown]
 # ## General settings
 
 # %%
+sc.settings.verbosity = 2
+scv.settings.verbosity = 3
+
+# %%
 plt.rcParams["svg.fonttype"] = "none"
-sns.reset_defaults()
-sns.reset_orig()
-scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
 # ## Constants
@@ -54,16 +51,19 @@ if SAVE_FIGURES:
 
 # %%
 adata = sc.read_h5ad(DATA_DIR / DATASET / "raw" / "adata_zebrafish_preprocessed.h5ad")
-TF_list = pd.read_csv(DATA_DIR / DATASET / "raw" / "zebrafish_tfs.csv", index_col=0).iloc[:, 0].tolist()
+tfs = pd.read_csv(DATA_DIR / DATASET / "raw" / "zebrafish_tfs.csv", index_col=0).iloc[:, 0].tolist()
 prior_net = pd.read_csv(DATA_DIR / DATASET / "raw" / "prior_GRN.csv", index_col=0)
 
 # %%
-## Only keep necessary list
-keep_list = pd.read_csv(DATA_DIR / DATASET / "raw" / "new_tf.csv", sep=";").iloc[:, 0].tolist()
+## Only keep necessary TF list
+keep_list = pd.read_csv(DATA_DIR / DATASET / "raw" / "keep_tf.csv", sep=";").iloc[:, 0].tolist()
 
 # %%
 sc.pp.neighbors(adata, n_neighbors=30)
-scv.pp.moments(adata)
+
+# %%
+scv.pp.moments(adata, n_pcs=None, n_neighbors=None)
+adata
 
 # %%
 scv.pl.umap(adata, color="cell_type", palette=sc.pl.palettes.vega_20, legend_loc="right")
@@ -131,27 +131,31 @@ with mplscience.style_context():
 # ## Preprocessing
 
 # %%
-adata = prior_GRN_import(adata, prior_net).copy()
+adata = set_prior_grn(adata, prior_net)
 
 # %%
-velocity_genes = preprocess_data(adata).var_names.tolist()
+velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
 
 # %%
-adata.var["TF"] = np.isin(adata.var_names, TF_list)
+adata.var["TF"] = np.isin(adata.var_names, tfs)
+
+# %% [markdown]
+# Select genes that are either part of the transcription factor (TF) list or `velocity_genes`
 
 # %%
 ## velocity_r2 positive genes
-sg = np.union1d(list(set(keep_list).intersection(adata.var_names)), velocity_genes)
+var_mask = np.union1d(list(set(keep_list).intersection(adata.var_names)), velocity_genes)
 
 ## Filtering genes, only keep velocity_r2 positive genes and TFs
-adata = adata[:, sg].copy()
+adata = adata[:, var_mask].copy()
 
 # %%
-adata = filter_genes_with_upstream_regulators(adata)
+adata = filter_genes(adata)
 adata = preprocess_data(adata, filter_on_r2=False)
 
 # %%
-scv.tl.velocity(adata)
+# focus on velocity genes to ensure calculation stability
+adata.var["velocity_genes"] = adata.var_names.isin(velocity_genes)
 
 # %% [markdown]
 # ## Save dataset
