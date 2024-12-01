@@ -5,7 +5,7 @@ from scipy.spatial.distance import cdist
 from anndata import AnnData
 
 
-def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) -> None:
+def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) -> AnnData:
     """Constructs a gene regulatory network (GRN) based on ground-truth interactions and gene expression data.
 
     Parameters
@@ -58,13 +58,15 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
         skeleton.loc[grn.columns, grn.index] = grn.T
 
     # Subset the original data to genes in the network and set final properties
-    adata = adata[:, skeleton.index].copy()
+    adata = adata[:, skeleton.index]
     skeleton = skeleton.loc[adata.var_names, adata.var_names]
 
     adata.uns["regulators"] = adata.var_names.to_numpy()
     adata.uns["targets"] = adata.var_names.to_numpy()
     adata.uns["skeleton"] = skeleton
     adata.uns["network"] = np.ones((adata.n_vars, adata.n_vars))
+
+    return adata
 
 
 def filter_genes(adata: AnnData) -> AnnData:
