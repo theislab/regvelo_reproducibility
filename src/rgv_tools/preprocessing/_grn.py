@@ -94,8 +94,7 @@ def filter_genes(adata: AnnData) -> AnnData:
     adata = adata[:, var_mask].copy()
 
     # Update skeleton matrix
-    skeleton = adata.uns["skeleton"].values
-    skeleton = skeleton[np.ix_(var_mask, var_mask)]
+    skeleton = adata.uns["skeleton"].loc[adata.var_names.tolist(), adata.var_names.tolist()]
     adata.uns["skeleton"] = skeleton
 
     # Iterative refinement
@@ -108,7 +107,7 @@ def filter_genes(adata: AnnData) -> AnnData:
         print(f"Number of genes: {len(regulators)}")
 
         # Filter skeleton and update `adata`
-        skeleton = skeleton[np.ix_(mask, mask)]
+        skeleton = skeleton.loc[regulators, regulators]
         adata.uns["skeleton"] = skeleton
 
         # Update adata with filtered genes
