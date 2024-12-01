@@ -90,22 +90,14 @@ with mplscience.style_context():
         )
 
 # %%
-scv.tl.velocity(adata)
-
-# %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_full.h5ad")
-
-del adata.uns["velocity_params"]
-del adata.layers["velocity"]
-del adata.layers["variance_velocity"]
-adata.var.drop(columns=["velocity_gamma", "velocity_qreg_ratio", "velocity_r2", "velocity_genes"], inplace=True)
 
 # %% [markdown]
 # ## RegVelo preprocessing
 
 # %%
-set_prior_grn(adata, gt_net)
+adata = set_prior_grn(adata, gt_net)
 
 # %%
 velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
@@ -113,7 +105,7 @@ velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
 # %%
 tf_grn = adata.var_names[adata.uns["skeleton"].T.sum(0) != 0].tolist()
 tf = list(set(tfs.iloc[:, 0].tolist()).intersection(tf_grn))
-adata.var["tf"] = adata.var_names.isin(tfs)
+adata.var["tf"] = adata.var_names.isin(tf)
 
 # %% [markdown]
 # Select genes that are either part of the transcription factor (TF) list or `velocity_genes`
@@ -126,13 +118,15 @@ adata = adata[:, var_mask].copy()
 adata = preprocess_data(adata, filter_on_r2=False)
 
 # %%
-mask = adata.var_names.isin(adata.uns["regulators"])
-
 # Filter the skeleton matrix `W` based on the selected indices
-skeleton = adata.uns["skeleton"][np.ix_(mask, mask)]
+skeleton = adata.uns["skeleton"].loc[adata.var_names.tolist(), adata.var_names.tolist()]
 
 # Update the filtered values in `uns`
 adata.uns.update({"skeleton": skeleton, "regulators": adata.var_names.tolist(), "targets": adata.var_names.tolist()})
+
+# %%
+## focus on velocity genes to ensure calculation stability of scvelo and veloVI
+adata.var["velocity_genes"] = adata.var_names.isin(velocity_genes)
 
 # %% [markdown]
 # ## Save dataset
