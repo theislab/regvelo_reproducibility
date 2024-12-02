@@ -38,9 +38,11 @@ if SAVE_DATA:
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "raw" / "endocrinogenesis_day15.h5ad")
+adata = scv.datasets.pancreas()
+
+# %%
 TF = pd.read_csv(DATA_DIR / DATASET / "raw" / "allTFs_mm.txt", header=None)
-gt_net = pd.read_csv(DATA_DIR / DATASET / "raw" / "skeleton_update.csv", index_col=0)
+gt_net = pd.read_csv(DATA_DIR / DATASET / "raw" / "skeleton.csv", index_col=0)
 
 # %% [markdown]
 # ## Preprocessing
