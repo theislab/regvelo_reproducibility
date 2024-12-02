@@ -29,8 +29,13 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
 
     if keep_dim:
         skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
-        skeleton.loc[targets, regulators] = gt_net.loc[targets, regulators]
-
+        skeleton.loc[
+            list(set(adata.var_names).intersection(gt_net.index)),
+            list(set(adata.var_names).intersection(gt_net.columns)),
+        ] = gt_net.loc[
+            list(set(adata.var_names).intersection(gt_net.index)),
+            list(set(adata.var_names).intersection(gt_net.columns)),
+        ]
         gt_net = skeleton.copy()
 
     # Compute correlation matrix for genes
@@ -47,7 +52,7 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
     np.fill_diagonal(grn.values, 0)  # Remove self-loops
 
     if keep_dim:
-        skeleton = pd.DataFrame(0, index=targets, columns=regulators, dtype=float)
+        skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
         skeleton.loc[grn.columns, grn.index] = grn.T
     else:
         grn = grn.loc[grn.sum(axis=1) > 0, grn.sum(axis=0) > 0]
