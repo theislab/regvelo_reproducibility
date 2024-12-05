@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Dynamic inference performance comparison on hematopoiesis Dataset
+# # Performance comparison of inference on hematopoiesis dataset
 #
-# Notebook compares cross-boundary correctness (CBC) and terminal state identification performance.
+# Comparison of cross-boundary correctness (CBC) and terminal state identification
 
 # %% [markdown]
 # ## Library imports
@@ -33,6 +33,8 @@ from rgv_tools.utils._stools import reverse_cluster, reverse_cluster_dict
 
 # %%
 plt.rcParams["svg.fonttype"] = "none"
+sns.reset_defaults()
+sns.reset_orig()
 scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=14, color_map="viridis")
 
 # %% [markdown]
@@ -150,14 +152,14 @@ significances_forward
 # %%
 score_df = []
 for source, target in tqdm(STATE_TRANSITIONS_REVERSE):
-    cbc_rgv = vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
-    cbc_rgv_wo = vks["regvelo_unregularized"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_rgv = -vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_rgv_wo = -vks["regvelo_unregularized"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
 
     score_df.append(
         pd.DataFrame(
             {
                 "State transition": [f"{source} - {target}"] * len(cbc_rgv),
-                "Log ratio": np.log((2 - cbc_rgv) / (2 - cbc_rgv_wo)),  # (1 - cbc) + 1
+                "Log ratio": np.log((cbc_rgv + 1) / (cbc_rgv_wo + 1)),
             }
         )
     )
@@ -240,7 +242,7 @@ with mplscience.style_context():
 
             ax.text(x, y, star, ha="center", va="bottom", color="black")
 
-    plt.ylim(score_df["Log ratio"].min() - 0.1, score_df["Log ratio"].max() + 0.24)
+    plt.ylim(score_df["Log ratio"].min() - 0.1, score_df["Log ratio"].max() + 0.8)
     plt.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), ncol=len(categories))
     # Apply tight layout
     plt.tight_layout()
@@ -300,14 +302,14 @@ significances_forward
 # %%
 score_df = []
 for source, target in tqdm(STATE_TRANSITIONS_REVERSE):
-    cbc_rgv = vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
-    cbc_scv = vks["scvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_rgv = -vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_scv = -vks["scvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
 
     score_df.append(
         pd.DataFrame(
             {
                 "State transition": [f"{source} - {target}"] * len(cbc_rgv),
-                "Log ratio": np.log((2 - cbc_rgv) / (2 - cbc_scv)),
+                "Log ratio": np.log((cbc_rgv + 1) / (cbc_scv + 1)),
             }
         )
     )
@@ -390,7 +392,7 @@ with mplscience.style_context():
 
             ax.text(x, y, star, ha="center", va="bottom", color="black")
 
-    plt.ylim(score_df["Log ratio"].min() - 0.2, score_df["Log ratio"].max() + 0.2)
+    plt.ylim(score_df["Log ratio"].min() - 0.2, score_df["Log ratio"].max() + 0.8)
     plt.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), ncol=len(categories))
     # Apply tight layout
     plt.tight_layout()
@@ -448,14 +450,14 @@ significances_forward
 # %%
 score_df = []
 for source, target in tqdm(STATE_TRANSITIONS_REVERSE):
-    cbc_rgv = vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
-    cbc_vi = vks["velovi"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_rgv = -vks["regvelo"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
+    cbc_vi = -vks["velovi"].cbc(source=source, target=target, cluster_key=cluster_key, rep=rep)
 
     score_df.append(
         pd.DataFrame(
             {
                 "State transition": [f"{source} - {target}"] * len(cbc_rgv),
-                "Log ratio": np.log((2 - cbc_rgv) / (2 - cbc_vi)),
+                "Log ratio": np.log((cbc_rgv + 1) / (cbc_vi + 1)),
             }
         )
     )
@@ -538,7 +540,7 @@ with mplscience.style_context():
 
             ax.text(x, y, star, ha="center", va="bottom", color="black")
 
-    plt.ylim(score_df["Log ratio"].min() - 0.2, score_df["Log ratio"].max() + 0.3)
+    plt.ylim(score_df["Log ratio"].min() - 0.2, score_df["Log ratio"].max() + 0.8)
     plt.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), ncol=len(categories))
     # Apply tight layout
     plt.tight_layout()
@@ -569,7 +571,7 @@ tsi = {}
 
 # %%
 for method in VELOCITY_METHODS[1:]:
-    estimators[method] = cr.estimators.GPCCA(ks[method])
+    estimators[method] = cr.estimators.GPCCA(vks[method])
     tsi[method] = TSI_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
 
 # %%
@@ -663,3 +665,7 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "state_identification.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
+
+# %%
+
+# %%
