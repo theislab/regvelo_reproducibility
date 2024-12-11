@@ -201,5 +201,3 @@ with mplscience.style_context():
             transparent=True,
             bbox_inches="tight",
         )
-
-# %%

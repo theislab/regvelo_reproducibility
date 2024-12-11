@@ -283,5 +283,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         fig.savefig(FIG_DIR / DATASET / "Time_GRN.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%

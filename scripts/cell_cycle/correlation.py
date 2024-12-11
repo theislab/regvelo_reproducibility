@@ -45,5 +45,3 @@ if SAVE_DATA:
     pd.DataFrame({"grn": grn_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "correlation_correlation.parquet"
     )
-
-# %%

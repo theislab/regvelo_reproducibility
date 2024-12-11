@@ -104,5 +104,3 @@ if SAVE_DATA:
     )
     adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "scvelo_confidence.parquet")
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "scvelo_cbc.parquet")
-
-# %%

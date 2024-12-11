@@ -114,5 +114,3 @@ if SAVE_DATA:
     )
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_cbc.parquet")
     vae.save(DATA_DIR / DATASET / "regvelo_model")
-
-# %%
