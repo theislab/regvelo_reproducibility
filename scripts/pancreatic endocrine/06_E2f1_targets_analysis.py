@@ -72,9 +72,6 @@ def calculate_aurocs(targets, thresholds):
         targets.loc[:, "gt"] = 0
         targets.loc[:, "gt"][targets.index.isin(chip_targets)] = 1
 
-        # Calculate AUROC scores
-        # auroc_1 = roc_auc_score(targets.loc[:,"gt"], targets.loc[:,"prior"])
-        # auroc_2 = roc_auc_score(targets.loc[:,"gt"], targets.loc[:,"weight"])  # Example of second AUROC (could be another model)
         fpr, tpr, thresholds = metrics.roc_curve(targets.loc[:, "gt"], targets.loc[:, "prior"])
         auroc_1 = metrics.auc(fpr, tpr)
         fpr, tpr, thresholds = metrics.roc_curve(targets.loc[:, "gt"], targets.loc[:, "weight"])
@@ -189,7 +186,6 @@ thresholds = np.linspace(0, quantile_99, num_thresholds)
 
 # Calculate AUROC scores for different thresholds
 auroc_scores_prior, auroc_scores_regvelo = calculate_aurocs(targets, thresholds)
-
 
 plt.rcParams["svg.fonttype"] = "none"
 with mplscience.style_context():
