@@ -1,5 +1,7 @@
 # %% [markdown]
-# # Regulation is important for velocity inference of RegVelo
+# # GRN influence on velocity inference with RegVelo
+#
+# Notebook infers velocity with RegVelo using different GRNs.
 
 # %% [markdown]
 # ## Library imports
