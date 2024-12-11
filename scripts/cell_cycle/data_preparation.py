@@ -119,5 +119,3 @@ adata.varm["true_skeleton"] = csr_matrix(true_skeleton.values)
 # %%
 if SAVE_DATA:
     adata.write(DATA_DIR / DATASET / "processed" / "adata_processed.h5ad")
-
-# %%
