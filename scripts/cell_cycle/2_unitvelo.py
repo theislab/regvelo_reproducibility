@@ -52,7 +52,6 @@ if SAVE_DATA:
 
 # %%
 adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_processed.h5ad")
-scv.pp.moments(adata, n_pcs=None, n_neighbors=None)  ## reconstruct Mu and Ms due to veloVAE run on continues space
 adata
 
 # %% [markdown]
