@@ -65,6 +65,9 @@ time_correlation = [
     get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.layers["fit_t"].mean(axis=1))
 ]
 
+# %%
+time_correlation
+
 # %% [markdown]
 # ## Cross-boundary correctness
 
@@ -88,6 +91,9 @@ for source, target in STATE_TRANSITIONS:
     )
 score_df = pd.concat(score_df)
 
+# %%
+np.mean(score_df["CBC"])
+
 # %% [markdown]
 # ## Data saving
 
@@ -98,3 +104,5 @@ if SAVE_DATA:
     )
     adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "scvelo_confidence.parquet")
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "scvelo_cbc.parquet")
+
+# %%
