@@ -213,7 +213,7 @@ for _nrun in range(30):
 
 # %%
 df = pd.DataFrame(
-    {"CBC score": score_v0 + score_v1 + score_v2, "Model": ["Original"] * 10 + ["Random"] * 10 + ["No regulation"] * 10}
+    {"CBC score": score_v0 + score_v1 + score_v2, "Model": ["Original"] * 30 + ["Random"] * 30 + ["No regulation"] * 30}
 )
 
 with mplscience.style_context():
@@ -250,7 +250,7 @@ with mplscience.style_context():
 df = pd.DataFrame(
     {
         "Latent time correlation": score_t0 + score_t1 + score_t2,
-        "Model": ["Original"] * 10 + ["Random"] * 10 + ["No regulation"] * 10,
+        "Model": ["Original"] * 30 + ["Random"] * 30 + ["No regulation"] * 30,
     }
 )
 
