@@ -73,7 +73,7 @@ W = torch.ones((adata.n_vars, adata.n_vars), dtype=int)
 
 score_v0 = []
 score_t0 = []
-for _nrun in range(30):
+for _ in range(30):
     vae_r = REGVELOVI(adata, W=W.T * 0, soft_constraint=False)
     vae_r.module.v_encoder.fc1.weight.data = vae.module.v_encoder.fc1.weight.data.detach().cpu().clone()
     vae_r.module.v_encoder.fc1.bias.data = vae.module.v_encoder.fc1.bias.data.detach().cpu().clone()
@@ -81,7 +81,7 @@ for _nrun in range(30):
 
     set_output(adata, vae_r, n_samples=30, batch_size=adata.n_obs)
 
-    ## calculate CBC
+    # Calculate CBC
     vk = VelocityKernel(adata).compute_transition_matrix()
 
     cluster_key = "phase"
@@ -102,13 +102,11 @@ for _nrun in range(30):
     score_df = pd.concat(score_df)
 
     score_v0.append(score_df["CBC"].mean())
-    print(score_v0[len(score_v0) - 1])
 
-    ## calculate latent time correlation
+    # Calculate latent time correlation
     score_t0.append(
         get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.layers["fit_t"].mean(axis=1))
     )
-    print(score_t0[len(score_t0) - 1])
 
 # %% [markdown]
 # ## Randomly shuffled GRN
@@ -117,7 +115,7 @@ for _nrun in range(30):
 dfs = []
 score_v1 = []
 score_t1 = []
-for _nrun in range(30):
+for _ in range(30):
     original_tensor = vae.module.v_encoder.fc1.weight.data.detach().cpu().clone()
     original_shape = original_tensor.shape
     # Flatten the tensor
@@ -139,7 +137,7 @@ for _nrun in range(30):
 
     set_output(adata, vae_r, n_samples=30, batch_size=adata.n_obs)
 
-    ## calculate CBC
+    # Calculate CBC
     vk = VelocityKernel(adata).compute_transition_matrix()
 
     cluster_key = "phase"
@@ -160,13 +158,11 @@ for _nrun in range(30):
     score_df = pd.concat(score_df)
 
     score_v1.append(score_df["CBC"].mean())
-    print(score_v1[len(score_v1) - 1])
 
-    ## calculate latent time correlation
+    # Calculate latent time correlation
     score_t1.append(
         get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.layers["fit_t"].mean(axis=1))
     )
-    print(score_t1[len(score_t1) - 1])
 
 # %% [markdown]
 # ## Remove GRN
