@@ -88,14 +88,6 @@ adata
 # %%
 prepare_data(adata=adata)
 
-true_skeleton = pd.DataFrame(np.zeros((adata.n_vars, adata.n_vars)), index=adata.var_names, columns=adata.var_names)
-for fname in tqdm((DATA_DIR / DATASET / "raw" / "tf_list_5k").iterdir()):
-    regulator = fname.stem
-    targets = pd.read_csv(fname, delimiter="\t")["Target_genes"].tolist()
-    true_skeleton.loc[regulator, targets] = 1
-
-adata.varm["true_skeleton"] = csr_matrix(true_skeleton.values)
-
 if SAVE_DATA:
     adata.write(DATA_DIR / DATASET / "processed" / "adata.h5ad")
 
@@ -113,5 +105,19 @@ adata = preprocess_data(adata)
 adata
 
 # %%
+true_skeleton = pd.DataFrame(np.zeros((adata.n_vars, adata.n_vars)), index=adata.var_names, columns=adata.var_names)
+for fname in tqdm((DATA_DIR / DATASET / "raw" / "tf_list_5k").iterdir()):
+    regulator = fname.stem
+    targets = pd.read_csv(fname, delimiter="\t")["Target_genes"].tolist()
+    targets = list(adata.var_names.intersection(targets))
+
+    if len(targets) > 50:
+        true_skeleton.loc[regulator, targets] = 1
+
+adata.varm["true_skeleton"] = csr_matrix(true_skeleton.values)
+
+# %%
 if SAVE_DATA:
     adata.write(DATA_DIR / DATASET / "processed" / "adata_processed.h5ad")
+
+# %%
