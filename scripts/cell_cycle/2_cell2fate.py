@@ -2,34 +2,18 @@
 # ## Run cell2fate
 
 # %%
-import sys
-
-from paths import DATA_DIR
-
-import seaborn as sns
-
+import anndata as ad
 import cell2fate as c2f
-import scanpy as sc
-import scvelo as scv
 
-# %% [markdown]
-# ## General setting
-
-# %%
-sns.reset_defaults()
-sns.reset_orig()
-scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True, fontsize=20, color_map="viridis")
-sys.path.append("../..")
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## Import cell cycle dataset and train the model
 
 # %%
-adata = sc.read(DATA_DIR / "cell_cycle" / "cell_cycle_processed.h5ad")
-
-
-# %%
+adata = ad.io.read_h5ad(DATA_DIR / "cell_cycle" / "cell_cycle_processed.h5ad")
 adata
+
 
 # %%
 clusters_to_remove = []
