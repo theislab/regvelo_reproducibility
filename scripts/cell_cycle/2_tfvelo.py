@@ -63,6 +63,8 @@ TFv.pp.moments(adata, n_pcs=30)
 
 TFv.pp.get_TFs(adata, databases="all")
 adata.uns["genes_pp"] = np.array(adata.var_names)
+
+# %%
 TFv.tl.recover_dynamics(
     adata,
     n_jobs=4,
