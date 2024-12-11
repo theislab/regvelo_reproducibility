@@ -114,8 +114,8 @@ for _nrun in range(30):
 # ## Randomly shuffled GRN
 
 # %%
-score_v1 = []
 dfs = []
+score_v1 = []
 score_t1 = []
 for _nrun in range(30):
     original_tensor = vae.module.v_encoder.fc1.weight.data.detach().cpu().clone()
@@ -213,14 +213,14 @@ for _nrun in range(30):
 
 # %%
 df = pd.DataFrame(
-    {"CBC score": score_v0 + score_v1 + score_v2, "Model": ["Original"] * 30 + ["Random"] * 30 + ["No regulation"] * 30}
+    {"CBC score": score_v0 + score_v1 + score_v2, "Model": ["Original"] * 10 + ["Random"] * 10 + ["No regulation"] * 10}
 )
 
 with mplscience.style_context():
     sns.set_style(style="whitegrid")
-    fig, ax = plt.subplots(figsize=(3, 4))
+    fig, ax = plt.subplots(figsize=(4, 4))
 
-    sns.violinplot(data=df, x="Model", y="CBC score", ax=ax)
+    sns.violinplot(data=df, x="Model", y="CBC score", ax=ax, color="lightgrey")
 
     ttest_res = ttest_ind(score_v0, score_v1, equal_var=False, alternative="greater")
     significance = get_significance(ttest_res.pvalue)
@@ -244,20 +244,21 @@ with mplscience.style_context():
 
     if SAVE_FIGURES:
         fig.savefig(FIG_DIR / DATASET / "CBC_score_GRN.svg", format="svg", transparent=True, bbox_inches="tight")
+    plt.show()
 
 # %%
 df = pd.DataFrame(
     {
         "Latent time correlation": score_t0 + score_t1 + score_t2,
-        "Model": ["Original"] * 30 + ["Random"] * 30 + ["No regulation"] * 30,
+        "Model": ["Original"] * 10 + ["Random"] * 10 + ["No regulation"] * 10,
     }
 )
 
 with mplscience.style_context():
     sns.set_style(style="whitegrid")
-    fig, ax = plt.subplots(figsize=(3, 4))
+    fig, ax = plt.subplots(figsize=(4, 4))
 
-    sns.violinplot(data=df, x="Model", y="Latent time correlation", ax=ax)
+    sns.violinplot(data=df, x="Model", y="Latent time correlation", ax=ax, color="lightgrey")
 
     ttest_res = ttest_ind(score_t0, score_t1, equal_var=False, alternative="greater")
     significance = get_significance(ttest_res.pvalue)
@@ -281,5 +282,6 @@ with mplscience.style_context():
 
     if SAVE_FIGURES:
         fig.savefig(FIG_DIR / DATASET / "Time_GRN.svg", format="svg", transparent=True, bbox_inches="tight")
+    plt.show()
 
 # %%
