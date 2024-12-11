@@ -17,7 +17,7 @@ from cellrank.kernels import VelocityKernel
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR
-from rgv_tools.benchmarking import get_grn_auroc, get_time_correlation, set_output
+from rgv_tools.benchmarking import get_grn_auroc_cc, get_time_correlation, set_output
 
 # %% [markdown]
 # ## General settings
@@ -65,9 +65,11 @@ time_correlation = [
 ]
 
 # %%
-grn_estimate = vae.module.v_encoder.GRN_Jacobian(torch.tensor(adata.layers["spliced"].mean(0)).to("cuda:0"))
+grn_estimate = vae.module.v_encoder.GRN_Jacobian(torch.tensor(adata.X.A.mean(0)).to("cuda:0"))
 grn_estimate = grn_estimate.cpu().detach().numpy()
-grn_correlation = [get_grn_auroc(ground_truth=adata.varm["true_skeleton"].toarray(), estimated=np.abs(grn_estimate).T)]
+grn_correlation = [
+    get_grn_auroc_cc(ground_truth=adata.varm["true_skeleton"].toarray(), estimated=np.abs(grn_estimate).T)
+]
 
 # %%
 scv.tl.velocity_graph(adata, vkey="velocity", n_jobs=1)
@@ -104,5 +106,13 @@ if SAVE_DATA:
     pd.DataFrame({"time": time_correlation}, index=adata.obs_names).to_parquet(
         path=DATA_DIR / DATASET / "results" / "regvelo_correlation.parquet"
     )
-    adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_confidence.parquet")
+    pd.DataFrame({"grn": grn_correlation}).to_parquet(
+        path=DATA_DIR / DATASET / "results" / "regvelo_grn_correlation.parquet"
+    )
+    adata.obs[["velocity_confidence"]].to_parquet(
+        path=DATA_DIR / DATASET / "results" / "regvelo_confidence_run1.parquet"
+    )
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_cbc.parquet")
+    vae.save(DATA_DIR / DATASET / "regvelo_model")
+
+# %%
