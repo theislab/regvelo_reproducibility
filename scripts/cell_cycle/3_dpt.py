@@ -1,5 +1,5 @@
 # %% [markdown]
-# # DPT benchmark on dyngen data
+# # DPT benchmark on cell cycle data
 #
 # Notebook benchmarks latent time inference using DPT on cell cycle data.
 
