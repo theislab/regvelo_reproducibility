@@ -84,14 +84,14 @@ def plot_TSI(
             # Count overlap with known terminal states
             pre_value.append(len(set(pre_terminal_names).intersection(terminal_states)))
 
-        except:
+        except:  # noqa
             # Log error and repeat the last valid value or use 0 if empty
             pre_value.append(pre_value[-1] if pre_value else 0)
 
     return pre_value
 
 
-def TSI_score(
+def get_tsi_score(
     adata: AnnData,
     points: List[float],
     cluster_key: str,

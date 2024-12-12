@@ -14,7 +14,7 @@ from ._ranking import (
     get_var_ranks,
     plot_gene_ranking,
 )
-from ._tsi import plot_TSI, TSI_score
+from ._tsi import get_tsi_score, plot_tsi
 
 __all__ = [
     "get_data_subset",
@@ -23,8 +23,8 @@ __all__ = [
     "get_velocity_correlation",
     "perturb_prediction",
     "set_output",
-    "TSI_score",
-    "plot_TSI",
+    "get_tsi_score",
+    "plot_tsi",
     "compute_average_correlations",
     "get_var_ranks",
     "get_optimal_auc",
