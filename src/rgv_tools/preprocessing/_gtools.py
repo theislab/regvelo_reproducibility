@@ -5,7 +5,7 @@ from scipy.spatial.distance import cdist
 from anndata import AnnData
 
 
-def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) -> AnnData:
+def get_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) -> AnnData:
     """Constructs a gene regulatory network (GRN) based on ground-truth interactions and gene expression data.
 
     Parameters
@@ -19,7 +19,7 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
 
     Returns
     -------
-    None. Modifies `AnnData` object to include the GRN information, with network-related metadata stored in `uns`.
+    A modified `AnnData` object containing the GRN information, with network-related metadata stored in `uns`.
     """
     regulator_mask = adata.var_names.isin(gt_net.columns)
     regulators = adata.var_names[regulator_mask]
@@ -29,13 +29,8 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
 
     if keep_dim:
         skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
-        skeleton.loc[
-            list(set(adata.var_names).intersection(gt_net.index)),
-            list(set(adata.var_names).intersection(gt_net.columns)),
-        ] = gt_net.loc[
-            list(set(adata.var_names).intersection(gt_net.index)),
-            list(set(adata.var_names).intersection(gt_net.columns)),
-        ]
+        skeleton.loc[targets, regulators] = gt_net.loc[targets, regulators]
+
         gt_net = skeleton.copy()
 
     # Compute correlation matrix for genes
@@ -52,7 +47,7 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
     np.fill_diagonal(grn.values, 0)  # Remove self-loops
 
     if keep_dim:
-        skeleton = pd.DataFrame(0, index=adata.var_names, columns=adata.var_names, dtype=float)
+        skeleton = pd.DataFrame(0, index=targets, columns=regulators, dtype=float)
         skeleton.loc[grn.columns, grn.index] = grn.T
     else:
         grn = grn.loc[grn.sum(axis=1) > 0, grn.sum(axis=0) > 0]
@@ -63,7 +58,7 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
         skeleton.loc[grn.columns, grn.index] = grn.T
 
     # Subset the original data to genes in the network and set final properties
-    adata = adata[:, skeleton.index]
+    adata = adata[:, skeleton.index].copy()
     skeleton = skeleton.loc[adata.var_names, adata.var_names]
 
     adata.uns["regulators"] = adata.var_names.to_numpy()
@@ -74,7 +69,7 @@ def set_prior_grn(adata: AnnData, gt_net: pd.DataFrame, keep_dim: bool = False) 
     return adata
 
 
-def filter_genes(adata: AnnData) -> AnnData:
+def filter_genes_with_upstream_regulators(adata: AnnData) -> AnnData:
     """Filter genes in an AnnData object to ensure each gene has upstream regulators.
 
     The function iteratively refines the skeleton matrix to maintain only genes with regulatory connections. Only used
@@ -99,7 +94,8 @@ def filter_genes(adata: AnnData) -> AnnData:
     adata = adata[:, var_mask].copy()
 
     # Update skeleton matrix
-    skeleton = adata.uns["skeleton"].loc[adata.var_names.tolist(), adata.var_names.tolist()]
+    skeleton = adata.uns["skeleton"].values
+    skeleton = skeleton[np.ix_(var_mask, var_mask)]
     adata.uns["skeleton"] = skeleton
 
     # Iterative refinement
@@ -112,7 +108,7 @@ def filter_genes(adata: AnnData) -> AnnData:
         print(f"Number of genes: {len(regulators)}")
 
         # Filter skeleton and update `adata`
-        skeleton = skeleton.loc[regulators, regulators]
+        skeleton = skeleton[np.ix_(mask, mask)]
         adata.uns["skeleton"] = skeleton
 
         # Update adata with filtered genes
