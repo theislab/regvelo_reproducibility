@@ -25,9 +25,6 @@ from rgv_tools.core import METHOD_PALETTE_DRIVER
 from rgv_tools.perturbation import aggregate_model_predictions
 
 # %% [markdown]
-# ## General settings
-
-# %% [markdown]
 # ## Constants
 
 # %%
@@ -185,7 +182,7 @@ data = pd.DataFrame(
     {
         "AUROC": ery_auc_rgv + mon_auc_rgv + ery_auc_cr + mon_auc_cr + [auroc_ery_dynamo, auroc_mon_dynamo],
         "Terminal state": ["Ery"] * 3 + ["Mon"] * 3 + ["Ery"] * 3 + ["Mon"] * 3 + ["Ery", "Mon"],
-        "Method": ["RegVelo (PS)"] * 6 + ["RegVelo( CR)"] * 6 + ["dynamo (LAP)"] * 2,
+        "Method": ["RegVelo (PS)"] * 6 + ["RegVelo (CR)"] * 6 + ["dynamo (LAP)"] * 2,
     }
 )
 
@@ -211,5 +208,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "driver_ranking.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
