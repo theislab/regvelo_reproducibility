@@ -58,23 +58,24 @@ full_vb = vv.VAE(adata, tmax=20, dim_z=5, device="cuda:0", full_vb=True, rate_pr
 config = {}
 full_vb.train(adata, config=config, plot=False, embed="pca")
 
-if SAVE_DATA:
-    full_vb.save_anndata(
-        adata, "fullvb", DATA_DIR / DATASET / "processed" / "velovae_vae", file_name="velovae_fullvb.h5ad"
-    )
+## output velocity to adata object
+full_vb.save_anndata(adata, "fullvb", DATA_DIR / DATASET / "processed" / "velovae_vae", file_name="velovae_fullvb.h5ad")
+
+# %%
+adata.layers["velocity"] = adata.layers["fullvb_velocity"].copy()
 
 # %%
 time_correlation = [get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.obs["fullvb_time"])]
 
 # %%
-scv.tl.velocity_graph(adata, vkey="fullvb_velocity", n_jobs=1)
-scv.tl.velocity_confidence(adata, vkey="fullvb_velocity")
+scv.tl.velocity_graph(adata, vkey="velocity", n_jobs=1)
+scv.tl.velocity_confidence(adata, vkey="velocity")
 
 # %% [markdown]
 # ## Cross-boundary correctness
 
 # %%
-vk = VelocityKernel(adata, vkey="fullvb_velocity").compute_transition_matrix()
+vk = VelocityKernel(adata, vkey="velocity").compute_transition_matrix()
 
 cluster_key = "phase"
 rep = "X_pca"
@@ -105,3 +106,5 @@ if SAVE_DATA:
         path=DATA_DIR / DATASET / "results" / "velovae_fullvb_confidence.parquet"
     )
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "velovae_fullvb_cbc.parquet")
+
+# %%
