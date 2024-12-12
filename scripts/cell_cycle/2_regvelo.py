@@ -109,8 +109,6 @@ if SAVE_DATA:
     pd.DataFrame({"grn": grn_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "regvelo_grn_correlation.parquet"
     )
-    adata.obs[["velocity_confidence"]].to_parquet(
-        path=DATA_DIR / DATASET / "results" / "regvelo_confidence_run1.parquet"
-    )
+    adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_confidence.parquet")
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_cbc.parquet")
     vae.save(DATA_DIR / DATASET / "regvelo_model")
