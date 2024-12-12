@@ -1,7 +1,7 @@
 # %% [markdown]
 # # RegVelo-based analysis of hematopoiesis dataset
 #
-# Notebook runs the regvelo model on the hematopoiesis dataset.
+# Notebook runs the RegVelo model on the hematopoiesis dataset without any regularization.
 
 # %% [markdown]
 # ## Library imports
