@@ -1,5 +1,7 @@
 # %% [markdown]
-# # Repeative run RegVelo for perturbation analysis
+# # Robustness of RegVelo's perturbation analysis
+#
+# Notebook runs RegVelo's perturbation analysis multiple time to assess robustness.
 
 # %% [markdown]
 # ## Library imports
@@ -74,5 +76,3 @@ for nrun in range(15):
     model_name = "rgv_model_" + str(nrun)
     model = DATA_DIR / DATASET / "processed" / "perturb_repeat_runs" / model_name
     vae.save(model)
-
-# %%
