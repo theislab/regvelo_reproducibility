@@ -276,5 +276,3 @@ with mplscience.style_context():
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "results" / "elf1_screening.csv")
-
-# %%

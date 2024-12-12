@@ -183,5 +183,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "AUROC_ranking.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%

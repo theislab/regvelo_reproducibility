@@ -176,5 +176,3 @@ estimator.plot_macrostates(which="terminal", basis="umap", legend_loc="right", s
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_regvelo.h5ad")
     vae.save(DATA_DIR / DATASET / "processed" / "rgv_model")
-
-# %%

@@ -216,5 +216,3 @@ coef_multiple.columns = get_list_name(d["coefficient"][0])
 if SAVE_DATA:
     coef.to_csv(DATA_DIR / DATASET / "results" / "celloracle_perturb_single.csv")
     coef_multiple.to_csv(DATA_DIR / DATASET / "results" / "celloracle_perturb_multiple.csv")
-
-# %%

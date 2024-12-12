@@ -163,5 +163,3 @@ adata.var["velocity_genes"] = adata.var_names.isin(velocity_genes)
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
-
-# %%

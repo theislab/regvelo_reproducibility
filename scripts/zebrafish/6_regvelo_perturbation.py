@@ -107,7 +107,3 @@ for nrun in [0, 1, 2]:
 
     coef.to_csv(coef_save)
     pval.to_csv(pval_save)
-
-# %%
-
-# %%

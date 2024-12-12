@@ -190,11 +190,6 @@ scipy.stats.ttest_ind(fc, fc * 0, equal_var=False, alternative="greater")
 fc = score_m[3:] / score_m[2]
 scipy.stats.ttest_ind(fc, fc * 0, equal_var=False, alternative="greater")
 
-# %% [markdown]
-# ## Reason why pick gch2-high pigment cells
-
 # %%
 adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 sc.pl.umap(adata, color=["gch2", "sox6"])
-
-# %%

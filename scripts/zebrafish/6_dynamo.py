@@ -219,11 +219,3 @@ if SAVE_DATA:
 
     coef_perturb.to_csv(DATA_DIR / DATASET / "results" / "dynamo_perturb_single.csv")
     coef_perturb_multiple.to_csv(DATA_DIR / DATASET / "results" / "dynamo_perturb_multiple.csv")
-
-# %%
-
-# %%
-
-# %%
-
-# %%
