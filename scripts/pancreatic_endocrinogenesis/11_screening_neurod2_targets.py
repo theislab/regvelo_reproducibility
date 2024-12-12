@@ -1,5 +1,7 @@
 # %% [markdown]
-# # Identify Neurod2 -> Rfx6 as an important regulatory link for epsilon cells
+# # Neurod2 target analysis
+#
+# Notebooks analyses Neurod2 targets, identifying the Neurod2 - Rfx6 regulatory link for epsilon cells.
 
 # %% [markdown]
 # ## Library imports
@@ -166,5 +168,3 @@ with mplscience.style_context():  # Entering the custom style context
         save_path = FIG_DIR / DATASET / "Neurod2_target_screening.svg"
         fig.savefig(save_path, format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
