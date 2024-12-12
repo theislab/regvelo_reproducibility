@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Dynamo-based drivers analysis
 #
-# Notebook uses Dynamo LAP analysis to identify key drivers.
+# Notebook uses dynamo's LAP analysis to identify key drivers.
 
 # %%
 import numpy as np
@@ -169,11 +169,3 @@ HSC_Ery_ranking = transition_graph["HSC->Ery"]["ranking"]
 if SAVE_DATA:
     HSC_Mon_ranking.to_csv(DATA_DIR / DATASET / "results" / "HSC_Mon_ranking.csv")
     HSC_Ery_ranking.to_csv(DATA_DIR / DATASET / "results" / "HSC_Ery_ranking.csv")
-
-# %%
-
-# %%
-
-# %%
-
-# %%
