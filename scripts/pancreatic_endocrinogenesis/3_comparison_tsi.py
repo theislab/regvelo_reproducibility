@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Performance comparison of inference on pancreatic endocrine dataset
+# # TSI comparison
 #
-# Notebook for comparison of terminal state identification
+# Notebook compares terminal state identification across different models.
 
 # %% [markdown]
 # ## Library imports
@@ -130,10 +130,7 @@ tsi_scv_curve = plot_TSI(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "clu
 tsi_vi_curve = plot_TSI(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "clusters")
 
 # %%
-adata.shape
-
-# %%
-### plot the recovery figure
+# Plot the recovery figure
 df = pd.DataFrame(
     {
         "number_macrostate": range(0, 12),
@@ -178,5 +175,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "state_identification.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
