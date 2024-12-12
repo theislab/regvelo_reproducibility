@@ -324,5 +324,3 @@ with mplscience.style_context():  # Entering the custom style context
         save_path = FIG_DIR / DATASET / "Identifiability_Benchmark.svg"
         fig.savefig(save_path, format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%

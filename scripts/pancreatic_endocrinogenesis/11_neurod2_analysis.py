@@ -341,7 +341,3 @@ with mplscience.style_context():
         )
     # Show the plot
     plt.show()
-
-# %%
-
-# %%

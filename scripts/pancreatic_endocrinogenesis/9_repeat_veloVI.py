@@ -48,5 +48,3 @@ for nrun in range(5):
 
     set_output(adata, vae, n_samples=30)
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / f"adata_velovi_run{nrun}")
-
-# %%
