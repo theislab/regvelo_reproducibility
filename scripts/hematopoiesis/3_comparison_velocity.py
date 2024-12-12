@@ -23,7 +23,7 @@ import scanpy as sc
 import scvelo as scv
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking._tsi import plot_TSI, TSI_score
+from rgv_tools.benchmarking import get_tsi_score, plot_tsi
 from rgv_tools.core import METHOD_PALETTE_TSI
 from rgv_tools.plotting._significance import add_significance, get_significance
 from rgv_tools.utils._stools import reverse_cluster, reverse_cluster_dict
@@ -572,7 +572,7 @@ tsi = {}
 # %%
 for method in VELOCITY_METHODS[1:]:
     estimators[method] = cr.estimators.GPCCA(vks[method])
-    tsi[method] = TSI_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
+    tsi[method] = get_tsi_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
 
 # %%
 df = pd.DataFrame(
@@ -615,9 +615,9 @@ with mplscience.style_context():
 # ## Show the stair plot
 
 # %%
-tsi_rgv_curve = plot_TSI(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "cell_type")
-tsi_scv_curve = plot_TSI(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "cell_type")
-tsi_vi_curve = plot_TSI(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_rgv_curve = plot_tsi(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_scv_curve = plot_tsi(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_vi_curve = plot_tsi(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "cell_type")
 
 # %%
 ### plot the recovery figure
@@ -665,7 +665,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         plt.savefig(FIG_DIR / DATASET / "state_identification.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
-
-# %%
