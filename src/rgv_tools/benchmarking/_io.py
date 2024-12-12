@@ -34,7 +34,10 @@ def get_data_subset(adata: AnnData, column: str, group: str | int, uns_keys: lis
     return adata_subset.to_memory()
 
 
-def set_output(adata, vae, n_samples: int = 25, batch_size: int | None = None) -> None:
+# Code mostly taken from veloVI reproducibility repo
+# https://yoseflab.github.io/velovi_reproducibility/estimation_comparison/simulation_w_inferred_rates.html
+def set_output(adata, vae, n_samples: int = 1, batch_size: int | None = None) -> None:
+    """Add inference results to adata."""
     latent_time = vae.get_latent_time(n_samples=n_samples, batch_size=batch_size)
     velocities = vae.get_velocity(n_samples=n_samples, batch_size=batch_size)
 
