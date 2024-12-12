@@ -131,8 +131,8 @@ res
 
 # %%
 cell_states = np.array(Epsilon.obs["leiden"].copy())
-cell_states[cell_states == "2"] = "State1"
-cell_states[cell_states != "State1"] = "State2"
+cell_states[cell_states == "2"] = "State 1"
+cell_states[cell_states != "State 1"] = "State 2"
 
 # %%
 Epsilon.obs["cell_states"] = list(cell_states)
@@ -151,13 +151,3 @@ with mplscience.style_context():
         )
 
     plt.show()
-
-# %%
-
-# %%
-
-# %%
-
-# %%
-
-# %%
