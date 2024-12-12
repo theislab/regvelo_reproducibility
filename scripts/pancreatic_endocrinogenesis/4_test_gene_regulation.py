@@ -151,5 +151,3 @@ estimator.set_terminal_states(list(set(estimator.macrostates.cat.categories.toli
 
 # %%
 estimator.plot_macrostates(which="terminal", basis="umap", legend_loc="right", s=100)
-
-# %%
