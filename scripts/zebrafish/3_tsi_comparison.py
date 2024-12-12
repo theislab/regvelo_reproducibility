@@ -22,7 +22,7 @@ import scvelo as scv
 import scvi
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import plot_TSI, TSI_score
+from rgv_tools.benchmarking import get_tsi_score, plot_tsi
 from rgv_tools.core import METHOD_PALETTE_TSI
 from rgv_tools.plotting._significance import add_significance, get_significance
 
@@ -88,7 +88,7 @@ tsi = {}
 # %%
 for method in VELOCITY_METHODS:
     estimators[method] = cr.estimators.GPCCA(ks[method])
-    tsi[method] = TSI_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
+    tsi[method] = get_tsi_score(adata, thresholds, "cell_type", TERMINAL_STATES, estimators[method])
 
 # %%
 df = pd.DataFrame(
@@ -132,9 +132,9 @@ with mplscience.style_context():
 # ## Visualize terminal states
 
 # %%
-tsi_rgv_curve = plot_TSI(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "cell_type")
-tsi_scv_curve = plot_TSI(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "cell_type")
-tsi_vi_curve = plot_TSI(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_rgv_curve = plot_tsi(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_scv_curve = plot_tsi(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "cell_type")
+tsi_vi_curve = plot_tsi(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "cell_type")
 
 # %% [markdown]
 # ## Plotting
@@ -188,5 +188,3 @@ with mplscience.style_context():
             FIG_DIR / DATASET / "state_identification_update.svg", format="svg", transparent=True, bbox_inches="tight"
         )
     plt.show()
-
-# %%
