@@ -3,6 +3,9 @@
 #
 # Notebook benchmarks velocity, latent time inference, and cross boundary correctness using UniTVelo on cell cycle data.
 
+# %% [markdown]
+# ## Library imports
+
 # %%
 import os
 
@@ -101,3 +104,5 @@ if SAVE_DATA:
     )
     adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "unitvelo_confidence.parquet")
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "unitvelo_cbc.parquet")
+
+# %%
