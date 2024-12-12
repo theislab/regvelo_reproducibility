@@ -356,5 +356,3 @@ with mplscience.style_context():
     if SAVE_FIGURES:
         fig.savefig(FIG_DIR / DATASET / "SPI1-GATA1-network.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%
