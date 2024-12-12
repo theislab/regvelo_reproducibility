@@ -1,5 +1,5 @@
 # %% [markdown]
-# # Evaluate RegVelo predicted E2f1 downstreamed targets
+# # Evaluate RegVelo predicted E2f1 downstream targets
 #
 # Notebooks for E2f1 regulatory network analysis
 
@@ -47,7 +47,7 @@ DATASET = "pancreatic_endocrine"
 SAVE_DATA = True
 if SAVE_DATA:
     (DATA_DIR / DATASET / "processed").mkdir(parents=True, exist_ok=True)
-    (DATA_DIR / DATASET / "processed" / "cell_cycle_repeat_runs").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / DATASET / "processed" / "runs").mkdir(parents=True, exist_ok=True)
 
 # %%
 SAVE_FIGURES = False
@@ -125,13 +125,13 @@ for nrun in range(5):
 
     print("save model...")
     model_name = "rgv_model_" + str(nrun)
-    model = DATA_DIR / DATASET / "processed" / "cell_cycle_repeat_runs" / model_name
+    model = DATA_DIR / DATASET / "processed" / "runs" / model_name
     vae.save(model)
 
 # %%
 grns = []
 for nrun in range(0, 5):
-    model = DATA_DIR / DATASET / "processed" / "cell_cycle_repeat_runs" / f"rgv_model_{nrun}"
+    model = DATA_DIR / DATASET / "processed" / "runs" / f"rgv_model_{nrun}"
     ### load model
     vae = REGVELOVI.load(model, adata)
     # grn1 = reg_vae.module.v_encoder.fc1.weight.data.cpu().detach().clone()
@@ -240,7 +240,3 @@ with mplscience.style_context():
 
 if SAVE_FIGURES:
     fig.savefig(FIG_DIR / DATASET / "E2f1_GRN.svg", format="svg", transparent=True, bbox_inches="tight")
-
-# %%
-
-# %%
