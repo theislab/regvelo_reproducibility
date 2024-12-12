@@ -57,10 +57,8 @@ W = torch.tensor(np.array(W)).int()
 ## prepare TF
 TF = adata.var_names[adata.var["TF"]]
 
-# %% [markdown]
-# ## Repeat run model for 10 times
-
 # %%
+# Train model 10 times
 for nrun in range(10):
     ## Running regvelo
     REGVELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
@@ -81,5 +79,3 @@ for nrun in range(10):
     path = DATA_DIR / DATASET / "processed"
     vi_model_name = "vi_adata_runs_" + str(nrun) + ".h5ad"
     adata.write_h5ad(path / vi_model_name)
-
-# %%
