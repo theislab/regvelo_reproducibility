@@ -1,7 +1,7 @@
 # %% [markdown]
-# ## Compare estimated velocity robustness between regvelo and veloVI
+# ## Compare estimated velocity robustness between RegVelo and veloVI
 #
-# Notebook for evaluating robustness of velocity estimation
+# Notebook for evaluating robustness of velocity estimation.
 
 # %% [markdown]
 # ## Library imports
