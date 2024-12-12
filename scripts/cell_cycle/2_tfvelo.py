@@ -3,6 +3,9 @@
 #
 # Notebook benchmarks velocity, latent time inference, and cross boundary correctness using TFvelo on cell cycle data.
 
+# %% [markdown]
+# ## Library imports
+
 # %%
 import TFvelo as TFv
 
