@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Perturbation prediction on pancreatic endocrine via RegVelo
 #
-# Using RegVelo to perform perturbation prediction, under `soft_mode` each run will repeat run 5 models and aggregate prediction results
+# Using RegVelo to perform perturbation prediction, under `soft_mode` each run will repeat run 15 models and aggregate prediction results
 
 # %% [markdown]
 # ## Library imports
@@ -84,5 +84,3 @@ for nrun in range(0, 15):
 
     coef.to_csv(coef_save)
     pval.to_csv(pval_save)
-
-# %%
