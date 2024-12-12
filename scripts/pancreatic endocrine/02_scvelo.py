@@ -47,5 +47,3 @@ scv.tl.velocity(adata, mode="dynamical", min_likelihood=-np.inf, min_r2=None)
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_scvelo.h5ad")
-
-# %%
