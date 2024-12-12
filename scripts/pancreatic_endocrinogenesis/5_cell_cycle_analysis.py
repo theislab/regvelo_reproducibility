@@ -240,7 +240,3 @@ with mplscience.style_context():
         fig.savefig(
             FIG_DIR / DATASET / "perturb_express_compare_e2f1.svg", format="svg", transparent=True, bbox_inches="tight"
         )
-
-# %%
-
-# %%
