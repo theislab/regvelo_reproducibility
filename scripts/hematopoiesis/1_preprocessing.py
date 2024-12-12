@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Basic preprocessing and analysis of the human hematopoiesis dataset
+# # Preprocessing of the human hematopoiesis dataset
 #
-# Notebook for preprocessing human hematopoiesis dataset
+# Notebook for preprocessing human hematopoiesis dataset.
 
 # %% [markdown]
 # ## Library imports
