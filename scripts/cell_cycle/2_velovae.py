@@ -65,9 +65,8 @@ if SAVE_DATA:
 time_correlation = [get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.obs["vae_time"])]
 
 # %%
-adata.layers["velocity"] = adata.layers["vae_velocity"].copy()
-scv.tl.velocity_graph(adata, vkey="velocity", n_jobs=1)
-scv.tl.velocity_confidence(adata, vkey="velocity")
+scv.tl.velocity_graph(adata, vkey="fullvb_velocity", n_jobs=1)
+scv.tl.velocity_confidence(adata, vkey="fullvb_velocity")
 
 # %% [markdown]
 # ## Cross-boundary correctness
