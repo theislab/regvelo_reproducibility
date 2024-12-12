@@ -1,203 +1,172 @@
 # %% [markdown]
-# # Comparing regvelo and velovi inferred latent time
+# # Performance comparison of inference on cell cycle
 #
-# Notebook compare latent time inference
+# Notebook compares metrics for velocity, latent time and GRN inference across different methods applied to cell cycle data.
 
 # %% [markdown]
 # ## Library imports
 
 # %%
-import random
-
-import numpy as np
 import pandas as pd
-from scipy.stats import wilcoxon
-from sklearn.metrics.pairwise import cosine_similarity
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
-import anndata as ad
-import scvelo as scv
-import scvi
-from regvelo import REGVELOVI
-from velovi import VELOVI
-
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import set_output
-from rgv_tools.core import METHOD_PALETTE
-from rgv_tools.plotting import get_significance
 
 # %% [markdown]
 # ## General settings
 
 # %%
-scvi.settings.dl_pin_memory_gpu_training = False
-
-
-# %% [markdown]
-# ## Function defination
-
+DATASET = "cell_cycle"
 
 # %%
-def compute_confidence(adata, vkey="velocity"):
-    """Compute confidence."""
-    adata.layers[vkey]
-    scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
-    scv.tl.velocity_confidence(adata, vkey=vkey)
+SAVE_FIGURES = False
+if SAVE_FIGURES:
+    (FIG_DIR / DATASET).mkdir(parents=True, exist_ok=True)
 
-    g_df = pd.DataFrame()
-    g_df["Latent time consistency"] = adata.obs[f"{vkey}_confidence"].to_numpy().ravel()
-
-    return g_df
-
+FIGURE_FORMATE = "svg"
 
 # %% [markdown]
 # ## Constants
 
 # %%
-DATASET = "cell_cycle"
-
-# %%
-significance_palette = {"n.s.": "#dedede", "*": "#90BAAD", "**": "#A1E5AB", "***": "#ADF6B1"}
-
-# %%
-STATE_TRANSITIONS = [("G1", "S"), ("S", "G2M")]
-
-# %%
-SAVE_DATA = True
-SAVE_FIGURES = True
-
-if SAVE_DATA:
-    (DATA_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
-if SAVE_FIGURES:
-    (FIG_DIR / DATASET / "results").mkdir(parents=True, exist_ok=True)
+TIME_METHODS = [
+    "regvelo",
+    "velovi",
+    "scvelo",
+    "unitvelo",
+    "velovae_vae",
+    "velovae_fullvb",
+    "cell2fate",
+    "tfvelo",
+    "dpt",
+]
+VELO_METHODS = ["regvelo", "velovi", "scvelo", "unitvelo", "velovae_vae", "velovae_fullvb", "cell2fate", "tfvelo"]
+GRN_METHODS = ["regvelo_grn", "grnboost2", "celloracle", "correlation", "splicejac", "tfvelo_grn"]
 
 # %% [markdown]
 # ## Data loading
 
 # %%
-adata = ad.io.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_processed.h5ad")
-adata
+time_df = []
+cbc_df = []
+confi_df = []
+grn_df = []
+
+for method in TIME_METHODS:
+    df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_correlation.parquet")
+    df.columns = f"{method}_" + df.columns
+    df = df.mean(0)
+    time_df.append(df)
+
+for method in VELO_METHODS:
+    df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_cbc.parquet")
+    del df["State transition"]
+    df.columns = f"{method}_" + df.columns
+    df = df.mean(0)
+    cbc_df.append(df)
+
+for method in VELO_METHODS:
+    df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_confidence.parquet")
+    df.columns = f"{method}_" + df.columns
+    confi_df.append(df)
+
+for method in GRN_METHODS:
+    df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_correlation.parquet")
+    df = pd.DataFrame({"AUROC": df.iloc[0, 0]})
+    df.columns = f"{method}_" + df.columns
+    grn_df.append(df)
+
+time_df = pd.concat(time_df).reset_index()
+time_df.columns = ["method", "spearman_corr"]
+cbc_df = pd.concat(cbc_df).reset_index()
+cbc_df.columns = ["method", "CBC"]
+confi_df = pd.concat(confi_df, axis=1).melt(var_name="method", value_name="confidence")
+grn_df = pd.concat(grn_df, axis=1).melt(var_name="method", value_name="AUROC")
 
 # %% [markdown]
-# ## Model loading
+# ## Processing results table
 
 # %%
-vae = REGVELOVI.load(DATA_DIR / DATASET / "regvelo_model", adata)
-
-# %%
-set_output(adata, vae, n_samples=30, batch_size=adata.n_obs)
-adata_regvelo = adata.copy()
+time_df.iloc[:, 0] = time_df.iloc[:, 0].str.removesuffix("_time")
+cbc_df.iloc[:, 0] = cbc_df.iloc[:, 0].str.removesuffix("_CBC")
+confi_df.iloc[:, 0] = confi_df.iloc[:, 0].str.removesuffix("_velocity_confidence")
+grn_df.iloc[:, 0] = grn_df.iloc[:, 0].str.removesuffix("_AUROC")
 
 # %% [markdown]
-# ## Running veloVI as baseline
-
-# %%
-VELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
-vae = VELOVI(adata)
-vae.train(max_epochs=1500)
-
-# %%
-set_output(adata, vae, n_samples=30)
-adata_velovi = adata.copy()
+# ## Analysis
 
 # %% [markdown]
-# ## replacing velocity as the latent time
-
-# %%
-dfs = []
-
-g_df = compute_confidence(adata_regvelo, vkey="fit_t")
-g_df["Dataset"] = "Cell cycle"
-g_df["Method"] = "regvelo"
-dfs.append(g_df)
-
-g_df = compute_confidence(adata_velovi, vkey="fit_t")
-g_df["Dataset"] = "Cell cycle"
-g_df["Method"] = "velovi"
-dfs.append(g_df)
-
-conf_df = pd.concat(dfs, axis=0)
+# ### CBC
 
 # %%
 with mplscience.style_context():
     sns.set_style(style="whitegrid")
-    fig, ax = plt.subplots(figsize=(3, 3))
+    fig, ax = plt.subplots(figsize=(3, 3), sharey=True)
+    # Plot the second Seaborn plot on the first subplot
+    sns.barplot(y="method", x="CBC", data=cbc_df, capsize=0.1, color="grey", order=VELO_METHODS, ax=ax)
+    ax.set_xlabel("CBC", fontsize=14)
+    ax.set_ylabel("")
+    plt.xlim(0.55, 0.9)
+    plt.show()
 
+# %% [markdown]
+# ### Latent time
+
+# %%
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(3, 3), sharey=True)
+    # Plot the second Seaborn plot on the first subplot
+    sns.barplot(y="method", x="spearman_corr", data=time_df, capsize=0.1, color="grey", order=TIME_METHODS, ax=ax)
+    ax.set_xlabel("", fontsize=14)
+    ax.set_ylabel("")
+    plt.show()
+
+# %% [markdown]
+# ## Confidence
+
+# %%
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(3, 3), sharey=True)
     sns.violinplot(
-        data=conf_df,
+        data=confi_df,
         ax=ax,
-        # orient="h",
-        x="Method",
-        y="Latent time consistency",
-        order=["regvelo", "velovi"],
-        palette=METHOD_PALETTE,
+        orient="h",
+        y="method",
+        x="confidence",
+        color="grey",
+        order=VELO_METHODS,
     )
     # plt.legend(title='', loc='lower center', bbox_to_anchor=(0.5, -0.6), ncol=3)
-    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_yticklabels([0.25, 0.5, 0.75, 1.0])
-    plt.xlabel("")
-
-    if SAVE_FIGURES:
-        fig.savefig(
-            FIG_DIR / DATASET / "Latent_time_consistency.svg", format="svg", transparent=True, bbox_inches="tight"
-        )
+    ax.set_xticks([0, 0.25, 0.5, 0.75, 1])
+    ax.set_xticklabels([0, 0.25, 0.5, 0.75, 1])
+    ax.set_xlabel("Velocity confidence", fontsize=14)
+    ax.set_ylabel("")
     plt.show()
 
 # %% [markdown]
-# ## Calculate fold change
+# ### GRN
 
 # %%
-graph = adata.obsp["connectivities"].A
-
-# %%
-Time_FC = []
-for i in range(graph.shape[0]):
-    v = adata_regvelo[i].layers["fit_t"]
-    m = adata_regvelo[graph[i, :] != 0].layers["fit_t"]
-    cos_similarities = cosine_similarity(v, m)
-
-    ## randomly sample each number of cells
-    indices = random.sample(range(0, adata.shape[0]), m.shape[0])
-    m = adata_regvelo[indices].layers["fit_t"]
-    cos_similarities_random = cosine_similarity(v, m)
-
-    FC = np.mean(cos_similarities) / np.mean(cos_similarities_random)
-    Time_FC.append(FC)
-
-# %%
-b = np.zeros(len(Time_FC))
-_, p_value = wilcoxon(Time_FC, b, alternative="greater")
-p_value
-
-# %%
-b = np.zeros(len(Time_FC))
-_, p_value = wilcoxon(Time_FC, b, alternative="greater")
-significance = get_significance(p_value)
-palette = significance_palette[significance]
-
-# Step 3: Create the boxplot
 with mplscience.style_context():
     sns.set_style(style="whitegrid")
-    fig, axes = plt.subplots(figsize=(2, 3))
-
-    # Step 4: Color based on significance
-
-    sns.violinplot(data=Time_FC, color=palette)
-
-    # Add titles and labels
-    plt.xlabel("Ery")
-    plt.ylabel("Log ratio")
-
-    fig.tight_layout()
+    fig, ax = plt.subplots(figsize=(3, 3), sharey=True)
+    sns.violinplot(
+        data=grn_df,
+        ax=ax,
+        orient="h",
+        y="method",
+        x="AUROC",
+        color="grey",
+        order=GRN_METHODS,
+    )
+    # plt.legend(title='', loc='lower center', bbox_to_anchor=(0.5, -0.6), ncol=3)
+    ax.set_xlabel("AUROC", fontsize=14)
+    ax.set_ylabel("")
     plt.show()
 
-    if SAVE_FIGURES:
-        fig.savefig(
-            FIG_DIR / DATASET / "Latent_time_consistency_test.svg",
-            format="svg",
-            transparent=True,
-            bbox_inches="tight",
-        )
+# %%
