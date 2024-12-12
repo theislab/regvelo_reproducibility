@@ -7,13 +7,12 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import pandas as pd
 import torch
 
 import scanpy as sc
+import scvi
 
 from rgv_tools import DATA_DIR
 from rgv_tools.perturbation import get_list_name, TFScanning

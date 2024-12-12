@@ -7,8 +7,6 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -22,6 +20,7 @@ import seaborn as sns
 
 import scanpy as sc
 import scvelo as scv
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
