@@ -1,7 +1,7 @@
 # %% [markdown]
 # # scVelo-based analysis of hematopoiesis dataset
 #
-# Notebook runs the scvelo model on the hematopoiesis dataset.
+# Notebook runs the scVelo model on the hematopoiesis dataset.
 
 # %% [markdown]
 # ## Library imports
