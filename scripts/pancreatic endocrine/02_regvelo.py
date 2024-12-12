@@ -7,8 +7,6 @@
 # ## Library imports
 
 # %%
-import scvi
-
 import numpy as np
 import torch
 
@@ -18,6 +16,7 @@ import mplscience
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
@@ -115,5 +114,3 @@ estimator.plot_macrostates(which="terminal", basis="umap", legend_loc="right", s
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_regvelo.h5ad")
     vae.save(DATA_DIR / DATASET / "processed" / "rgv_model")
-
-# %%
