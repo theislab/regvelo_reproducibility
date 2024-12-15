@@ -11,16 +11,14 @@ import velovae as vv
 
 import numpy as np
 import pandas as pd
-import scvelo as scv
 import torch
 
 import anndata as ad
+import scvelo as scv
 
 from rgv_tools import DATA_DIR
 from rgv_tools.benchmarking import (
-    get_time_correlation,
     get_velocity_correlation,
-    set_output,
 )
 
 # %% [markdown]
