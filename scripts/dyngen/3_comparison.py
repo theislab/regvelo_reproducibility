@@ -34,7 +34,7 @@ if SAVE_FIG:
 
 # %%
 VELOCITY_METHODS = ["regvelo", "velovi", "scvelo", "unitvelo", "velovae_vae", "velovae_fullvb", "tfvelo", "cell2fate"]
-TIME_METHODS = ["regvelo", "velovi", "scvelo", "unitvelo", "velovae_vae", "velovae_fullvb", "tfvelo", "cell2fate"]
+TIME_METHODS = ["regvelo", "velovi", "scvelo"]
 GRN_METHODS = ["regvelo", "correlation", "grnboost2", "celloracle", "tfvelo", "splicejac"]
 
 # %% [markdown]
@@ -42,12 +42,18 @@ GRN_METHODS = ["regvelo", "correlation", "grnboost2", "celloracle", "tfvelo", "s
 
 # %%
 correlation_df = []
+time_df = []
 grn_df = []
 
 for method in VELOCITY_METHODS:
     df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_correlation.parquet")
     df.columns = f"{method}_" + df.columns
     correlation_df.append(df)
+
+for method in TIME_METHODS:
+    df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_correlation.parquet")
+    df.columns = f"{method}_" + df.columns
+    time_df.append(df)
 
 for method in GRN_METHODS:
     df = pd.read_parquet(DATA_DIR / DATASET / "results" / f"{method}_correlation.parquet")
@@ -56,10 +62,81 @@ for method in GRN_METHODS:
 
 # %%
 correlation_df = pd.concat(correlation_df, axis=1)
+time_df = pd.concat(time_df, axis=1)
 grn_df = pd.concat(grn_df, axis=1)
 
 # %% [markdown]
 # ## Analysis
+
+# %% [markdown]
+# ### Time
+
+# %%
+df = time_df.loc[:, time_df.columns.str.contains("time")]
+df.columns = df.columns.str.removesuffix("_time")
+df = pd.melt(df, var_name="method", value_name="correlation")
+
+with mplscience.style_context():
+    sns.set_style(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sns.violinplot(
+        data=df, x="correlation", y="method", hue="method", order=TIME_METHODS, palette=METHOD_PALETTE, ax=ax
+    )
+
+    ttest_res = ttest_ind(
+        time_df["regvelo_time"],
+        time_df["velovi_time"],
+        equal_var=False,
+        alternative="greater",
+    )
+    significance = get_significance(pvalue=ttest_res.pvalue)
+    add_significance(
+        ax=ax,
+        left=0,
+        right=1,
+        significance=significance,
+        lw=1,
+        bracket_level=1.05,
+        c="k",
+        level=0,
+        orientation="vertical",
+    )
+
+    ttest_res = ttest_ind(
+        correlation_df["regvelo_time"],
+        correlation_df["scvelo_time"],
+        equal_var=False,
+        alternative="greater",
+    )
+    significance = get_significance(pvalue=ttest_res.pvalue)
+    add_significance(
+        ax=ax,
+        left=0,
+        right=2,
+        significance=significance,
+        lw=1,
+        bracket_level=1.05,
+        c="k",
+        level=0,
+        orientation="vertical",
+    )
+
+    ax.set(
+        xlabel="Spearman correlation",
+        ylabel="Method",
+        yticks=ax.get_yticks(),
+        yticklabels=["RegVelo", "veloVI", "scVelo"],
+    )
+
+    if SAVE_FIG:
+        fig.savefig(
+            FIG_DIR / DATASET / "time_benchmark.svg",
+            format="svg",
+            transparent=True,
+            bbox_inches="tight",
+        )
+
+    plt.show()
 
 # %% [markdown]
 # ### Velocity
@@ -103,7 +180,7 @@ with mplscience.style_context():
     )
 
     ttest_res = ttest_ind(
-        correlation_df["velovi_velocity"],
+        correlation_df["regvelo_velocity"],
         correlation_df["scvelo_velocity"],
         equal_var=False,
         alternative="greater",
