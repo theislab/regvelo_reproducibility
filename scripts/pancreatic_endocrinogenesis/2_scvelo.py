@@ -18,7 +18,7 @@ from rgv_tools import DATA_DIR
 # ## Constants
 
 # %%
-DATASET = "pancreatic_endocrine"
+DATASET = "pancreatic_endocrinogenesis"
 
 # %%
 SAVE_DATA = True

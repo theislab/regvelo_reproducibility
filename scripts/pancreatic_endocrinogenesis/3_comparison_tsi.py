@@ -38,7 +38,7 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # ## Constants
 
 # %%
-DATASET = "pancreatic_endocrine"
+DATASET = "pancreatic_endocrinogenesis"
 
 SAVE_FIGURES = False
 if SAVE_FIGURES:
