@@ -105,5 +105,3 @@ if SAVE_DATA:
         path=DATA_DIR / DATASET / "results" / "velovae_vae_confidence.parquet"
     )
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "velovae_vae_cbc.parquet")
-
-# %%

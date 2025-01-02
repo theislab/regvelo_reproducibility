@@ -142,5 +142,3 @@ if SAVE_FIGURES:
 
     fig.savefig(FIG_DIR / DATASET / "O2SC_GRN.svg", format="svg", transparent=True, bbox_inches="tight")
     plt.show()
-
-# %%

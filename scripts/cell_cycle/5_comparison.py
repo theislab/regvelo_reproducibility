@@ -168,5 +168,3 @@ with mplscience.style_context():
     ax.set_xlabel("AUROC", fontsize=14)
     ax.set_ylabel("")
     plt.show()
-
-# %%
