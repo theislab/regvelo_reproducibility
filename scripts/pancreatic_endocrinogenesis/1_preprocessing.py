@@ -29,6 +29,7 @@ scv.settings.verbosity = 3
 
 # %%
 DATASET = "pancreatic_endocrinogenesis"
+(DATA_DIR / DATASET / "raw").mkdir(parents=True, exist_ok=True)
 
 SAVE_DATA = True
 if SAVE_DATA:
@@ -38,7 +39,7 @@ if SAVE_DATA:
 # ## Data loading
 
 # %%
-adata = scv.datasets.pancreas()
+adata = scv.datasets.pancreas(file_path=DATA_DIR / DATASET / "raw" / "endocrinogenesis_day15.h5ad")
 
 # %%
 TF = pd.read_csv(DATA_DIR / DATASET / "raw" / "allTFs_mm.txt", header=None)
