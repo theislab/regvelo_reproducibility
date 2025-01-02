@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; Single-cell analysis repository</title>
+    <title>Index &#8212; RegVelo&#39;s reproducibility repository</title>
   
   
   
@@ -15,17 +15,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
@@ -35,10 +37,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +64,7 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -76,19 +80,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -96,7 +89,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -104,8 +96,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -123,7 +115,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -148,33 +141,140 @@
   
   
   
-    <p class="title logo__title">Single-cell analysis repository</p>
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="index.html">
-                    Single-cell analysis template repository
+                    RegVelo’s reproducibility repository
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Template</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="template.html">A descriptive title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dyngen/1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dyngen/3_robustness_evaluation.html">Plot downstream metrics</a></li>
 </ul>
 
     </div>
@@ -183,9 +283,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -218,7 +323,7 @@
 <div class="article-header-buttons">
 
 
-<a href="https://github.com/WeilerP/sc_analysis_template" target="_blank"
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
    class="btn btn-sm btn-source-repository-button"
    title="Source repository"
    data-bs-placement="bottom" data-bs-toggle="tooltip"
@@ -249,24 +354,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 
 </div></div>
       
@@ -326,7 +423,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Philipp Weiler
+By Weixu Wang, Philipp Weiler
 </p>
 
   </div>
@@ -360,8 +457,8 @@ By Philipp Weiler
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

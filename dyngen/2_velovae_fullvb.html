@@ -1,0 +1,1447 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>VeloVAE (fullvb) benchmark on dyngen data &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dyngen/2_velovae_fullvb';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VeloVAE benchmark on dyngen data" href="2_velovae.html" />
+    <link rel="prev" title="UniTVelo benchmark on dyngen data" href="2_unitvelo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/dyngen/2_velovae_fullvb.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>VeloVAE (fullvb) benchmark on dyngen data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-saving">Data saving</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="velovae-fullvb-benchmark-on-dyngen-data">
+<h1>VeloVAE (fullvb) benchmark on dyngen data<a class="headerlink" href="#velovae-fullvb-benchmark-on-dyngen-data" title="Link to this heading">#</a></h1>
+<p>Notebook benchmarks velocity and latent time inference using VeloVAE (fullvb) on dyngen-generated data.</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">velovae</span> <span class="k">as</span> <span class="nn">vv</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
+<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+
+<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span> <span class="nn">rgv_tools.benchmarking</span> <span class="kn">import</span> <span class="n">get_velocity_correlation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-12-14 01:30:12.923192: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-12-14 01:30:12.938701: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1734136212.957171 3032484 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1734136212.962640 3032484 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-12-14 01:30:12.983527: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_csv from `anndata` is deprecated. Import anndata.io.read_csv instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_excel from `anndata` is deprecated. Import anndata.io.read_excel instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_hdf from `anndata` is deprecated. Import anndata.io.read_hdf instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_mtx from `anndata` is deprecated. Import anndata.io.read_mtx instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_text from `anndata` is deprecated. Import anndata.io.read_text instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_umi_tools from `anndata` is deprecated. Import anndata.io.read_umi_tools instead.
+  warnings.warn(msg, FutureWarning)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;dyngen&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;velovae_vae&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="velocity-pipeline">
+<h2>Velocity pipeline<a class="headerlink" href="#velocity-pipeline" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity_correlation</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">suffix</span> <span class="o">!=</span> <span class="s2">&quot;.zarr&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_zarr</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rate_prior</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)}</span>
+        <span class="n">vae</span> <span class="o">=</span> <span class="n">vv</span><span class="o">.</span><span class="n">VAE</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">dim_z</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">,</span> <span class="n">full_vb</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rate_prior</span><span class="o">=</span><span class="n">rate_prior</span><span class="p">)</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">vae</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Output velocity to adata object</span>
+        <span class="n">vae</span><span class="o">.</span><span class="n">save_anndata</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="s2">&quot;fullvb&quot;</span><span class="p">,</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;velovae_vae&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;velovae.h5ad&quot;</span><span class="p">)</span>
+
+        <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;fullvb_velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">velocity_correlation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">get_velocity_correlation</span><span class="p">(</span>
+                <span class="n">ground_truth</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;true_velocity&quot;</span><span class="p">],</span> <span class="n">estimated</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">],</span> <span class="n">aggregation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+        <span class="c1"># Append np.nan in case of an error and optionally log the error</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">velocity_correlation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "608ec8df6a154e359efe42aec194080a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 59 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4bea9aa7e65c4ffba43e13e41c3ee4b1", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "75da06736ac34533b82a8db5ce661293", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.42, 0.2890740448785467), (0.58, 0.7827494240291312)
+KS-test result: [1. 0. 1.]
+Initial induction: 84, repression: 21/105
+Learning Rate based on Data Sparsity: 0.0001
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 6, test iteration: 10
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a1b7e70bfb344ce287f6d7ccaf39e6fa", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.040
+Average Set Size: 20
+Change in noise variance: 0.0455
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 1931.    *********
+Change in noise variance: 0.0177
+Change in x0: 0.2938
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 2287.    *********
+Change in noise variance: 0.0026
+Change in x0: 0.2331
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 2363.    *********
+Change in noise variance: 0.0029
+Change in x0: 0.1918
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 2389.    *********
+Change in noise variance: 0.0009
+Change in x0: 0.1528
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 2425.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0943
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 2437.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0717
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 2614.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0580
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 2718.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0564
+*********             Velocity Refinement Round 10             *********
+Stage 2: Early Stop Triggered at round 9.
+*********              Finished. Total Time =   0 h :  5 m : 26 s             *********
+Final: Train ELBO = 91.494,	Test ELBO = 84.699
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5249b6f9c4da4b50894f1daa58be07cb", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 25 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fbc54ea76d6a44058075e5e54449f4ea", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a8042b550ea04035a8092bbd4fc6ac44", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+KS-test result: [1. 2. 1.]
+Initial induction: 35, repression: 24/59
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 3, test iteration: 4
+*********       Stage 1: Early Stop Triggered at epoch 6.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7290e1c2d1304bc0abe709b892dcc740", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.058
+Average Set Size: 18
+*********     Round 1: Early Stop Triggered at epoch 13.    *********
+Change in noise variance: 0.2737
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 87.    *********
+Change in noise variance: 0.0610
+Change in x0: 0.8688
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 94.    *********
+Change in noise variance: 0.0019
+Change in x0: 0.3654
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 101.    *********
+Change in noise variance: 0.0010
+Change in x0: 0.2517
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 108.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2153
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 134.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2039
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 157.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1966
+*********             Velocity Refinement Round 8             *********
+Stage 2: Early Stop Triggered at round 7.
+*********              Finished. Total Time =   0 h :  0 m : 20 s             *********
+Final: Train ELBO = -13651.812,	Test ELBO = -13606.135
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1d4cfed972284d039eefc96810e8168e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 37 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ccc6bb7bde2453d83261b605deb1bcc", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dbf6d5597816448692c005e4d59384d2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.39, 0.1200757575748825), (0.61, 0.7766228691348986)
+KS-test result: [0. 1. 1.]
+Initial induction: 73, repression: 13/86
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 8.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "57e41b6179984466b52b062e9339cd0d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.057
+Average Set Size: 16
+*********     Round 1: Early Stop Triggered at epoch 14.    *********
+Change in noise variance: 0.3585
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 19.    *********
+Change in noise variance: 0.0663
+Change in x0: 0.2847
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 24.    *********
+Change in noise variance: 0.0642
+Change in x0: 0.2418
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 30.    *********
+Change in noise variance: 0.0075
+Change in x0: 0.1653
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 36.    *********
+Change in noise variance: 0.0122
+Change in x0: 0.1416
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 42.    *********
+Change in noise variance: 0.0046
+Change in x0: 0.1361
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 48.    *********
+Change in noise variance: 0.0025
+Change in x0: 0.1304
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 54.    *********
+Change in noise variance: 0.0020
+Change in x0: 0.1185
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 59.    *********
+Change in noise variance: 0.0012
+Change in x0: 0.1085
+*********             Velocity Refinement Round 10             *********
+*********     Round 10: Early Stop Triggered at epoch 64.    *********
+Change in noise variance: 0.0006
+Change in x0: 0.1040
+*********             Velocity Refinement Round 11             *********
+Stage 2: Early Stop Triggered at round 10.
+*********              Finished. Total Time =   0 h :  0 m : 19 s             *********
+Final: Train ELBO = -18201.777,	Test ELBO = -18397.561
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0020c20e3555422084cbd7ed575a2ba0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 35 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1b467689f0e94fec8175474ecc660daf", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "50408a2a41e94ffa9a8a597227d12dd1", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+KS-test result: [1. 1. 1.]
+Assign cluster 0 to repressive
+Initial induction: 50, repression: 31/81
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 458.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c6c95d9e14bd4a458c24f21b5c2d43dc", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.120
+Average Set Size: 32
+Change in noise variance: 0.1604
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 1025.    *********
+Change in noise variance: 0.1941
+Change in x0: 1.2177
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 1111.    *********
+Change in noise variance: 0.0061
+Change in x0: 0.9228
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 1161.    *********
+Change in noise variance: 0.0068
+Change in x0: 0.4832
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 1240.    *********
+Change in noise variance: 0.0064
+Change in x0: 0.2474
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 1332.    *********
+Change in noise variance: 0.0030
+Change in x0: 0.1310
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 1522.    *********
+Change in noise variance: 0.0028
+Change in x0: 0.0764
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 1551.    *********
+Change in noise variance: 0.0008
+Change in x0: 0.0919
+*********             Velocity Refinement Round 9             *********
+Stage 2: Early Stop Triggered at round 8.
+*********              Finished. Total Time =   0 h :  1 m : 15 s             *********
+Final: Train ELBO = -2424.000,	Test ELBO = -2521.890
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "eb6ecc93e6fc423ea300f6230d6d55b9", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 35 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ec0d33b5c1314dcc96f7269b9ea7b8c3", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b7565b9d71fa4e3a8be83774f26974fe", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+KS-test result: [1. 1. 1.]
+Assign cluster 0 to repressive
+Initial induction: 51, repression: 29/80
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 7.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a66068fc65e04b6cb2774ea0456cf572", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.033
+Average Set Size: 17
+*********     Round 1: Early Stop Triggered at epoch 13.    *********
+Change in noise variance: 0.3382
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 322.    *********
+Change in noise variance: 0.0977
+Change in x0: 0.5931
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 521.    *********
+Change in noise variance: 0.0098
+Change in x0: 0.3892
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 591.    *********
+Change in noise variance: 0.0020
+Change in x0: 0.3135
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 669.    *********
+Change in noise variance: 0.0009
+Change in x0: 0.2734
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 712.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2453
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 722.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2222
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 743.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2082
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 780.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2067
+*********             Velocity Refinement Round 10             *********
+Stage 2: Early Stop Triggered at round 9.
+*********              Finished. Total Time =   0 h :  0 m : 53 s             *********
+Final: Train ELBO = -14614.414,	Test ELBO = -14580.146
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7692cbe433ae4464b94de63566b6ac1e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 67 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f3a4c97081674e678b6e1f5099015a93", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8f8b866c7eb3467084d4753c14273f98", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+KS-test result: [1. 1. 1.]
+Assign cluster 1 to repressive
+Initial induction: 72, repression: 37/109
+Learning Rate based on Data Sparsity: 0.0001
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 6, test iteration: 10
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b63014cfe131428a866feab79d9a1459", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.062
+Average Set Size: 20
+Change in noise variance: 0.0388
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 1599.    *********
+Change in noise variance: 0.0101
+Change in x0: 0.2792
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 1628.    *********
+Change in noise variance: 0.0018
+Change in x0: 0.2092
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 1757.    *********
+Change in noise variance: 0.0020
+Change in x0: 0.1938
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 1768.    *********
+Change in noise variance: 0.0011
+Change in x0: 0.1624
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 1874.    *********
+Change in noise variance: 0.0003
+Change in x0: 0.1271
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 1906.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1167
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 1930.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0996
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 1986.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0815
+*********             Velocity Refinement Round 10             *********
+*********     Round 10: Early Stop Triggered at epoch 2030.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0677
+*********             Velocity Refinement Round 11             *********
+*********     Round 11: Early Stop Triggered at epoch 2047.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0574
+*********             Velocity Refinement Round 12             *********
+*********     Round 12: Early Stop Triggered at epoch 2064.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.0484
+*********             Velocity Refinement Round 13             *********
+Stage 2: Early Stop Triggered at round 12.
+*********              Finished. Total Time =   0 h :  3 m : 51 s             *********
+Final: Train ELBO = 113.724,	Test ELBO = 119.769
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f5cc6cb5487245afad5397079c52bd3b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 18 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "af26c30d4df542088eb3fc99106f1fa0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f092f2cc7331487ab2be158425545c72", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.47, 0.8701520422929223), (0.53, 0.2900017161456463)
+KS-test result: [1. 2. 0.]
+Initial induction: 20, repression: 41/61
+Learning Rate based on Data Sparsity: 0.0001
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 5.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9313c01c20c34c11bed01843e642baad", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.030
+Average Set Size: 16
+*********     Round 1: Early Stop Triggered at epoch 116.    *********
+Change in noise variance: 0.5613
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 151.    *********
+Change in noise variance: 0.0224
+Change in x0: 0.5994
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 157.    *********
+Change in noise variance: 0.0021
+Change in x0: 0.4098
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 170.    *********
+Change in noise variance: 0.0018
+Change in x0: 0.3452
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 176.    *********
+Change in noise variance: 0.0009
+Change in x0: 0.2928
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 182.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2531
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 188.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2259
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 194.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2183
+*********             Velocity Refinement Round 9             *********
+Stage 2: Early Stop Triggered at round 8.
+*********              Finished. Total Time =   0 h :  0 m : 25 s             *********
+Final: Train ELBO = -13386.965,	Test ELBO = -13522.012
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "00adbc4637714254bea80aa39dce63d2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 34 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "adad387c7338495f84880ef29df5b6e6", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "525485d9f24e4785972c56907d57f045", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+KS-test result: [1. 1. 1.]
+Assign cluster 2 to repressive
+Initial induction: 45, repression: 18/63
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 8.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e899daf03ec946c38aabb1e10c112a76", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.027
+Average Set Size: 17
+*********     Round 1: Early Stop Triggered at epoch 14.    *********
+Change in noise variance: 0.1701
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 19.    *********
+Change in noise variance: 0.0061
+Change in x0: 0.6860
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 25.    *********
+Change in noise variance: 0.0006
+Change in x0: 0.4838
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 31.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.3766
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 36.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2992
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 41.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2497
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 46.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2236
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 51.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2116
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 61.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.2000
+*********             Velocity Refinement Round 10             *********
+*********     Round 10: Early Stop Triggered at epoch 73.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1865
+*********             Velocity Refinement Round 11             *********
+*********     Round 11: Early Stop Triggered at epoch 78.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1758
+*********             Velocity Refinement Round 12             *********
+*********     Round 12: Early Stop Triggered at epoch 90.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1698
+*********             Velocity Refinement Round 13             *********
+Stage 2: Early Stop Triggered at round 12.
+*********              Finished. Total Time =   0 h :  0 m : 21 s             *********
+Final: Train ELBO = -15680.239,	Test ELBO = -15800.924
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "55705bbe58da4e608d6c36261a4de394", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 32 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "58daa168b2ef45aeaf603fce74945ff0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fd6f45ff5032485681c15d7eaed3e2a9", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.56, 0.3239376112994556), (0.44, 0.9106431281299979)
+(0.52, 0.2605808478636782), (0.48, 0.805314977942315)
+KS-test result: [1. 0. 0.]
+Initial induction: 43, repression: 37/80
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 396.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4d8896d8246342349b4b96f573d6e159", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.010
+Average Set Size: 15
+*********     Round 1: Early Stop Triggered at epoch 402.    *********
+Change in noise variance: 0.4139
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 408.    *********
+Change in noise variance: 0.3447
+Change in x0: 0.7088
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 444.    *********
+Change in noise variance: 0.0068
+Change in x0: 0.2237
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 450.    *********
+Change in noise variance: 0.0017
+Change in x0: 0.1605
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 456.    *********
+Change in noise variance: 0.0015
+Change in x0: 0.0966
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 462.    *********
+Change in noise variance: 0.0017
+Change in x0: 0.0794
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 468.    *********
+Change in noise variance: 0.0010
+Change in x0: 0.0909
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 474.    *********
+Change in noise variance: 0.0009
+Change in x0: 0.0889
+*********             Velocity Refinement Round 9             *********
+Stage 2: Early Stop Triggered at round 8.
+*********              Finished. Total Time =   0 h :  0 m : 38 s             *********
+Final: Train ELBO = -3722.105,	Test ELBO = -3882.429
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c97f43d971d141fea4b2a8f249a43354", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 20 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4ab7cec28e7647d3a3ebbcfb34c81c09", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "47444abb9123417f838d66aff9096167", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.53, 0.06264460485018672), (0.47, 0.7010424470363079)
+(0.58, 0.707388107196621), (0.42, 0.09198273775867975)
+KS-test result: [0. 0. 2.]
+Initial induction: 27, repression: 49/76
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 7.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "667418d9b390454c89c88bbfc833876b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of Invalid Sets: 0.030
+Average Set Size: 15
+*********     Round 1: Early Stop Triggered at epoch 13.    *********
+Change in noise variance: 0.3139
+*********             Velocity Refinement Round 2             *********
+*********     Round 2: Early Stop Triggered at epoch 144.    *********
+Change in noise variance: 0.0408
+Change in x0: 0.5010
+*********             Velocity Refinement Round 3             *********
+*********     Round 3: Early Stop Triggered at epoch 180.    *********
+Change in noise variance: 0.0073
+Change in x0: 0.5771
+*********             Velocity Refinement Round 4             *********
+*********     Round 4: Early Stop Triggered at epoch 186.    *********
+Change in noise variance: 0.0269
+Change in x0: 0.3684
+*********             Velocity Refinement Round 5             *********
+*********     Round 5: Early Stop Triggered at epoch 192.    *********
+Change in noise variance: 0.0052
+Change in x0: 0.3283
+*********             Velocity Refinement Round 6             *********
+*********     Round 6: Early Stop Triggered at epoch 198.    *********
+Change in noise variance: 0.0027
+Change in x0: 0.2698
+*********             Velocity Refinement Round 7             *********
+*********     Round 7: Early Stop Triggered at epoch 204.    *********
+Change in noise variance: 0.0018
+Change in x0: 0.2269
+*********             Velocity Refinement Round 8             *********
+*********     Round 8: Early Stop Triggered at epoch 210.    *********
+Change in noise variance: 0.0011
+Change in x0: 0.2009
+*********             Velocity Refinement Round 9             *********
+*********     Round 9: Early Stop Triggered at epoch 216.    *********
+Change in noise variance: 0.0005
+Change in x0: 0.1882
+*********             Velocity Refinement Round 10             *********
+*********     Round 10: Early Stop Triggered at epoch 221.    *********
+Change in noise variance: 0.0000
+Change in x0: 0.1845
+*********             Velocity Refinement Round 11             *********
+Stage 2: Early Stop Triggered at round 10.
+*********              Finished. Total Time =   0 h :  0 m : 26 s             *********
+Final: Train ELBO = -13665.999,	Test ELBO = -13649.533
+Estimating ODE parameters...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "560b36acfd1b4adfadc868715bcb0d1e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected 35 velocity genes.
+Estimating the variance...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c7cca1d4b2b44fb0a3f846e32749189d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization using the steady-state and dynamical models.
+Reinitialize the regular ODE parameters based on estimated global latent time.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fa794d813c1e4eceaceaedf2ed39ea4e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 clusters detected based on gene co-expression.
+(0.56, 0.24297477479231852), (0.44, 0.7779664767114342)
+KS-test result: [0. 1. 1.]
+Initial induction: 60, repression: 23/83
+Learning Rate based on Data Sparsity: 0.0000
+--------------------------- Train a VeloVAE ---------------------------
+*********        Creating Training/Validation Datasets        *********
+*********                      Finished.                      *********
+*********                 Creating optimizers                 *********
+*********                      Finished.                      *********
+*********                    Start training                   *********
+*********                      Stage  1                       *********
+Total Number of Iterations Per Epoch: 2, test iteration: 2
+*********       Stage 1: Early Stop Triggered at epoch 9.       *********
+*********                      Stage  2                       *********
+*********             Velocity Refinement Round 1             *********
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9529c4f4d8a846638854269136aa0958", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="data-saving">
+<h2>Data saving<a class="headerlink" href="#data-saving" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="n">velocity_correlation</span><span class="p">})</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;velovae_fullvb_correlation.parquet&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-regvelo_test-py"
+        },
+        kernelOptions: {
+            name: "conda-env-regvelo_test-py",
+            path: "./dyngen"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_unitvelo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">UniTVelo benchmark on dyngen data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2_velovae.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">VeloVAE benchmark on dyngen data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-saving">Data saving</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

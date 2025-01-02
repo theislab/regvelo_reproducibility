@@ -1,0 +1,1380 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Using RegVelo to predict perturbation &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'zebrafish/6_regvelo_perturbation';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Perturbation prediction benchmark" href="7_perturbation_benchmark.html" />
+    <link rel="prev" title="Dynamo-based perturbation analysis" href="6_dynamo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/zebrafish/6_regvelo_perturbation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Using RegVelo to predict perturbation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-prediction">Perturbation prediction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-gene-knockout">Single gene knockout</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-knockout">Multiple knockout</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="using-regvelo-to-predict-perturbation">
+<h1>Using RegVelo to predict perturbation<a class="headerlink" href="#using-regvelo-to-predict-perturbation" title="Link to this heading">#</a></h1>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+
+<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span> <span class="nn">rgv_tools.perturbation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_list_name</span><span class="p">,</span>
+    <span class="n">Multiple_TFScanning</span><span class="p">,</span>
+    <span class="n">split_elements</span><span class="p">,</span>
+    <span class="n">TFScanning</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_csv from `anndata` is deprecated. Import anndata.io.read_csv instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_text from `anndata` is deprecated. Import anndata.io.read_text instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_excel from `anndata` is deprecated. Import anndata.io.read_excel instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_mtx from `anndata` is deprecated. Import anndata.io.read_mtx instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_hdf from `anndata` is deprecated. Import anndata.io.read_hdf instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_umi_tools from `anndata` is deprecated. Import anndata.io.read_umi_tools instead.
+  warnings.warn(msg, FutureWarning)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;zebrafish&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TERMINAL_STATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;mNC_head_mesenchymal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_arch2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_hox34&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pigment&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">single_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;erf&quot;</span><span class="p">,</span> <span class="s2">&quot;fli1a&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f5&quot;</span><span class="p">,</span> <span class="s2">&quot;rarga&quot;</span><span class="p">,</span> <span class="s2">&quot;rxraa&quot;</span><span class="p">,</span> <span class="s2">&quot;smarcc1a&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f2&quot;</span><span class="p">]</span>
+<span class="n">multiple_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fli1a_elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec_mitfa_bhlhe40&quot;</span><span class="p">,</span> <span class="s2">&quot;fli1a_erf_erfl3&quot;</span><span class="p">,</span> <span class="s2">&quot;erf_erfl3&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_preprocessed.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="perturbation-prediction">
+<h2>Perturbation prediction<a class="headerlink" href="#perturbation-prediction" title="Link to this heading">#</a></h2>
+<section id="single-gene-knockout">
+<h3>Single gene knockout<a class="headerlink" href="#single-gene-knockout" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_ko</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">)</span>
+<span class="n">single_ko</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;rgv_model_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+    <span class="n">coef_name</span> <span class="o">=</span> <span class="s2">&quot;coef_single_regvelo_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+    <span class="n">pval_name</span> <span class="o">=</span> <span class="s2">&quot;pval_single_regvelo_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;perturb_repeat_runs&quot;</span> <span class="o">/</span> <span class="n">model_name</span>
+    <span class="n">coef_save</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="n">coef_name</span>
+    <span class="n">pval_save</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="n">pval_name</span>
+
+    <span class="c1">## Perturbation</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">TFScanning</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="n">single_ko</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">]))</span>
+    <span class="n">coef</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+    <span class="n">coef</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">pval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">]))</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">coef</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">single_ko</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">coef</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">coef_save</span><span class="p">)</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">pval_save</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bcdf9e14ec2e4d38a198b8b5546ca711", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ca68e910de0a46feae012eb26e819e2d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:45:31,171 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import petsc4py. For installation, please refer to: https://petsc4py.readthedocs.io/en/stable/install.html.
+Defaulting to `&#39;gmres&#39;` solver.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "39d5eaee7f6c4ff8b4ede94dc1edea02", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cfd0f14d02bd494d8de8072aa6e5db44", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a817c502f30243708bf8d381368c5fd1", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:45:41,723 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bf54898832974e91bf317e36a9e55d3b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a6e23d8116a54d27aa495146c8f18942", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "df004870c8894240ad89e1cac3398279", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:45:52,684 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a00a85daaeb9422592c16c315a0fee67", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rxraa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "710e9b85cf594dc3aa88a246b67ffc80", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8c6725549dd441b3bee5263362f2fa91", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:03,710 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a77db297e0254fd1834b22199106dd9a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7112e80d86cf4a24a5e0bfed3d980d74", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "884d619ad3e8420cad296141b85ef9d2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:14,079 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d08f886decba427696ace5f9bc495d84", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "34c3ec4a69094188bada4fc12023e325", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bf17ead441a34948b6087b144ebada28", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:24,385 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "178d54db2bb44a518fbd577d1be96f0f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f5
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6240bc25869f4ecab4b87304963243b7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c12cd5a6e2484c60b5eaa65204ba28e5", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:34,948 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ca69045200cd4baf8495d8a152cd830e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rarga
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ff243a72af2141a2a1cac51b80a9ce98", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d91d486d5be443a5a18f59b3f12d43e8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:45,238 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2ce49804b9614ba8b5a18737bca10e7f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f2
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "99dab616861e4cf2a3307b8852a4a0be", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9cd85f75072143118a3a28999315863a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:46:55,823 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "933487382f8943fcb7549a5f2ba25280", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "81bc33462caa4cd6aab8f37f44af1983", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "78f3880f17774f4488970d31254eb1d2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:06,384 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "af19dd10a570420fb1b22689f83dc7b6", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "946b321ee9de440f89d51290e31df437", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1eeedfcdb9104a65b254db7909b0b06e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:17,183 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6cc86fa15a354e0a99f3ec51c406234d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "21e96a0c62af468b895acc070748f874", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "50cd086febdc48b4b4d903716b8e5e98", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:27,667 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6c7b13a1d6b5445486f00d5424b44cd7", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "08d49bd851d14ff5810aaf3dc0de2278", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fa04f39d8ff74cd2a4a67d634aa6cc4f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:38,381 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d720e4e12afc430398968a96b0998d2d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rxraa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d4fefb5e661643e2af9b5a50ed49196b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f518f497afb747429733f31d839f00b2", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:48,854 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c2ada88d7b064fd6b493fabfa4108956", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d3a13a2da0c34881bad7de5814262bc0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c138bdc592ad4dfa94264a63791b9a30", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:47:59,596 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a320dfd4f345431696271cbaf5429e09", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "83c4ae48eccb4c36b6024a71a7fc0f9d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ed512fb67d124ef9858693ae7afcd0db", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:48:10,572 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6a574f0b91eb4d058afb356487ad8b6c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f5
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9c4b60c3384b4cfcb75d85357deb1068", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a61a494eb6974fb8ae0c08aadc39bc98", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:48:21,079 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "faeb746b2d504de1bedfb3f4454fa38d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rarga
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "95d483ef038b4846a648ab9e390a5651", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1dc5a1000ef142f98ee6119d300b86d3", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:48:31,622 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d6e59cc4d2ec446f82c5d6546b3398d5", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f2
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7a0684dc6a3a4f3da82a5cbfd8a6eaab", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4f6fdf29eb4a42b68ecd48b3997d370e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:48:42,238 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cd5578887b4b48e1a7185f0a8d6cc117", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a299a748009b452d839323fdf7efcac1", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2963c627a51b45f4804ddd10e45e5fb0", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:48:53,001 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "da506934466e448eab2fb0a3c4ecdccc", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f3007b9b21e438d91ca6e87270a377b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ddc5e5476ca846439bc058bb28561114", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:03,680 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "71935ce07ebc4770992c6cb670bf7e46", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b114ac9cc80a458a9420d6752f713967", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fc97844feb7549709469414b474fef09", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:14,410 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "26315b225fac4f81bff4c9bde85e8a66", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1652166868204264b732dd3e929043f2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d97be594baf74499a4741fd052c32823", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:25,247 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9b1358bcbb4041b29d37eb52a49a3c69", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rxraa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5accc78641134160b244aba5e86ac048", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "05bfd887552d4d40ad540533f4c69e5a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:36,076 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e9ddb2621b6e4918b7574835bcafc022", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "560fc175b8724d99af3003a64bd0517f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8cf9c863936545409ec3c2dfd9b100f6", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:46,920 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b98348b88afa4f3faf1bdc10847666d8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3a1ccfcf3b454f6f8573ca7afaaec44f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8a66ebcabf8844c79b52ad1775f6d4e3", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:49:58,372 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7af95a064d78400aa1545a046388f6cb", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f5
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e47d33352fa64b1fa92edb0f4b436f4d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4b866644d9514329a3a145aed026277f", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:50:09,453 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "96702c724f62422ca53b7db6cfe61a39", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done rarga
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "30380285900745da8f22c44ec739fc8e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a9a5d725f00b4e9294aaff523241d490", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:50:20,757 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6db19736e7f44c7a99a20e5a2619fc8d", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done nr2f2
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fc67eede720e45b5ac94d07a38c44390", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9b921887a59f4c0b8268bad42c54dd6e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:50:32,045 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b208d6bd71924b668c1f7583e56c210c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "650206db81ea43209ac48fd80bcf6368", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9dece82d168c40529353ac775a31d6a5", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:50:43,044 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "68be13b841c54d15ac1dde543e775364", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="multiple-knockout">
+<h3>Multiple knockout<a class="headerlink" href="#multiple-knockout" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiple_ko_list</span> <span class="o">=</span> <span class="n">split_elements</span><span class="p">(</span><span class="n">multiple_ko</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;rgv_model_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+    <span class="n">coef_name</span> <span class="o">=</span> <span class="s2">&quot;coef_multiple_regvelo_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+    <span class="n">pval_name</span> <span class="o">=</span> <span class="s2">&quot;pval_multiple_regvelo_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;perturb_repeat_runs&quot;</span> <span class="o">/</span> <span class="n">model_name</span>
+    <span class="n">coef_save</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="n">coef_name</span>
+    <span class="n">pval_save</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="n">pval_name</span>
+
+    <span class="c1">## Perturbatiom</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">Multiple_TFScanning</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="n">multiple_ko_list</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">]))</span>
+    <span class="n">coef</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+    <span class="n">coef</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">pval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">]))</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">coef</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">coef_save</span><span class="p">)</span>
+    <span class="n">pval</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">pval_save</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7acbf608abe54fbc8cdf0335dee34264", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "05148c25b5314ead9e5991d453db4741", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:50:54,421 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4375946f0a59444a8efd309b6f1fe65c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "efbf30bc441f41beb2869d941883695f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ed9035fafcbf408f84e142b66403db1e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:05,483 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1fa2dcaa69904d64bdd9f484fa228bef", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f941a27b9fa341b1a1b3d3a97e0679ca", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e1839b4e23424223b18f319e14e41d72", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:16,302 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "794e0c60d4f94f3abf897fbe32cebcfe", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa_tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0513d69cfb264a97beae3fce45382ef1", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6f805064f955448c8526a4e5640394f4", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:26,882 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "17df2c8e20f2471bb605cea27960f2b7", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec_mitfa_bhlhe40
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a8627fdbe0e842ec9720257c33812550", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8edc7d8cb9d043dd8240504d0383f093", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:37,651 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5225866cde4b40f3918ec4b13272dbfc", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_erf_erfl3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_0/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "85966c254b1b446cae70254c0d7adf23", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "269cef9a56364a90adae8f7649359661", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:48,761 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c85571fe156a463eac0ab533fe08c3b8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf_erfl3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5deb50e825d4465e9d52c0ed852a2484", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dc537d42708f473ea1711f27e6162062", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:51:59,505 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "75cb78e78eff467a8060e62b61cfbd00", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c03486742cdd4d21890849e47a852eba", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "76884194ca7549e99338cbd7542f1071", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:52:10,525 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0069c5d7498549979cda85a8893bf905", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0087d06d35874c2c8196d52faef9fb05", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2c3caab9304845f7b14e8e5988adbb9c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:52:21,320 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f861321f2b442b48c1111ea417ccd70", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa_tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "595c1dd5832048aa80aa46955ecadce7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dfde8c66ea8c4e94a728e834a39cdaf3", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:52:32,526 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9e273d3672d145e6aa99e1380bb11319", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec_mitfa_bhlhe40
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "64e4daba6c6240e7951d3d2625450adc", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fa00338982a94f13aad5b4ee76d50d4a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:52:43,786 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6800350514574ec7b8c3e4c8182421a6", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_erf_erfl3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_1/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "aef824aaa3b1412f98864e1125de02e4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3fd57fdda62443d99a3919f90402c06e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:52:54,641 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "de9cbe2a13704c0c9820fe44eb01dcf4", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf_erfl3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "984f2d9e667d48c68add3743233335c5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e4073b1b7f284d419875ee75e66b4c61", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:53:05,443 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "13e01a9238bd42149b281555da953d57", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f140b32b73fc4d06a3a025fdeae0a213", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c16d87c4a5644a1dbec292285740e32e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:53:17,130 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bee2d61234a949a0a924613241846c9e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_elk3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b4e5922464a149a78f8fa07aa6046ec4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "62c3b65d328c450abc6cbe45aa4badcc", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:53:28,188 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b3ddbdf5993b4308930bca1ed2602ee4", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done mitfa_tfec
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7e26e188396a4668a9718860fbce1298", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a6c38b25b8544a8baf460da08801772a", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:53:39,255 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3e7ce88941c141009971a516f617e667", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done tfec_mitfa_bhlhe40
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1d56756622f042859664cecd77dd65cc", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "073725f58dda4d8499a3c223da327438", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:53:50,234 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "333ed8c6f675439db8c473e7f15318c8", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done fli1a_erf_erfl3
+<span class=" -Color -Color-Blue">INFO    </span> File                                                                                                      
+         <span class=" -Color -Color-Magenta">/ictstr01/home/icb/weixu.wang/regulatory_velo/data/zebrafish/processed/perturb_repeat_runs/rgv_model_2/</span>mod
+         el.pt already downloaded                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d1b94cc48a064f9a81c2d22cbdd589a9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1aabe6732fdf4aeeb49115278b73a64b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-24 17:54:01,592 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9b2bab73ef394fa293c08b152c05f239", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Done erf_erfl3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-dynamo-py"
+        },
+        kernelOptions: {
+            name: "conda-env-dynamo-py",
+            path: "./zebrafish"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-dynamo-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="6_dynamo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Dynamo-based perturbation analysis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="7_perturbation_benchmark.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Perturbation prediction benchmark</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-prediction">Perturbation prediction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-gene-knockout">Single gene knockout</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-knockout">Multiple knockout</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
