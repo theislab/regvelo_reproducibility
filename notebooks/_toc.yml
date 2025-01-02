@@ -1,11 +1,30 @@
 format: jb-book
 root: index
 parts:
+    - caption: Cell cycle
+      chapters:
+          - file: cell_cycle/1_data_preparation.ipynb
+          - file: cell_cycle/2_regvelo.ipynb
+          - file: cell_cycle/2_scvelo.ipynb
+          - file: cell_cycle/2_velovi.ipynb
+          - file: cell_cycle/2_tfvelo.ipynb
+          - file: cell_cycle/2_unitvelo.ipynb
+          - file: cell_cycle/2_velovae_fullvb.ipynb
+          - file: cell_cycle/2_velovae.ipynb
+          - file: cell_cycle/2_cell2fate.ipynb
+          - file: cell_cycle/2_dpt.ipynb
+          - file: cell_cycle/2_celloracle.ipynb
+          - file: cell_cycle/2_grnboost2.ipynb
+          - file: cell_cycle/2_splicejac.ipynb
+          - file: cell_cycle/2_correlation.ipynb
+          - file: cell_cycle/3_comparison.ipynb
+          - file: cell_cycle/3_grn_influence.ipynb
+          - file: cell_cycle/3_grn_visualization.ipynb
     - caption: Pancreatic endocrinogenesis
       chapters:
           - file: pancreatic_endocrinogenesis/1_preprocessing.ipynb
           - file: pancreatic_endocrinogenesis/2_regvelo.ipynb
-          - file: pancreatic_endocrinogenesis/2_scveloipynb
+          - file: pancreatic_endocrinogenesis/2_scvelo.ipynb
           - file: pancreatic_endocrinogenesis/2_velovi.ipynb
           - file: pancreatic_endocrinogenesis/3_comparison_tsi.ipynb
           - file: pancreatic_endocrinogenesis/4_cell_fate_analysis.ipynb
@@ -14,15 +33,15 @@ parts:
           - file: pancreatic_endocrinogenesis/6_e2f1_targets_analysis.ipynb
           - file: pancreatic_endocrinogenesis/7_repeat_regvelo.ipynb
           - file: pancreatic_endocrinogenesis/8_perturbation_screening.ipynb
-          - file: pancreatic_endocrinogenesis/9_repeat_veloVI.ipynb
+          - file: pancreatic_endocrinogenesis/9_repeat_velovi.ipynb
           - file: pancreatic_endocrinogenesis/10_benchmark_identifiability.ipynb
           - file: pancreatic_endocrinogenesis/11_neurod2_analysis.ipynb
           - file: pancreatic_endocrinogenesis/11_screening_neurod2_targets.ipynb
     - caption: Hematopoiesis
       chapters:
           - file: hematopoiesis/1_preprocessing.ipynb
-          - file: hematopoiesis/2_regvelo_unregularized.ipynb
           - file: hematopoiesis/2_regvelo.ipynb
+          - file: hematopoiesis/2_regvelo_unregularized.ipynb
           - file: hematopoiesis/2_scvelo.ipynb
           - file: hematopoiesis/2_velovi.ipynb
           - file: hematopoiesis/3_comparison_gene_ranking.ipynb
@@ -42,6 +61,7 @@ parts:
           - file: zebrafish/2_velovi.ipynb
           - file: zebrafish/3_tsi_comparison.ipynb
           - file: zebrafish/4_driver_prediction.ipynb
+          - file: zebrafish/4_perturbation.ipynb
           - file: zebrafish/5_driver_prediction_comparison.ipynb
           - file: zebrafish/6_celloracle.ipynb
           - file: zebrafish/6_dynamo.ipynb
@@ -49,3 +69,33 @@ parts:
           - file: zebrafish/7_perturbation_benchmark.ipynb
           - file: zebrafish/8_perturb_seq_analysis.ipynb
           - file: zebrafish/9_elf1_motif_analysis.ipynb
+    - caption: Toy GRN data
+      chapters:
+          - file: toy_grn/1_simulation.ipynb
+          - file: toy_grn/2_regvelo.ipynb
+          - file: toy_grn/2_scvelo.ipynb
+          - file: toy_grn/2_velovi.ipynb
+          - file: toy_grn/2_dpt.ipynb
+          - file: toy_grn/2_celloracle.ipynb
+          - file: toy_grn/2_grnboost2.ipynb
+          - file: toy_grn/2_correlation.ipynb
+          - file: toy_grn/3_comparison.ipynb
+          - file: toy_grn/3_plot_toy_simulation_benchmark.ipynb
+    - caption: Dyngen-simulated data
+      chapters:
+          - file: dyngen/1_data_conversion.ipynb
+          - file: dyngen/2_regvelo.ipynb
+          - file: dyngen/2_scvelo.ipynb
+          - file: dyngen/2_velovi.ipynb
+          - file: dyngen/2_unitvelo.ipynb
+          - file: dyngen/2_velovae_fullvb.ipynb
+          - file: dyngen/2_velovae.ipynb
+          - file: dyngen/2_cell2fate.ipynb
+          - file: dyngen/2_celloracle.ipynb
+          - file: dyngen/2_grnboost2.ipynb
+          - file: dyngen/2_splicejac.ipynb
+          - file: dyngen/2_correlation.ipynb
+          - file: dyngen/3_comparison.ipynb
+          - file: dyngen/3_velovi_benchmark.ipynb
+          - file: dyngen/3_regvelo_benchmark.ipynb
+          - file: dyngen/3_robustness_evaluation.ipynb
