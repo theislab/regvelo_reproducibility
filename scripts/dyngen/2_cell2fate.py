@@ -3,7 +3,7 @@
 #
 # Notebook benchmarks velocity and latent time inference using cell2fate on dyngen-generated data.
 #
-# cell2fate requires `anndata = 0.8.0` and `scvi-tools = 0.16.1`
+# Note that cell2fate requires `anndata==0.8.0` and `scvi-tools==0.16.1`.
 
 # %% [markdown]
 # ## Library imports
@@ -11,7 +11,6 @@
 # %%
 import contextlib
 import io
-from pathlib import PosixPath
 
 import numpy as np
 import pandas as pd
@@ -21,6 +20,8 @@ import torch
 import anndata as ad
 import cell2fate as c2f
 import scanpy as sc
+
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## Function definitions
@@ -54,6 +55,7 @@ def train_c2f_model(adata):
     return adata
 
 
+# %%
 def get_velocity_correlation(ground_truth, estimated, aggregation, axis: int = 0):
     """Compute Pearson correlation between ground truth and estimated values."""
     # Ensure inputs are numpy arrays for easier manipulation
@@ -76,20 +78,11 @@ def get_velocity_correlation(ground_truth, estimated, aggregation, axis: int = 0
         raise ValueError("Aggregation must be callable or None.")
 
 
-def get_time_correlation(ground_truth, estimated) -> float:
-    """Compute Spearman correlation between ground truth and estimated values."""
-    return scipy.stats.spearmanr(ground_truth, estimated)[0]
-
-
 # %% [markdown]
 # ## Constants
 
 # %%
 DATASET = "dyngen"
-
-# %%
-## Please manually set your dataset location
-DATA_DIR = PosixPath("/ictstr01/home/icb/weixu.wang/regulatory_velo/data")
 
 # %%
 SAVE_DATA = True
@@ -134,5 +127,3 @@ if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "cell2fate_correlation.parquet"
     )
-
-# %%
