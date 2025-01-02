@@ -17,8 +17,8 @@ maintainers = [
     {name = "Weixu Wang", email = "weixu.wang@helmholtz-munich.de"},
 ]
 urls.Documentation = "https://todo.com"  # TODO
-urls.Source = "https://github.com/theislab/RegVelo_reproducibility.git"
-urls.Home-page = "https://github.com/theislab/RegVelo_reproducibility.git"
+urls.Source = "https://github.com/theislab/regvelo_reproducibility.git"
+urls.Home-page = "https://github.com/theislab/regvelo_reproducibility.git"
 dependencies = [
     "jupyterlab",
     "anndata>=0.11.0",

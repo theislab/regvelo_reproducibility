@@ -1,9 +1,9 @@
-title: Single-cell analysis repository
-author: Philipp Weiler
+title: RegVelo's reproducibility repository
+author: Weixu Wang, Philipp Weiler
 execute:
     execute_notebooks: "off"
 
 repository:
-    url: https://github.com/WeilerP/sc_analysis_template
+    url: https://github.com/theislab/regvelo_reproducibility
 html:
     use_repository_button: true
