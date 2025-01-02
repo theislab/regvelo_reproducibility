@@ -2,6 +2,7 @@ from ._io import set_output
 from ._metrics import (
     compute_average_correlations,
     get_grn_auroc,
+    get_grn_auroc_cc,
     get_time_correlation,
     get_velocity_correlation,
     perturb_prediction,
@@ -19,6 +20,7 @@ from ._tsi import get_tsi_score, plot_tsi
 __all__ = [
     "get_data_subset",
     "get_grn_auroc",
+    "get_grn_auroc_cc",
     "get_time_correlation",
     "get_velocity_correlation",
     "perturb_prediction",

@@ -126,6 +126,34 @@ def get_grn_auroc(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
     return roc_auc_score(ground_truth, estimated[mask])
 
 
+def get_grn_auroc_cc(ground_truth: ArrayLike, estimated: ArrayLike) -> float:
+    """Compute AUROC for cell cycling data.
+
+    Parameters
+    ----------
+    ground_truth
+        Array of ground truth value.
+    estimated
+        Array of estimated values.
+
+    Returns
+    -------
+    AUROC score.
+    """
+    np.fill_diagonal(ground_truth, 0)
+    np.fill_diagonal(estimated, 0)
+
+    regulator = ground_truth.sum(1) != 0
+    ground_truth = ground_truth[regulator, :]
+    estimated = estimated[regulator, :]
+
+    auc = []
+    for i in range(ground_truth.shape[0]):
+        auc.append(roc_auc_score(ground_truth[i, :], estimated[i, :]))
+
+    return auc
+
+
 def perturb_prediction(coef, perturbation, gene_list):
     """TODO."""
     gt = perturbation.loc[[i in coef.index for i in perturbation.loc[:, "sgRNA_group"]], :].copy()
