@@ -1,7 +1,7 @@
 # %% [markdown]
 # # Correlation benchmark on dyngen data
 #
-# Notebook benchmarks GRN inference using Correlation on dyngen-generated data.
+# Notebook benchmarks GRN inference using correlation on dyngen-generated data.
 
 # %% [markdown]
 # ## Library imports
@@ -77,5 +77,3 @@ if SAVE_DATA:
     pd.DataFrame({"grn": grn_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "correlation_correlation.parquet"
     )
-
-# %%
