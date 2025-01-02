@@ -37,7 +37,7 @@ scvi.settings.seed = 0
 # ## Constants
 
 # %%
-DATASET = "prior_benchmark"
+DATASET = "dyngen"
 
 # %%
 SAVE_DATA = True
