@@ -1,4 +1,4 @@
-from ._io import set_output
+from ._io import get_data_subset, set_output
 from ._metrics import (
     compute_average_correlations,
     get_grn_auroc,

@@ -29,6 +29,7 @@ dependencies = [
     "unitvelo",
     "dynamo-release",
     "torch",
+    "torchsde",
     "arboreto",
     "zarr",
     "distributed==2024.2.1",
