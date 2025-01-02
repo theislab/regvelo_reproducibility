@@ -36,7 +36,7 @@ scv.settings.set_figure_params("scvelo", dpi_save=400, dpi=80, transparent=True,
 # ## Constants
 
 # %%
-DATASET = "prior_benchmark"
+DATASET = "dyngen"
 
 # %%
 SAVE_FIG = True
