@@ -18,5 +18,4 @@ python -m ipykernel install --user --name regvelo-py310 --display-name "regvelo-
 
 ## Remarks
 
--   Please install scvi-tools with version `0.20.3` ensure reproduce the results
 -   Results related to the in vivo Perturb-seq and multiome data analysis can be found [here](https://github.com/zhiyhu/neural-crest-scmultiomics)
