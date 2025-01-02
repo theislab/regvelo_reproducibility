@@ -28,7 +28,7 @@ scv.settings.verbosity = 3
 # ## Constants
 
 # %%
-DATASET = "pancreatic_endocrine"
+DATASET = "pancreatic_endocrinogenesis"
 
 SAVE_DATA = True
 if SAVE_DATA:

@@ -32,7 +32,7 @@ scvi.settings.seed = 0
 # ## Constants
 
 # %%
-DATASET = "pancreatic_endocrine"
+DATASET = "pancreatic_endocrinogenesis"
 
 # %%
 SAVE_DATA = True
