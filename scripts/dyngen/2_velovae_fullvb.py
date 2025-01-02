@@ -17,9 +17,7 @@ import anndata as ad
 import scvelo as scv
 
 from rgv_tools import DATA_DIR
-from rgv_tools.benchmarking import (
-    get_velocity_correlation,
-)
+from rgv_tools.benchmarking import get_velocity_correlation
 
 # %% [markdown]
 # ## General settings
@@ -72,7 +70,7 @@ for filename in (DATA_DIR / DATASET / "processed").iterdir():
             )
         )
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         # Append np.nan in case of an error and optionally log the error
         print(f"An error occurred: {e}")
         velocity_correlation.append(np.nan)
@@ -85,5 +83,3 @@ if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "velovae_fullvb_correlation.parquet"
     )
-
-# %%

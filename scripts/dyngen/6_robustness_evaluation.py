@@ -336,5 +336,3 @@ with mplscience.style_context():
             bbox_inches="tight",
         )
     plt.show()
-
-# %%

@@ -278,7 +278,3 @@ with mplscience.style_context():
         )
 
     plt.show()
-
-# %%
-
-# %%

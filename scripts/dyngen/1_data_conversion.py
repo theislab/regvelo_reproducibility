@@ -125,5 +125,3 @@ for filename in tqdm((DATA_DIR / DATASET / "raw").iterdir()):
         adata.uns[f"true_{uns_key}"] = adata.uns[f"true_{uns_key}"][np.ix_(mask, mask)]
 
     adata.write_zarr(DATA_DIR / DATASET / "processed" / f"simulation_{simulation_id}.zarr")
-
-# %%

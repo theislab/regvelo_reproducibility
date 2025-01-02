@@ -312,5 +312,3 @@ if SAVE_DATA:
     pd.DataFrame(
         {"velocity": cor_velo_all, "time": cor_time_all, "grn": auc_all, "grn_prior": auc_all_prior}
     ).to_parquet(path=DATA_DIR / DATASET / "results" / "regvelo_benchmark.parquet")
-
-# %%

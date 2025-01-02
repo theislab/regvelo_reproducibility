@@ -107,5 +107,3 @@ if SAVE_DATA:
     pd.DataFrame({"velocity": velocity_correlation, "time": time_correlation, "grn": grn_correlation}).to_parquet(
         path=DATA_DIR / DATASET / "results" / "regvelo_correlation.parquet"
     )
-
-# %%
