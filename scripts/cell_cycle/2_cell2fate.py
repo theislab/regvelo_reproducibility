@@ -3,43 +3,21 @@
 #
 # Notebook benchmarks velocity, latent time inference, and cross boundary correctness using cell2fate on cell cycle data.
 #
-# cell2fate requires `anndata = 0.8.0` and `scvi-tools = 0.16.1`
+# Note that cell2fate requires `anndata==0.8.0` and `scvi-tools==0.16.1`.
 
 # %% [markdown]
 # ## Library imports
 
 # %%
-from pathlib import PosixPath
-
 import pandas as pd
-import scipy
 
 import anndata as ad
 import cell2fate as c2f
 import scvelo as scv
 from cellrank.kernels import VelocityKernel
 
-# %% [markdown]
-# ## Function defination
-
-
-# %%
-def get_time_correlation(ground_truth, estimated) -> float:
-    """Compute Spearman correlation between ground truth and estimated values.
-
-    Parameters
-    ----------
-    ground_truth
-        Array of ground truth value.
-    estimated
-        Array of estimated values.
-
-    Returns
-    -------
-    Spearman correlation.
-    """
-    return scipy.stats.spearmanr(ground_truth, estimated)[0]
-
+from rgv_tools import DATA_DIR
+from rgv_tools.benchmarking import get_time_correlation
 
 # %% [markdown]
 # ## Constants
@@ -49,10 +27,6 @@ DATASET = "cell_cycle"
 
 # %%
 STATE_TRANSITIONS = [("G1", "S"), ("S", "G2M")]
-
-# %%
-## Please manually set your dataset location
-DATA_DIR = PosixPath("/ictstr01/home/icb/weixu.wang/regulatory_velo/data")
 
 # %%
 SAVE_DATA = True
@@ -161,5 +135,3 @@ if SAVE_DATA:
     )
     adata.obs[["velocity_confidence"]].to_parquet(path=DATA_DIR / DATASET / "results" / "cell2fate_confidence.parquet")
     score_df.to_parquet(path=DATA_DIR / DATASET / "results" / "cell2fate_cbc.parquet")
-
-# %%
