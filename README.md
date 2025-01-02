@@ -16,6 +16,12 @@ pip install -e .
 python -m ipykernel install --user --name regvelo-py310 --display-name "regvelo-py310"
 ```
 
+## Data
+
+All datasets are freely available via a [FigShare project](https://figshare.com/account/home#/projects/226860). To run the provided analyses,
+download the corresponding data into the `data/` directory. For each dataset the directory `raw/` contains the data as obtained by the original study
+or in its raw format; similarly, in `processed/`, we collect all processed data.
+
 ## Remarks
 
 -   Results related to the in vivo Perturb-seq and multiome data analysis can be found [here](https://github.com/zhiyhu/neural-crest-scmultiomics)
