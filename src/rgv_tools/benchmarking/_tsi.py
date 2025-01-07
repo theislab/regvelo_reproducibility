@@ -27,7 +27,7 @@ def generate_sequence(k: int, n: int) -> List[int]:
     return sequence
 
 
-def plot_TSI(
+def plot_tsi(
     adata: AnnData,
     kernel: Any,
     threshold: float,
@@ -131,7 +131,7 @@ def get_tsi_score(
 
     for threshold in points:
         # Compute the staircase function for the current threshold
-        pre_value = plot_TSI(adata, kernel, threshold, terminal_states, cluster_key, max_states)
+        pre_value = plot_tsi(adata, kernel, threshold, terminal_states, cluster_key, max_states)
         y_values = [0] + pre_value
 
         # Calculate the area under the staircase function

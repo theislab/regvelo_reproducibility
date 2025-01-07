@@ -21,7 +21,7 @@ import scanpy as sc
 import scvelo as scv
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking._tsi import plot_TSI, TSI_score
+from rgv_tools.benchmarking._tsi import plot_tsi, TSI_score
 from rgv_tools.core import METHOD_PALETTE_TSI
 from rgv_tools.plotting._significance import add_significance, get_significance
 
@@ -125,9 +125,9 @@ ttest_ind(tsi["regvelo"], tsi["scvelo"], alternative="greater")
 # ## Show the stair plot
 
 # %%
-tsi_rgv_curve = plot_TSI(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "clusters")
-tsi_scv_curve = plot_TSI(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "clusters")
-tsi_vi_curve = plot_TSI(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "clusters")
+tsi_rgv_curve = plot_tsi(adata, estimators["regvelo"], 0.8, TERMINAL_STATES, "clusters")
+tsi_scv_curve = plot_tsi(adata, estimators["scvelo"], 0.8, TERMINAL_STATES, "clusters")
+tsi_vi_curve = plot_tsi(adata, estimators["velovi"], 0.8, TERMINAL_STATES, "clusters")
 
 # %%
 # Plot the recovery figure
