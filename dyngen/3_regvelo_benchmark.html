@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -473,21 +473,21 @@
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">sklearn</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sklearn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
-<span class="kn">import</span> <span class="nn">scvi</span>
-<span class="kn">from</span> <span class="nn">regvelo</span> <span class="kn">import</span> <span class="n">REGVELOVI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">regvelo</span><span class="w"> </span><span class="kn">import</span> <span class="n">REGVELOVI</span>
 
-<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>
-<span class="kn">from</span> <span class="nn">rgv_tools.benchmarking</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_time_correlation</span><span class="p">,</span>
     <span class="n">get_velocity_correlation</span><span class="p">,</span>
     <span class="n">set_output</span><span class="p">,</span>
@@ -573,7 +573,7 @@
 <h2>Function definitions<a class="headerlink" href="#function-definitions" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">csgn_benchmark</span><span class="p">(</span><span class="n">GRN</span><span class="p">,</span> <span class="n">csgn</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">csgn_benchmark</span><span class="p">(</span><span class="n">GRN</span><span class="p">,</span> <span class="n">csgn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GRN benchmark.&quot;&quot;&quot;</span>
     <span class="n">csgn</span><span class="p">[</span><span class="n">csgn</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">GRN</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -607,7 +607,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_noise_graph</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_noise_graph</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Adding noise graph.&quot;&quot;&quot;</span>
     <span class="n">W_c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">W</span>
     <span class="n">edge</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
@@ -636,7 +636,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">GRN_Jacobian</span><span class="p">(</span><span class="n">reg_vae</span><span class="p">,</span> <span class="n">Ms</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">GRN_Jacobian</span><span class="p">(</span><span class="n">reg_vae</span><span class="p">,</span> <span class="n">Ms</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer GRN.&quot;&quot;&quot;</span>
     <span class="n">reg_vae</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">v_encoder</span><span class="o">.</span><span class="n">fc1</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
     <span class="n">reg_vae</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">v_encoder</span><span class="o">.</span><span class="n">fc1</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>

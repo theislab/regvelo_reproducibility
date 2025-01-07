@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -463,20 +463,20 @@
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">mplscience</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mplscience</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
-<span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
-<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
-<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
-<span class="kn">from</span> <span class="nn">regvelo</span> <span class="kn">import</span> <span class="n">REGVELOVI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cellrank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">regvelo</span><span class="w"> </span><span class="kn">import</span> <span class="n">REGVELOVI</span>
 
-<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
-<span class="kn">from</span> <span class="nn">rgv_tools.benchmarking</span> <span class="kn">import</span> <span class="n">set_output</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_output</span>
 </pre></div>
 </div>
 </div>
@@ -554,7 +554,7 @@
 <h2>Function defination<a class="headerlink" href="#function-defination" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cal_cell_fate</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="p">,</span> <span class="n">n_states</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cal_cell_fate</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">terminal_states</span><span class="p">,</span> <span class="n">cluster_key</span><span class="p">,</span> <span class="n">n_states</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Cellrank&#39;s typical analysis pipeline.&quot;&quot;&quot;</span>
     <span class="n">vk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">VelocityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
     <span class="n">ck</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ConnectivityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>

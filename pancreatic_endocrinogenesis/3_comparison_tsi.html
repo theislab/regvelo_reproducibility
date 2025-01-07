@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -460,23 +460,23 @@
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttest_ind</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">mplscience</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mplscience</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">rcParams</span>
 
-<span class="kn">import</span> <span class="nn">cellrank</span> <span class="k">as</span> <span class="nn">cr</span>
-<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
-<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cellrank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
 
-<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
-<span class="kn">from</span> <span class="nn">rgv_tools.benchmarking._tsi</span> <span class="kn">import</span> <span class="n">plot_TSI</span><span class="p">,</span> <span class="n">TSI_score</span>
-<span class="kn">from</span> <span class="nn">rgv_tools.core</span> <span class="kn">import</span> <span class="n">METHOD_PALETTE_TSI</span>
-<span class="kn">from</span> <span class="nn">rgv_tools.plotting._significance</span> <span class="kn">import</span> <span class="n">add_significance</span><span class="p">,</span> <span class="n">get_significance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking._tsi</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_tsi</span><span class="p">,</span> <span class="n">TSI_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">METHOD_PALETTE_TSI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.plotting._significance</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_significance</span><span class="p">,</span> <span class="n">get_significance</span>
 </pre></div>
 </div>
 </div>
@@ -914,9 +914,9 @@ WARNING: The following terminal states have different number of cells than reque
 <h2>Show the stair plot<a class="headerlink" href="#show-the-stair-plot" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tsi_rgv_curve</span> <span class="o">=</span> <span class="n">plot_TSI</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;regvelo&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
-<span class="n">tsi_scv_curve</span> <span class="o">=</span> <span class="n">plot_TSI</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;scvelo&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
-<span class="n">tsi_vi_curve</span> <span class="o">=</span> <span class="n">plot_TSI</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;velovi&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tsi_rgv_curve</span> <span class="o">=</span> <span class="n">plot_tsi</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;regvelo&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
+<span class="n">tsi_scv_curve</span> <span class="o">=</span> <span class="n">plot_tsi</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;scvelo&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
+<span class="n">tsi_vi_curve</span> <span class="o">=</span> <span class="n">plot_tsi</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">estimators</span><span class="p">[</span><span class="s2">&quot;velovi&quot;</span><span class="p">],</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">TERMINAL_STATES</span><span class="p">,</span> <span class="s2">&quot;clusters&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

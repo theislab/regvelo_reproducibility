@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -459,19 +459,19 @@
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">contextlib</span>
-<span class="kn">import</span> <span class="nn">io</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
-<span class="kn">import</span> <span class="nn">cell2fate</span> <span class="k">as</span> <span class="nn">c2f</span>
-<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cell2fate</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">c2f</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
 
-<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
 </pre></div>
 </div>
 </div>
@@ -487,7 +487,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function for train model and get output</span>
-<span class="k">def</span> <span class="nf">train_c2f_model</span><span class="p">(</span><span class="n">adata</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_c2f_model</span><span class="p">(</span><span class="n">adata</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;cell2fate pipeline.&quot;&quot;&quot;</span>
     <span class="n">c2f</span><span class="o">.</span><span class="n">Cell2fate_DynamicalModel</span><span class="o">.</span><span class="n">setup_anndata</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">spliced_label</span><span class="o">=</span><span class="s2">&quot;spliced_raw&quot;</span><span class="p">,</span> <span class="n">unspliced_label</span><span class="o">=</span><span class="s2">&quot;unspliced_raw&quot;</span><span class="p">)</span>
     <span class="n">n_modules</span> <span class="o">=</span> <span class="n">c2f</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_max_modules</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
@@ -517,7 +517,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_velocity_correlation</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">estimated</span><span class="p">,</span> <span class="n">aggregation</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_velocity_correlation</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">estimated</span><span class="p">,</span> <span class="n">aggregation</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Pearson correlation between ground truth and estimated values.&quot;&quot;&quot;</span>
     <span class="c1"># Ensure inputs are numpy arrays for easier manipulation</span>
     <span class="n">ground_truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">)</span>

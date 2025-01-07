@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -459,19 +459,19 @@
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
-<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
-<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
-<span class="kn">import</span> <span class="nn">scvelo</span> <span class="k">as</span> <span class="nn">scv</span>
-<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
-<span class="kn">from</span> <span class="nn">velovi</span> <span class="kn">import</span> <span class="n">preprocess_data</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">velovi</span><span class="w"> </span><span class="kn">import</span> <span class="n">preprocess_data</span>
 
-<span class="kn">from</span> <span class="nn">rgv_tools</span> <span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
 </pre></div>
 </div>
 </div>
@@ -509,7 +509,7 @@
 <h2>Function definitions<a class="headerlink" href="#function-definitions" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_data</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update dyngen-simulated data to include only relevant information in the standard format.&quot;&quot;&quot;</span>
     <span class="n">adata</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;counts_spliced&quot;</span><span class="p">]</span>
 
@@ -550,7 +550,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_sc_grn</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_sc_grn</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute cell-specific GRNs.&quot;&quot;&quot;</span>
     <span class="n">true_sc_grn</span> <span class="o">=</span> <span class="p">[]</span>
 
