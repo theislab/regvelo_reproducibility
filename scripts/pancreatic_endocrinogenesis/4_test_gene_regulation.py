@@ -54,7 +54,7 @@ N_STATES = 7
 # ## Data loading
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed_filtered.h5ad")
+adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
 
 # %% [markdown]
 # ## Model loading
