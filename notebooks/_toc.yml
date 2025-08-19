@@ -1,6 +1,17 @@
 format: jb-book
 root: index
 parts:
+    - caption: Complexity scale analysis with mouse neural crest and Schwann cell datasets
+      chapters:
+          - file: scale_mouse_neural_crest/1_split_scaling.ipynb
+          - file: scale_mouse_neural_crest/2_scenic_stage.ipynb
+          - file: scale_mouse_neural_crest/3_grn_preprocessing.ipynb
+          - file: scale_mouse_neural_crest/3_regvelo.ipynb
+          - file: scale_mouse_neural_crest/3_scvelo.ipynb
+          - file: scale_mouse_neural_crest/3_velovi.ipynb
+          - file: scale_mouse_neural_crest/4_cbc.ipynb
+          - file: scale_mouse_neural_crest/4_cell_fate_consistency.ipynb
+          - file: scale_mouse_neural_crest/4_tsi.ipynb
     - caption: Cell cycle
       chapters:
           - file: cell_cycle/1_data_preparation.ipynb
