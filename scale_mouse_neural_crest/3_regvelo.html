@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RegVelo-based analysis on murine NCC cell &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'scale_mouse_neural_crest/3_regvelo';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/scale_mouse_neural_crest/3_regvelo.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>RegVelo-based analysis on murine NCC cell</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-definations">Function definations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="regvelo-based-analysis-on-murine-ncc-cell">
+<h1>RegVelo-based analysis on murine NCC cell<a class="headerlink" href="#regvelo-based-analysis-on-murine-ncc-cell" title="Link to this heading">#</a></h1>
+<p>We run RegVelo on each scale dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">regvelo</span><span class="w"> </span><span class="kn">import</span> <span class="n">REGVELOVI</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_output</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scvi</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[rank: 0] Seed set to 0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;mouse_neural_crest&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="function-definations">
+<h2>Function definations<a class="headerlink" href="#function-definations" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">min_max_scaling</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute min and max values for each feature.&quot;&quot;&quot;</span>
+    <span class="n">min_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">max_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Perform min-max scaling</span>
+    <span class="n">scaled_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">min_vals</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_vals</span> <span class="o">-</span> <span class="n">min_vals</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">scaled_data</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="velocity-pipeline">
+<h2>Velocity pipeline<a class="headerlink" href="#velocity-pipeline" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;adata_stage</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_processed_velo_all_regulons.h5ad&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Prepare skeleton</span>
+    <span class="n">scvi</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;skeleton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">))</span><span class="o">.</span><span class="n">int</span><span class="p">()</span>
+
+    <span class="c1"># Prepare TF</span>
+    <span class="n">TF</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]]</span>
+
+    <span class="c1"># Prepare model</span>
+    <span class="n">REGVELOVI</span><span class="o">.</span><span class="n">setup_anndata</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">spliced_layer</span><span class="o">=</span><span class="s2">&quot;Ms&quot;</span><span class="p">,</span> <span class="n">unspliced_layer</span><span class="o">=</span><span class="s2">&quot;Mu&quot;</span><span class="p">)</span>
+    <span class="n">vae</span> <span class="o">=</span> <span class="n">REGVELOVI</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">regulators</span><span class="o">=</span><span class="n">TF</span><span class="p">)</span>
+
+    <span class="n">vae</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">set_output</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">vae</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">n_obs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;adata_run_stage_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_regvelo_all_regulons.h5ad&quot;</span><span class="p">)</span>
+        <span class="n">vae</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;rgv_run_stage_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_all_regulons&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[rank: 0] Seed set to 0
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/icb/weixu.wang/miniconda3/envs/regvelo_test/li ...
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/icb/weixu.wang/miniconda3/envs/regvelo_test/li ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/icb/weixu.wang/miniconda3/envs/regvelo_test/li ...
+You are using a CUDA device (&#39;NVIDIA A100 80GB PCIe&#39;) that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision(&#39;medium&#39; | &#39;high&#39;)` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:424: The &#39;train_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=5` in the `DataLoader` to improve performance.
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py:298: The number of training batches (1) is smaller than the logging interval Trainer(log_every_n_steps=10). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:424: The &#39;val_dataloader&#39; does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=5` in the `DataLoader` to improve performance.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "02b465d70a4c4bf8b8201a665c00a230", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>IOPub message rate exceeded.
+The Jupyter server will temporarily stop sending output
+to the client in order to avoid crashing it.
+To change this limit, set the config variable
+`--ServerApp.iopub_msg_rate_limit`.
+
+Current values:
+ServerApp.iopub_msg_rate_limit=1000.0 (msgs/sec)
+ServerApp.rate_limit_window=3.0 (secs)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-regvelo_test-py"
+        },
+        kernelOptions: {
+            name: "conda-env-regvelo_test-py",
+            path: "./scale_mouse_neural_crest"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-definations">Function definations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
