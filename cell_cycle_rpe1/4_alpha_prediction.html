@@ -1,0 +1,2935 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Benchmark transcription rate prediction &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cell_cycle_rpe1/4_alpha_prediction';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluate latent time prediction via redefining global latent time" href="5_latent_time.html" />
+    <link rel="prev" title="CellDancer benchmark on cell cycle data" href="3_celldancer.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_latent_time.html">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/cell_cycle_rpe1/4_alpha_prediction.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Benchmark transcription rate prediction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-transcription-rate">Estimate transcription rate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-transcription-rate-with-celldancer">Estimating transcription rate with celldancer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#violinplot">Violinplot</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="benchmark-transcription-rate-prediction">
+<h1>Benchmark transcription rate prediction<a class="headerlink" href="#benchmark-transcription-rate-prediction" title="Link to this heading">#</a></h1>
+<p>Notebooks for benchmarking transcription rate prediction on metabolic labelled cell cycle datasets</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttest_ind</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mplscience</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">regvelo</span><span class="w"> </span><span class="kn">import</span> <span class="n">REGVELOVI</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.plotting._significance</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_significance</span><span class="p">,</span> <span class="n">get_significance</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;cell_cycle_rpe1&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="n">DATASET</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_processed.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;raw&quot;</span> <span class="o">/</span> <span class="s2">&quot;aax3072_table-s1.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>  <span class="c1"># downloaded from the supplementary of https://www.science.org/doi/10.1126/science.aax3072</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;^norm_kappa_&quot;</span><span class="p">)</span>
+<span class="n">alpha</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>norm_kappa_000</th>
+      <th>norm_kappa_001</th>
+      <th>norm_kappa_002</th>
+      <th>norm_kappa_003</th>
+      <th>norm_kappa_004</th>
+      <th>norm_kappa_005</th>
+      <th>norm_kappa_006</th>
+      <th>norm_kappa_007</th>
+      <th>norm_kappa_008</th>
+      <th>norm_kappa_009</th>
+      <th>...</th>
+      <th>norm_kappa_291</th>
+      <th>norm_kappa_292</th>
+      <th>norm_kappa_293</th>
+      <th>norm_kappa_294</th>
+      <th>norm_kappa_295</th>
+      <th>norm_kappa_296</th>
+      <th>norm_kappa_297</th>
+      <th>norm_kappa_298</th>
+      <th>norm_kappa_299</th>
+      <th>norm_kappa_300</th>
+    </tr>
+    <tr>
+      <th>gene_symbol</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>UBALD2</th>
+      <td>1.179867</td>
+      <td>1.179867</td>
+      <td>1.179867</td>
+      <td>1.179867</td>
+      <td>1.179867</td>
+      <td>1.179867</td>
+      <td>1.165868</td>
+      <td>1.165868</td>
+      <td>1.124469</td>
+      <td>1.124469</td>
+      <td>...</td>
+      <td>1.393822</td>
+      <td>1.389139</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+      <td>1.387780</td>
+    </tr>
+    <tr>
+      <th>LMNB2</th>
+      <td>0.118109</td>
+      <td>0.118109</td>
+      <td>0.118109</td>
+      <td>0.091849</td>
+      <td>0.091849</td>
+      <td>0.091849</td>
+      <td>0.091849</td>
+      <td>0.091849</td>
+      <td>0.091849</td>
+      <td>0.016334</td>
+      <td>...</td>
+      <td>0.328110</td>
+      <td>0.328110</td>
+      <td>0.328110</td>
+      <td>0.328110</td>
+      <td>0.328110</td>
+      <td>0.320427</td>
+      <td>0.320427</td>
+      <td>0.320427</td>
+      <td>0.304818</td>
+      <td>0.304818</td>
+    </tr>
+    <tr>
+      <th>SOGA1</th>
+      <td>0.088258</td>
+      <td>0.088258</td>
+      <td>0.020962</td>
+      <td>0.020962</td>
+      <td>0.020962</td>
+      <td>0.020962</td>
+      <td>0.012680</td>
+      <td>0.012680</td>
+      <td>0.012680</td>
+      <td>0.012680</td>
+      <td>...</td>
+      <td>0.518963</td>
+      <td>0.470260</td>
+      <td>0.432552</td>
+      <td>0.432552</td>
+      <td>0.397859</td>
+      <td>0.397859</td>
+      <td>0.381700</td>
+      <td>0.381700</td>
+      <td>0.381700</td>
+      <td>0.381700</td>
+    </tr>
+    <tr>
+      <th>PPIP5K2</th>
+      <td>0.108402</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.071083</td>
+      <td>0.043664</td>
+      <td>...</td>
+      <td>0.593905</td>
+      <td>0.593905</td>
+      <td>0.457897</td>
+      <td>0.457897</td>
+      <td>0.457897</td>
+      <td>0.457897</td>
+      <td>0.457897</td>
+      <td>0.447648</td>
+      <td>0.447648</td>
+      <td>0.447648</td>
+    </tr>
+    <tr>
+      <th>PTPRJ</th>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>1.002031</td>
+      <td>0.888077</td>
+      <td>0.861586</td>
+      <td>...</td>
+      <td>1.276865</td>
+      <td>1.270956</td>
+      <td>1.266449</td>
+      <td>1.266449</td>
+      <td>1.266449</td>
+      <td>1.251248</td>
+      <td>1.251248</td>
+      <td>1.251248</td>
+      <td>1.251248</td>
+      <td>1.251248</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>SGMS2</th>
+      <td>-1.192674</td>
+      <td>-1.192674</td>
+      <td>-1.192674</td>
+      <td>-1.192674</td>
+      <td>-1.208510</td>
+      <td>-1.224163</td>
+      <td>-1.208510</td>
+      <td>-1.208510</td>
+      <td>-1.208510</td>
+      <td>-1.208510</td>
+      <td>...</td>
+      <td>-0.453817</td>
+      <td>-0.479000</td>
+      <td>-0.479000</td>
+      <td>-0.479000</td>
+      <td>-0.479000</td>
+      <td>-0.504759</td>
+      <td>-0.504759</td>
+      <td>-0.542460</td>
+      <td>-0.542460</td>
+      <td>-0.549843</td>
+    </tr>
+    <tr>
+      <th>PMAIP1</th>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.183754</td>
+      <td>-0.184812</td>
+      <td>-0.223222</td>
+      <td>...</td>
+      <td>-0.042112</td>
+      <td>-0.044428</td>
+      <td>-0.044428</td>
+      <td>-0.060940</td>
+      <td>-0.060940</td>
+      <td>-0.060940</td>
+      <td>-0.080172</td>
+      <td>-0.080172</td>
+      <td>-0.080172</td>
+      <td>-0.080172</td>
+    </tr>
+    <tr>
+      <th>DHCR24</th>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.450735</td>
+      <td>-0.484615</td>
+      <td>-0.493553</td>
+      <td>...</td>
+      <td>-0.320440</td>
+      <td>-0.329280</td>
+      <td>-0.329280</td>
+      <td>-0.329280</td>
+      <td>-0.329280</td>
+      <td>-0.329280</td>
+      <td>-0.330464</td>
+      <td>-0.330464</td>
+      <td>-0.376690</td>
+      <td>-0.384143</td>
+    </tr>
+    <tr>
+      <th>POLE</th>
+      <td>-0.529833</td>
+      <td>-0.529833</td>
+      <td>-0.529833</td>
+      <td>-0.575677</td>
+      <td>-0.575677</td>
+      <td>-0.575677</td>
+      <td>-0.575677</td>
+      <td>-0.575677</td>
+      <td>-0.603306</td>
+      <td>-0.603306</td>
+      <td>...</td>
+      <td>-0.412773</td>
+      <td>-0.420573</td>
+      <td>-0.420573</td>
+      <td>-0.420573</td>
+      <td>-0.488070</td>
+      <td>-0.506770</td>
+      <td>-0.506770</td>
+      <td>-0.506770</td>
+      <td>-0.506770</td>
+      <td>-0.506770</td>
+    </tr>
+    <tr>
+      <th>ANKRD36C</th>
+      <td>-0.432021</td>
+      <td>-0.432021</td>
+      <td>-0.432021</td>
+      <td>-0.432021</td>
+      <td>-0.432021</td>
+      <td>-0.432021</td>
+      <td>-0.447457</td>
+      <td>-0.447457</td>
+      <td>-0.467636</td>
+      <td>-0.498658</td>
+      <td>...</td>
+      <td>-0.221038</td>
+      <td>-0.256899</td>
+      <td>-0.256899</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+      <td>-0.274694</td>
+    </tr>
+  </tbody>
+</table>
+<p>528 rows × 301 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;norm_kappa_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alpha</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_cycle_position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">GEX</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
+    <span class="n">gex</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_cycle_position&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">GEX</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gex</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">GEX</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">GEX</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>280</th>
+      <th>281</th>
+      <th>282</th>
+      <th>283</th>
+      <th>284</th>
+      <th>285</th>
+      <th>286</th>
+      <th>287</th>
+      <th>288</th>
+      <th>289</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DEPDC1</th>
+      <td>0.161310</td>
+      <td>0.328377</td>
+      <td>0.126236</td>
+      <td>0.000000</td>
+      <td>0.445840</td>
+      <td>0.742209</td>
+      <td>0.684013</td>
+      <td>0.317394</td>
+      <td>0.509439</td>
+      <td>0.180416</td>
+      <td>...</td>
+      <td>0.337324</td>
+      <td>0.523796</td>
+      <td>1.649758</td>
+      <td>0.000000</td>
+      <td>0.357087</td>
+      <td>1.076477</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>TRIO</th>
+      <td>1.981804</td>
+      <td>1.515634</td>
+      <td>1.730185</td>
+      <td>2.096108</td>
+      <td>1.660738</td>
+      <td>1.462572</td>
+      <td>1.611647</td>
+      <td>2.059388</td>
+      <td>2.121015</td>
+      <td>1.883820</td>
+      <td>...</td>
+      <td>1.791328</td>
+      <td>2.165788</td>
+      <td>0.876263</td>
+      <td>2.176786</td>
+      <td>0.636869</td>
+      <td>2.048151</td>
+      <td>2.324368</td>
+      <td>2.076471</td>
+      <td>2.328215</td>
+      <td>1.574311</td>
+    </tr>
+    <tr>
+      <th>ADAMTS6</th>
+      <td>1.273340</td>
+      <td>1.115689</td>
+      <td>0.793328</td>
+      <td>0.815586</td>
+      <td>0.724796</td>
+      <td>0.495016</td>
+      <td>0.865061</td>
+      <td>1.060191</td>
+      <td>1.100434</td>
+      <td>0.940455</td>
+      <td>...</td>
+      <td>1.411591</td>
+      <td>1.539369</td>
+      <td>0.876263</td>
+      <td>1.219352</td>
+      <td>0.525509</td>
+      <td>1.306756</td>
+      <td>1.440009</td>
+      <td>1.383749</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>POLQ</th>
+      <td>0.220024</td>
+      <td>0.093262</td>
+      <td>0.655998</td>
+      <td>0.120990</td>
+      <td>0.369249</td>
+      <td>0.329390</td>
+      <td>0.096619</td>
+      <td>0.529976</td>
+      <td>0.502093</td>
+      <td>0.098990</td>
+      <td>...</td>
+      <td>0.309368</td>
+      <td>0.322715</td>
+      <td>1.888225</td>
+      <td>0.260449</td>
+      <td>0.000000</td>
+      <td>0.230847</td>
+      <td>0.470612</td>
+      <td>0.000000</td>
+      <td>0.320231</td>
+      <td>1.574311</td>
+    </tr>
+    <tr>
+      <th>SYNE2</th>
+      <td>0.456051</td>
+      <td>0.121919</td>
+      <td>0.452270</td>
+      <td>0.317492</td>
+      <td>0.821573</td>
+      <td>0.516719</td>
+      <td>0.412208</td>
+      <td>0.884521</td>
+      <td>0.536059</td>
+      <td>0.589152</td>
+      <td>...</td>
+      <td>0.966696</td>
+      <td>0.376468</td>
+      <td>1.336004</td>
+      <td>1.522307</td>
+      <td>0.000000</td>
+      <td>0.851015</td>
+      <td>0.000000</td>
+      <td>0.691451</td>
+      <td>0.320231</td>
+      <td>1.069426</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>MANCR</th>
+      <td>1.107140</td>
+      <td>0.836700</td>
+      <td>0.756655</td>
+      <td>0.554660</td>
+      <td>0.632607</td>
+      <td>1.029576</td>
+      <td>0.840048</td>
+      <td>1.151329</td>
+      <td>1.099359</td>
+      <td>0.443124</td>
+      <td>...</td>
+      <td>0.780349</td>
+      <td>1.278557</td>
+      <td>0.000000</td>
+      <td>1.791222</td>
+      <td>0.335229</td>
+      <td>0.574196</td>
+      <td>1.046393</td>
+      <td>1.096350</td>
+      <td>0.320231</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>MTATP6P1</th>
+      <td>2.288898</td>
+      <td>2.405079</td>
+      <td>2.159031</td>
+      <td>2.227160</td>
+      <td>2.321663</td>
+      <td>2.195483</td>
+      <td>2.659615</td>
+      <td>2.515312</td>
+      <td>2.502668</td>
+      <td>2.483743</td>
+      <td>...</td>
+      <td>2.828326</td>
+      <td>2.249292</td>
+      <td>2.709321</td>
+      <td>2.271032</td>
+      <td>2.617242</td>
+      <td>2.023398</td>
+      <td>1.604221</td>
+      <td>2.830018</td>
+      <td>2.296170</td>
+      <td>2.158117</td>
+    </tr>
+    <tr>
+      <th>MIR100HG</th>
+      <td>1.508564</td>
+      <td>1.982803</td>
+      <td>1.997843</td>
+      <td>2.543906</td>
+      <td>2.180073</td>
+      <td>2.280532</td>
+      <td>2.287652</td>
+      <td>1.908947</td>
+      <td>1.789601</td>
+      <td>2.454187</td>
+      <td>...</td>
+      <td>1.833768</td>
+      <td>2.028000</td>
+      <td>0.876263</td>
+      <td>1.520726</td>
+      <td>2.845396</td>
+      <td>2.284718</td>
+      <td>1.737294</td>
+      <td>1.943000</td>
+      <td>2.607786</td>
+      <td>1.908226</td>
+    </tr>
+    <tr>
+      <th>SNHG1</th>
+      <td>1.340924</td>
+      <td>0.865615</td>
+      <td>0.407378</td>
+      <td>0.911950</td>
+      <td>1.100356</td>
+      <td>0.833532</td>
+      <td>1.037473</td>
+      <td>0.792740</td>
+      <td>1.336403</td>
+      <td>0.926061</td>
+      <td>...</td>
+      <td>0.710278</td>
+      <td>0.952297</td>
+      <td>1.336004</td>
+      <td>0.341737</td>
+      <td>0.692316</td>
+      <td>0.947387</td>
+      <td>1.179466</td>
+      <td>1.096350</td>
+      <td>0.653094</td>
+      <td>1.908226</td>
+    </tr>
+    <tr>
+      <th>SNHG19</th>
+      <td>0.349352</td>
+      <td>0.636762</td>
+      <td>0.260200</td>
+      <td>0.517246</td>
+      <td>0.360954</td>
+      <td>0.710418</td>
+      <td>0.619507</td>
+      <td>0.398636</td>
+      <td>0.000000</td>
+      <td>0.374218</td>
+      <td>...</td>
+      <td>0.149108</td>
+      <td>0.376468</td>
+      <td>0.000000</td>
+      <td>0.685875</td>
+      <td>0.357087</td>
+      <td>0.919150</td>
+      <td>0.575781</td>
+      <td>0.000000</td>
+      <td>0.792144</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>141 rows × 290 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gs</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>280</th>
+      <th>281</th>
+      <th>282</th>
+      <th>283</th>
+      <th>284</th>
+      <th>285</th>
+      <th>286</th>
+      <th>287</th>
+      <th>288</th>
+      <th>289</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>PAPPA</th>
+      <td>0.236026</td>
+      <td>0.595305</td>
+      <td>0.754837</td>
+      <td>0.815792</td>
+      <td>0.590248</td>
+      <td>0.554654</td>
+      <td>0.354364</td>
+      <td>0.417110</td>
+      <td>0.374995</td>
+      <td>0.716544</td>
+      <td>...</td>
+      <td>0.861246</td>
+      <td>0.409270</td>
+      <td>0.876263</td>
+      <td>0.000000</td>
+      <td>0.370403</td>
+      <td>0.388174</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.792144</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>RIMS2</th>
+      <td>0.000000</td>
+      <td>0.330232</td>
+      <td>0.247463</td>
+      <td>0.379518</td>
+      <td>0.510151</td>
+      <td>0.191398</td>
+      <td>0.000000</td>
+      <td>0.603839</td>
+      <td>0.530653</td>
+      <td>0.054663</td>
+      <td>...</td>
+      <td>0.559815</td>
+      <td>0.573492</td>
+      <td>0.000000</td>
+      <td>0.430828</td>
+      <td>0.370403</td>
+      <td>0.388174</td>
+      <td>0.000000</td>
+      <td>0.691451</td>
+      <td>0.513865</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>MIR100HG</th>
+      <td>1.508564</td>
+      <td>1.982803</td>
+      <td>1.997843</td>
+      <td>2.543906</td>
+      <td>2.180073</td>
+      <td>2.280532</td>
+      <td>2.287652</td>
+      <td>1.908947</td>
+      <td>1.789601</td>
+      <td>2.454187</td>
+      <td>...</td>
+      <td>1.833768</td>
+      <td>2.028000</td>
+      <td>0.876263</td>
+      <td>1.520726</td>
+      <td>2.845396</td>
+      <td>2.284718</td>
+      <td>1.737294</td>
+      <td>1.943000</td>
+      <td>2.607786</td>
+      <td>1.908226</td>
+    </tr>
+    <tr>
+      <th>G2E3</th>
+      <td>0.236026</td>
+      <td>0.113038</td>
+      <td>0.136443</td>
+      <td>0.140211</td>
+      <td>0.337680</td>
+      <td>0.120133</td>
+      <td>0.133690</td>
+      <td>0.392664</td>
+      <td>0.870752</td>
+      <td>0.156803</td>
+      <td>...</td>
+      <td>0.428223</td>
+      <td>0.381109</td>
+      <td>2.080633</td>
+      <td>0.742809</td>
+      <td>0.357087</td>
+      <td>0.000000</td>
+      <td>0.470612</td>
+      <td>0.000000</td>
+      <td>0.513865</td>
+      <td>1.574311</td>
+    </tr>
+    <tr>
+      <th>AURKA</th>
+      <td>0.851758</td>
+      <td>0.219980</td>
+      <td>0.172232</td>
+      <td>0.104639</td>
+      <td>0.240032</td>
+      <td>0.335769</td>
+      <td>0.474674</td>
+      <td>0.418812</td>
+      <td>0.273523</td>
+      <td>0.318951</td>
+      <td>...</td>
+      <td>0.646679</td>
+      <td>0.824949</td>
+      <td>0.876263</td>
+      <td>0.000000</td>
+      <td>0.895912</td>
+      <td>1.030397</td>
+      <td>0.864525</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.069426</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>CENPF</th>
+      <td>1.120599</td>
+      <td>0.872054</td>
+      <td>0.628304</td>
+      <td>0.371293</td>
+      <td>0.910407</td>
+      <td>1.810582</td>
+      <td>1.590818</td>
+      <td>1.217998</td>
+      <td>1.629507</td>
+      <td>1.057226</td>
+      <td>...</td>
+      <td>0.805158</td>
+      <td>1.354087</td>
+      <td>1.649758</td>
+      <td>1.357588</td>
+      <td>1.873811</td>
+      <td>1.849402</td>
+      <td>1.826995</td>
+      <td>1.788931</td>
+      <td>0.471913</td>
+      <td>2.524307</td>
+    </tr>
+    <tr>
+      <th>MCM10</th>
+      <td>0.129327</td>
+      <td>0.107488</td>
+      <td>0.685333</td>
+      <td>0.266811</td>
+      <td>0.399895</td>
+      <td>0.390223</td>
+      <td>0.047354</td>
+      <td>0.330642</td>
+      <td>0.387730</td>
+      <td>0.176696</td>
+      <td>...</td>
+      <td>0.342713</td>
+      <td>0.135464</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.230847</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.524149</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>KPNA2</th>
+      <td>0.710659</td>
+      <td>0.691963</td>
+      <td>0.619302</td>
+      <td>0.493050</td>
+      <td>0.431500</td>
+      <td>0.712793</td>
+      <td>0.647899</td>
+      <td>0.648701</td>
+      <td>0.669845</td>
+      <td>0.639119</td>
+      <td>...</td>
+      <td>0.473450</td>
+      <td>0.930215</td>
+      <td>2.080633</td>
+      <td>0.803296</td>
+      <td>0.370403</td>
+      <td>1.600532</td>
+      <td>1.545007</td>
+      <td>0.691451</td>
+      <td>0.000000</td>
+      <td>1.069426</td>
+    </tr>
+    <tr>
+      <th>PTTG1</th>
+      <td>1.176973</td>
+      <td>1.258670</td>
+      <td>1.011124</td>
+      <td>0.911626</td>
+      <td>0.870235</td>
+      <td>1.471961</td>
+      <td>1.531632</td>
+      <td>0.854305</td>
+      <td>1.377528</td>
+      <td>1.618404</td>
+      <td>...</td>
+      <td>0.479520</td>
+      <td>1.270856</td>
+      <td>2.241926</td>
+      <td>1.539767</td>
+      <td>0.860738</td>
+      <td>1.503640</td>
+      <td>1.046393</td>
+      <td>1.383749</td>
+      <td>0.513865</td>
+      <td>1.069426</td>
+    </tr>
+    <tr>
+      <th>PKMYT1</th>
+      <td>0.940430</td>
+      <td>0.351545</td>
+      <td>0.664576</td>
+      <td>0.297624</td>
+      <td>0.800065</td>
+      <td>0.745133</td>
+      <td>0.171471</td>
+      <td>0.848509</td>
+      <td>0.276872</td>
+      <td>0.296031</td>
+      <td>...</td>
+      <td>1.045587</td>
+      <td>0.669761</td>
+      <td>0.000000</td>
+      <td>0.430828</td>
+      <td>0.000000</td>
+      <td>0.851015</td>
+      <td>0.288744</td>
+      <td>0.691451</td>
+      <td>0.000000</td>
+      <td>1.069426</td>
+    </tr>
+  </tbody>
+</table>
+<p>75 rows × 290 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">pos</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GEX</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>230.0</th>
+      <th>66.0</th>
+      <th>109.0</th>
+      <th>85.0</th>
+      <th>177.0</th>
+      <th>49.0</th>
+      <th>55.0</th>
+      <th>196.0</th>
+      <th>254.0</th>
+      <th>60.0</th>
+      <th>...</th>
+      <th>242.0</th>
+      <th>259.0</th>
+      <th>21.0</th>
+      <th>247.0</th>
+      <th>42.0</th>
+      <th>287.0</th>
+      <th>296.0</th>
+      <th>232.0</th>
+      <th>106.0</th>
+      <th>4.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DEPDC1</th>
+      <td>0.161310</td>
+      <td>0.328377</td>
+      <td>0.126236</td>
+      <td>0.000000</td>
+      <td>0.445840</td>
+      <td>0.742209</td>
+      <td>0.684013</td>
+      <td>0.317394</td>
+      <td>0.509439</td>
+      <td>0.180416</td>
+      <td>...</td>
+      <td>0.337324</td>
+      <td>0.523796</td>
+      <td>1.649758</td>
+      <td>0.000000</td>
+      <td>0.357087</td>
+      <td>1.076477</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>TRIO</th>
+      <td>1.981804</td>
+      <td>1.515634</td>
+      <td>1.730185</td>
+      <td>2.096108</td>
+      <td>1.660738</td>
+      <td>1.462572</td>
+      <td>1.611647</td>
+      <td>2.059388</td>
+      <td>2.121015</td>
+      <td>1.883820</td>
+      <td>...</td>
+      <td>1.791328</td>
+      <td>2.165788</td>
+      <td>0.876263</td>
+      <td>2.176786</td>
+      <td>0.636869</td>
+      <td>2.048151</td>
+      <td>2.324368</td>
+      <td>2.076471</td>
+      <td>2.328215</td>
+      <td>1.574311</td>
+    </tr>
+    <tr>
+      <th>ADAMTS6</th>
+      <td>1.273340</td>
+      <td>1.115689</td>
+      <td>0.793328</td>
+      <td>0.815586</td>
+      <td>0.724796</td>
+      <td>0.495016</td>
+      <td>0.865061</td>
+      <td>1.060191</td>
+      <td>1.100434</td>
+      <td>0.940455</td>
+      <td>...</td>
+      <td>1.411591</td>
+      <td>1.539369</td>
+      <td>0.876263</td>
+      <td>1.219352</td>
+      <td>0.525509</td>
+      <td>1.306756</td>
+      <td>1.440009</td>
+      <td>1.383749</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>POLQ</th>
+      <td>0.220024</td>
+      <td>0.093262</td>
+      <td>0.655998</td>
+      <td>0.120990</td>
+      <td>0.369249</td>
+      <td>0.329390</td>
+      <td>0.096619</td>
+      <td>0.529976</td>
+      <td>0.502093</td>
+      <td>0.098990</td>
+      <td>...</td>
+      <td>0.309368</td>
+      <td>0.322715</td>
+      <td>1.888225</td>
+      <td>0.260449</td>
+      <td>0.000000</td>
+      <td>0.230847</td>
+      <td>0.470612</td>
+      <td>0.000000</td>
+      <td>0.320231</td>
+      <td>1.574311</td>
+    </tr>
+    <tr>
+      <th>SYNE2</th>
+      <td>0.456051</td>
+      <td>0.121919</td>
+      <td>0.452270</td>
+      <td>0.317492</td>
+      <td>0.821573</td>
+      <td>0.516719</td>
+      <td>0.412208</td>
+      <td>0.884521</td>
+      <td>0.536059</td>
+      <td>0.589152</td>
+      <td>...</td>
+      <td>0.966696</td>
+      <td>0.376468</td>
+      <td>1.336004</td>
+      <td>1.522307</td>
+      <td>0.000000</td>
+      <td>0.851015</td>
+      <td>0.000000</td>
+      <td>0.691451</td>
+      <td>0.320231</td>
+      <td>1.069426</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>MANCR</th>
+      <td>1.107140</td>
+      <td>0.836700</td>
+      <td>0.756655</td>
+      <td>0.554660</td>
+      <td>0.632607</td>
+      <td>1.029576</td>
+      <td>0.840048</td>
+      <td>1.151329</td>
+      <td>1.099359</td>
+      <td>0.443124</td>
+      <td>...</td>
+      <td>0.780349</td>
+      <td>1.278557</td>
+      <td>0.000000</td>
+      <td>1.791222</td>
+      <td>0.335229</td>
+      <td>0.574196</td>
+      <td>1.046393</td>
+      <td>1.096350</td>
+      <td>0.320231</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>MTATP6P1</th>
+      <td>2.288898</td>
+      <td>2.405079</td>
+      <td>2.159031</td>
+      <td>2.227160</td>
+      <td>2.321663</td>
+      <td>2.195483</td>
+      <td>2.659615</td>
+      <td>2.515312</td>
+      <td>2.502668</td>
+      <td>2.483743</td>
+      <td>...</td>
+      <td>2.828326</td>
+      <td>2.249292</td>
+      <td>2.709321</td>
+      <td>2.271032</td>
+      <td>2.617242</td>
+      <td>2.023398</td>
+      <td>1.604221</td>
+      <td>2.830018</td>
+      <td>2.296170</td>
+      <td>2.158117</td>
+    </tr>
+    <tr>
+      <th>MIR100HG</th>
+      <td>1.508564</td>
+      <td>1.982803</td>
+      <td>1.997843</td>
+      <td>2.543906</td>
+      <td>2.180073</td>
+      <td>2.280532</td>
+      <td>2.287652</td>
+      <td>1.908947</td>
+      <td>1.789601</td>
+      <td>2.454187</td>
+      <td>...</td>
+      <td>1.833768</td>
+      <td>2.028000</td>
+      <td>0.876263</td>
+      <td>1.520726</td>
+      <td>2.845396</td>
+      <td>2.284718</td>
+      <td>1.737294</td>
+      <td>1.943000</td>
+      <td>2.607786</td>
+      <td>1.908226</td>
+    </tr>
+    <tr>
+      <th>SNHG1</th>
+      <td>1.340924</td>
+      <td>0.865615</td>
+      <td>0.407378</td>
+      <td>0.911950</td>
+      <td>1.100356</td>
+      <td>0.833532</td>
+      <td>1.037473</td>
+      <td>0.792740</td>
+      <td>1.336403</td>
+      <td>0.926061</td>
+      <td>...</td>
+      <td>0.710278</td>
+      <td>0.952297</td>
+      <td>1.336004</td>
+      <td>0.341737</td>
+      <td>0.692316</td>
+      <td>0.947387</td>
+      <td>1.179466</td>
+      <td>1.096350</td>
+      <td>0.653094</td>
+      <td>1.908226</td>
+    </tr>
+    <tr>
+      <th>SNHG19</th>
+      <td>0.349352</td>
+      <td>0.636762</td>
+      <td>0.260200</td>
+      <td>0.517246</td>
+      <td>0.360954</td>
+      <td>0.710418</td>
+      <td>0.619507</td>
+      <td>0.398636</td>
+      <td>0.000000</td>
+      <td>0.374218</td>
+      <td>...</td>
+      <td>0.149108</td>
+      <td>0.376468</td>
+      <td>0.000000</td>
+      <td>0.685875</td>
+      <td>0.357087</td>
+      <td>0.919150</td>
+      <td>0.575781</td>
+      <td>0.000000</td>
+      <td>0.792144</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>141 rows × 290 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">pos</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>230.0</th>
+      <th>66.0</th>
+      <th>109.0</th>
+      <th>85.0</th>
+      <th>177.0</th>
+      <th>49.0</th>
+      <th>55.0</th>
+      <th>196.0</th>
+      <th>254.0</th>
+      <th>60.0</th>
+      <th>...</th>
+      <th>242.0</th>
+      <th>259.0</th>
+      <th>21.0</th>
+      <th>247.0</th>
+      <th>42.0</th>
+      <th>287.0</th>
+      <th>296.0</th>
+      <th>232.0</th>
+      <th>106.0</th>
+      <th>4.0</th>
+    </tr>
+    <tr>
+      <th>gene_symbol</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>UBALD2</th>
+      <td>0.692507</td>
+      <td>-0.774376</td>
+      <td>-1.027370</td>
+      <td>-0.854328</td>
+      <td>0.061159</td>
+      <td>-0.238411</td>
+      <td>-0.262981</td>
+      <td>0.161117</td>
+      <td>1.447728</td>
+      <td>-0.411593</td>
+      <td>...</td>
+      <td>0.902076</td>
+      <td>1.580665</td>
+      <td>-0.175543</td>
+      <td>1.149451</td>
+      <td>-0.238411</td>
+      <td>1.589349</td>
+      <td>1.387780</td>
+      <td>0.705599</td>
+      <td>-0.953666</td>
+      <td>1.179867</td>
+    </tr>
+    <tr>
+      <th>LMNB2</th>
+      <td>0.529516</td>
+      <td>-0.552728</td>
+      <td>-1.304541</td>
+      <td>-1.376764</td>
+      <td>0.284558</td>
+      <td>-0.477744</td>
+      <td>-0.411589</td>
+      <td>0.402770</td>
+      <td>0.795242</td>
+      <td>-0.411589</td>
+      <td>...</td>
+      <td>0.722385</td>
+      <td>0.761394</td>
+      <td>-0.910402</td>
+      <td>0.760184</td>
+      <td>-0.900394</td>
+      <td>0.394706</td>
+      <td>0.320427</td>
+      <td>0.536469</td>
+      <td>-1.304541</td>
+      <td>0.091849</td>
+    </tr>
+    <tr>
+      <th>SOGA1</th>
+      <td>0.108462</td>
+      <td>-0.680941</td>
+      <td>-0.018291</td>
+      <td>-0.328111</td>
+      <td>0.034385</td>
+      <td>-0.194473</td>
+      <td>-0.196554</td>
+      <td>-0.076837</td>
+      <td>0.652980</td>
+      <td>-0.273828</td>
+      <td>...</td>
+      <td>0.320829</td>
+      <td>0.780893</td>
+      <td>-0.226716</td>
+      <td>0.534645</td>
+      <td>-0.249730</td>
+      <td>0.577887</td>
+      <td>0.397859</td>
+      <td>0.144626</td>
+      <td>0.000000</td>
+      <td>0.020962</td>
+    </tr>
+    <tr>
+      <th>PPIP5K2</th>
+      <td>0.831422</td>
+      <td>-1.025339</td>
+      <td>-0.659772</td>
+      <td>-0.762519</td>
+      <td>0.024266</td>
+      <td>-1.683484</td>
+      <td>-1.604536</td>
+      <td>0.097151</td>
+      <td>1.222013</td>
+      <td>-1.472045</td>
+      <td>...</td>
+      <td>1.160917</td>
+      <td>1.231502</td>
+      <td>-1.231383</td>
+      <td>1.182067</td>
+      <td>-1.757942</td>
+      <td>0.912401</td>
+      <td>0.457897</td>
+      <td>0.983093</td>
+      <td>-0.672506</td>
+      <td>0.071083</td>
+    </tr>
+    <tr>
+      <th>PTPRJ</th>
+      <td>1.042036</td>
+      <td>-0.578932</td>
+      <td>-0.140358</td>
+      <td>-0.236434</td>
+      <td>-0.049393</td>
+      <td>-0.517368</td>
+      <td>-0.495903</td>
+      <td>0.366185</td>
+      <td>1.686175</td>
+      <td>-0.508249</td>
+      <td>...</td>
+      <td>1.607530</td>
+      <td>1.776387</td>
+      <td>-0.549304</td>
+      <td>1.656482</td>
+      <td>-0.640710</td>
+      <td>1.329547</td>
+      <td>1.251248</td>
+      <td>1.325945</td>
+      <td>-0.131871</td>
+      <td>1.002031</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>SGMS2</th>
+      <td>1.387533</td>
+      <td>-0.082324</td>
+      <td>-0.075702</td>
+      <td>-0.145237</td>
+      <td>0.330238</td>
+      <td>-0.353837</td>
+      <td>-0.185794</td>
+      <td>0.529986</td>
+      <td>0.421661</td>
+      <td>-0.185794</td>
+      <td>...</td>
+      <td>1.466910</td>
+      <td>-0.104414</td>
+      <td>-1.087653</td>
+      <td>1.387533</td>
+      <td>-0.507248</td>
+      <td>-0.432786</td>
+      <td>-0.504759</td>
+      <td>1.425201</td>
+      <td>-0.066528</td>
+      <td>-1.208510</td>
+    </tr>
+    <tr>
+      <th>PMAIP1</th>
+      <td>0.125522</td>
+      <td>-0.974546</td>
+      <td>-0.849682</td>
+      <td>-1.009706</td>
+      <td>0.368004</td>
+      <td>-1.032658</td>
+      <td>-0.979155</td>
+      <td>0.689779</td>
+      <td>0.212730</td>
+      <td>-0.966090</td>
+      <td>...</td>
+      <td>0.136583</td>
+      <td>0.226378</td>
+      <td>-0.561242</td>
+      <td>0.163084</td>
+      <td>-1.016736</td>
+      <td>-0.001435</td>
+      <td>-0.060940</td>
+      <td>0.125522</td>
+      <td>-0.864333</td>
+      <td>-0.183754</td>
+    </tr>
+    <tr>
+      <th>DHCR24</th>
+      <td>0.796890</td>
+      <td>-0.606781</td>
+      <td>-0.235416</td>
+      <td>-0.580445</td>
+      <td>0.995562</td>
+      <td>-0.865113</td>
+      <td>-0.847082</td>
+      <td>0.949131</td>
+      <td>0.221086</td>
+      <td>-0.783282</td>
+      <td>...</td>
+      <td>0.418463</td>
+      <td>0.180183</td>
+      <td>-0.789217</td>
+      <td>0.317341</td>
+      <td>-0.927062</td>
+      <td>-0.320440</td>
+      <td>-0.329280</td>
+      <td>0.704518</td>
+      <td>-0.346948</td>
+      <td>-0.450735</td>
+    </tr>
+    <tr>
+      <th>POLE</th>
+      <td>0.400946</td>
+      <td>-1.080653</td>
+      <td>0.264789</td>
+      <td>-0.195188</td>
+      <td>0.367359</td>
+      <td>-1.334873</td>
+      <td>-1.269773</td>
+      <td>0.367359</td>
+      <td>0.096167</td>
+      <td>-1.243465</td>
+      <td>...</td>
+      <td>0.129791</td>
+      <td>-0.027705</td>
+      <td>-1.112352</td>
+      <td>0.129791</td>
+      <td>-1.365260</td>
+      <td>-0.336136</td>
+      <td>-0.506770</td>
+      <td>0.324208</td>
+      <td>0.232217</td>
+      <td>-0.575677</td>
+    </tr>
+    <tr>
+      <th>ANKRD36C</th>
+      <td>0.599263</td>
+      <td>-1.589231</td>
+      <td>-0.638207</td>
+      <td>-0.795766</td>
+      <td>0.650575</td>
+      <td>-1.684860</td>
+      <td>-1.676727</td>
+      <td>0.651835</td>
+      <td>0.366817</td>
+      <td>-1.664038</td>
+      <td>...</td>
+      <td>0.505878</td>
+      <td>0.206309</td>
+      <td>-1.086746</td>
+      <td>0.468641</td>
+      <td>-1.616084</td>
+      <td>-0.148026</td>
+      <td>-0.274694</td>
+      <td>0.583993</td>
+      <td>-0.664289</td>
+      <td>-0.432021</td>
+    </tr>
+  </tbody>
+</table>
+<p>528 rows × 290 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_gex</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gs</span><span class="p">)):</span>
+    <span class="n">cor_gex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">GEX</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimate-transcription-rate">
+<h2>Estimate transcription rate<a class="headerlink" href="#estimate-transcription-rate" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vae</span> <span class="o">=</span> <span class="n">REGVELOVI</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;regvelo_model&quot;</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/lightning/fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python /home/icb/weixu.wang/miniconda3/envs/regvelo_test/li ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/cell_cycle_REF/data/regvelo_model/</span>model.pt 
+         already downloaded                                                                                        
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_s</span><span class="p">,</span> <span class="n">fit_u</span> <span class="o">=</span> <span class="n">vae</span><span class="o">.</span><span class="n">rgv_expression_fit</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">return_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fit_s</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+<span class="n">alpha_pre</span> <span class="o">=</span> <span class="n">vae</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">v_encoder</span><span class="o">.</span><span class="n">transcription_rate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">alpha_pre</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">fit_s</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">fit_s</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre</span> <span class="o">=</span> <span class="n">alpha_pre</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">gs</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="n">alpha_pre</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_cycle_position&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha_pre_m</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">alpha_pre_m</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">gs</span><span class="p">)</span>
+<span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">pos</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_rgv</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">75</span><span class="p">):</span>
+    <span class="n">cor_rgv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m_rgv</span> <span class="o">=</span> <span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimating-transcription-rate-with-celldancer">
+<h2>Estimating transcription rate with celldancer<a class="headerlink" href="#estimating-transcription-rate-with-celldancer" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;celldancer_alpha_estimate.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre</span> <span class="o">=</span> <span class="n">alpha_pre</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">gs</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">:</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="n">alpha_pre</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_cycle_position&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha_pre_m</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">alpha_pre_m</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">alpha_pre_m</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">gs</span><span class="p">)</span>
+<span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">pos</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha_pre_m</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>230.0</th>
+      <th>66.0</th>
+      <th>109.0</th>
+      <th>85.0</th>
+      <th>177.0</th>
+      <th>49.0</th>
+      <th>55.0</th>
+      <th>196.0</th>
+      <th>254.0</th>
+      <th>60.0</th>
+      <th>...</th>
+      <th>242.0</th>
+      <th>259.0</th>
+      <th>21.0</th>
+      <th>247.0</th>
+      <th>42.0</th>
+      <th>287.0</th>
+      <th>296.0</th>
+      <th>232.0</th>
+      <th>106.0</th>
+      <th>4.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>PAPPA</th>
+      <td>0.067470</td>
+      <td>0.108662</td>
+      <td>0.085077</td>
+      <td>0.106062</td>
+      <td>0.065569</td>
+      <td>0.153572</td>
+      <td>0.140023</td>
+      <td>0.080240</td>
+      <td>0.067295</td>
+      <td>0.088635</td>
+      <td>...</td>
+      <td>0.078329</td>
+      <td>0.075798</td>
+      <td>0.046987</td>
+      <td>0.096394</td>
+      <td>0.149704</td>
+      <td>0.069833</td>
+      <td>0.085413</td>
+      <td>0.065956</td>
+      <td>0.091174</td>
+      <td>0.061060</td>
+    </tr>
+    <tr>
+      <th>RIMS2</th>
+      <td>0.194880</td>
+      <td>0.184190</td>
+      <td>0.233063</td>
+      <td>0.188801</td>
+      <td>0.211795</td>
+      <td>0.167446</td>
+      <td>0.182517</td>
+      <td>0.176321</td>
+      <td>0.172191</td>
+      <td>0.183245</td>
+      <td>...</td>
+      <td>0.166389</td>
+      <td>0.181412</td>
+      <td>0.190325</td>
+      <td>0.169382</td>
+      <td>0.175393</td>
+      <td>0.195688</td>
+      <td>0.174280</td>
+      <td>0.210455</td>
+      <td>0.266357</td>
+      <td>0.240317</td>
+    </tr>
+    <tr>
+      <th>MIR100HG</th>
+      <td>0.207153</td>
+      <td>0.234966</td>
+      <td>0.205020</td>
+      <td>0.240787</td>
+      <td>0.212764</td>
+      <td>0.291031</td>
+      <td>0.277944</td>
+      <td>0.194312</td>
+      <td>0.211806</td>
+      <td>0.244101</td>
+      <td>...</td>
+      <td>0.193928</td>
+      <td>0.209133</td>
+      <td>0.198018</td>
+      <td>0.202107</td>
+      <td>0.297138</td>
+      <td>0.202776</td>
+      <td>0.198001</td>
+      <td>0.217856</td>
+      <td>0.183420</td>
+      <td>0.212776</td>
+    </tr>
+    <tr>
+      <th>G2E3</th>
+      <td>0.135669</td>
+      <td>0.104929</td>
+      <td>0.115884</td>
+      <td>0.104281</td>
+      <td>0.105922</td>
+      <td>0.073541</td>
+      <td>0.083583</td>
+      <td>0.109529</td>
+      <td>0.156124</td>
+      <td>0.101179</td>
+      <td>...</td>
+      <td>0.112561</td>
+      <td>0.170952</td>
+      <td>0.068824</td>
+      <td>0.170462</td>
+      <td>0.065195</td>
+      <td>0.137725</td>
+      <td>0.102899</td>
+      <td>0.162377</td>
+      <td>0.138815</td>
+      <td>0.109731</td>
+    </tr>
+    <tr>
+      <th>AURKA</th>
+      <td>0.032485</td>
+      <td>0.015556</td>
+      <td>0.031590</td>
+      <td>0.019039</td>
+      <td>0.023794</td>
+      <td>0.006240</td>
+      <td>0.007497</td>
+      <td>0.036565</td>
+      <td>0.057842</td>
+      <td>0.010349</td>
+      <td>...</td>
+      <td>0.043843</td>
+      <td>0.071995</td>
+      <td>0.003554</td>
+      <td>0.018232</td>
+      <td>0.005987</td>
+      <td>0.073007</td>
+      <td>0.130384</td>
+      <td>0.023054</td>
+      <td>0.015853</td>
+      <td>0.015490</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>CENPF</th>
+      <td>0.071015</td>
+      <td>0.050892</td>
+      <td>0.065156</td>
+      <td>0.063965</td>
+      <td>0.071007</td>
+      <td>0.040065</td>
+      <td>0.042347</td>
+      <td>0.065967</td>
+      <td>0.074917</td>
+      <td>0.051343</td>
+      <td>...</td>
+      <td>0.072823</td>
+      <td>0.074915</td>
+      <td>0.049658</td>
+      <td>0.069647</td>
+      <td>0.039659</td>
+      <td>0.073996</td>
+      <td>0.072258</td>
+      <td>0.089910</td>
+      <td>0.079792</td>
+      <td>0.039903</td>
+    </tr>
+    <tr>
+      <th>MCM10</th>
+      <td>0.043488</td>
+      <td>0.078948</td>
+      <td>0.077092</td>
+      <td>0.073664</td>
+      <td>0.056498</td>
+      <td>0.077495</td>
+      <td>0.060162</td>
+      <td>0.047970</td>
+      <td>0.055300</td>
+      <td>0.074251</td>
+      <td>...</td>
+      <td>0.083806</td>
+      <td>0.038094</td>
+      <td>0.129971</td>
+      <td>0.029473</td>
+      <td>0.089182</td>
+      <td>0.063064</td>
+      <td>0.076066</td>
+      <td>0.076595</td>
+      <td>0.077299</td>
+      <td>0.121573</td>
+    </tr>
+    <tr>
+      <th>KPNA2</th>
+      <td>0.075527</td>
+      <td>0.034534</td>
+      <td>0.047214</td>
+      <td>0.040717</td>
+      <td>0.046310</td>
+      <td>0.030415</td>
+      <td>0.031468</td>
+      <td>0.039342</td>
+      <td>0.080178</td>
+      <td>0.032182</td>
+      <td>...</td>
+      <td>0.042713</td>
+      <td>0.096810</td>
+      <td>0.083730</td>
+      <td>0.074292</td>
+      <td>0.026279</td>
+      <td>0.060275</td>
+      <td>0.050828</td>
+      <td>0.034897</td>
+      <td>0.046984</td>
+      <td>0.012323</td>
+    </tr>
+    <tr>
+      <th>PTTG1</th>
+      <td>0.143616</td>
+      <td>0.150156</td>
+      <td>0.148792</td>
+      <td>0.139637</td>
+      <td>0.137904</td>
+      <td>0.147893</td>
+      <td>0.142231</td>
+      <td>0.145094</td>
+      <td>0.113857</td>
+      <td>0.120295</td>
+      <td>...</td>
+      <td>0.155262</td>
+      <td>0.107316</td>
+      <td>0.101735</td>
+      <td>0.086086</td>
+      <td>0.111887</td>
+      <td>0.144526</td>
+      <td>0.115453</td>
+      <td>0.118170</td>
+      <td>0.128351</td>
+      <td>0.147436</td>
+    </tr>
+    <tr>
+      <th>PKMYT1</th>
+      <td>0.076249</td>
+      <td>0.060124</td>
+      <td>0.086998</td>
+      <td>0.051522</td>
+      <td>0.093748</td>
+      <td>0.049488</td>
+      <td>0.047053</td>
+      <td>0.088945</td>
+      <td>0.052630</td>
+      <td>0.039598</td>
+      <td>...</td>
+      <td>0.127635</td>
+      <td>0.057120</td>
+      <td>0.032725</td>
+      <td>0.045265</td>
+      <td>0.037772</td>
+      <td>0.058293</td>
+      <td>0.043852</td>
+      <td>0.115498</td>
+      <td>0.055205</td>
+      <td>0.112760</td>
+    </tr>
+  </tbody>
+</table>
+<p>75 rows × 290 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_cd</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">75</span><span class="p">):</span>
+    <span class="n">cor_cd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">alpha_pre_m</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cor_cd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4194778873230621
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="violinplot">
+<h2>Violinplot<a class="headerlink" href="#violinplot" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">g_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Spearman correlation&quot;</span><span class="p">:</span> <span class="n">cor_cd</span><span class="p">})</span>
+<span class="n">g_df</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cellDancer&quot;</span>
+<span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g_df</span><span class="p">)</span>
+
+<span class="n">g_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Spearman correlation&quot;</span><span class="p">:</span> <span class="n">cor_rgv</span><span class="p">})</span>
+<span class="n">g_df</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RegVelo&quot;</span>
+<span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g_df</span><span class="p">)</span>
+
+<span class="n">g_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Spearman correlation&quot;</span><span class="p">:</span> <span class="n">cor_gex</span><span class="p">})</span>
+<span class="n">g_df</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GEX&quot;</span>
+<span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g_df</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="c1"># pal = {&quot;RegVelo&quot;: &quot;#0173b2&quot;, &quot;veloVI&quot;: &quot;#de8f05&quot;}</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="c1"># orient=&quot;h&quot;,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Method&quot;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Spearman correlation&quot;</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RegVelo&quot;</span><span class="p">,</span> <span class="s2">&quot;GEX&quot;</span><span class="p">,</span> <span class="s2">&quot;cellDancer&quot;</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightpink&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ttest_res</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span>
+        <span class="n">cor_rgv</span><span class="p">,</span>
+        <span class="n">cor_gex</span><span class="p">,</span>
+        <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;greater&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">significance</span> <span class="o">=</span> <span class="n">get_significance</span><span class="p">(</span><span class="n">pvalue</span><span class="o">=</span><span class="n">ttest_res</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+    <span class="n">add_significance</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">significance</span><span class="o">=</span><span class="n">significance</span><span class="p">,</span>
+        <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">bracket_level</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ttest_res</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span>
+        <span class="n">cor_rgv</span><span class="p">,</span>
+        <span class="n">cor_cd</span><span class="p">,</span>
+        <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;greater&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">significance</span> <span class="o">=</span> <span class="n">get_significance</span><span class="p">(</span><span class="n">pvalue</span><span class="o">=</span><span class="n">ttest_res</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+    <span class="n">add_significance</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">right</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">significance</span><span class="o">=</span><span class="n">significance</span><span class="p">,</span>
+        <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">bracket_level</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;corr_sp.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/41f8fa31a250649be54e2e538814fe7376ab4ddc62d4b59602b0909ec25621b2.png" src="../_images/41f8fa31a250649be54e2e538814fe7376ab4ddc62d4b59602b0909ec25621b2.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-regvelo_test-py"
+        },
+        kernelOptions: {
+            name: "conda-env-regvelo_test-py",
+            path: "./cell_cycle_rpe1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3_celldancer.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CellDancer benchmark on cell cycle data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="5_latent_time.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Evaluate latent time prediction via redefining global latent time</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-transcription-rate">Estimate transcription rate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-transcription-rate-with-celldancer">Estimating transcription rate with celldancer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#violinplot">Violinplot</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

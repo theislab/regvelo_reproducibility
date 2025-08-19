@@ -1,0 +1,1023 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Evaluate latent time prediction via redefining global latent time &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cell_cycle_rpe1/5_latent_time';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic preprocessing of the pancreatic endocrine dataset" href="../pancreatic_endocrinogenesis/1_preprocessing.html" />
+    <link rel="prev" title="Benchmark transcription rate prediction" href="4_alpha_prediction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_alpha_prediction.html">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/cell_cycle_rpe1/5_latent_time.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Evaluate latent time prediction via redefining global latent time</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions">Define functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-latent-time-layer-to-calculate-neighbor-graph-and-define-global-latent-time">Use latent time layer to calculate neighbor graph and define global latent time</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="evaluate-latent-time-prediction-via-redefining-global-latent-time">
+<h1>Evaluate latent time prediction via redefining global latent time<a class="headerlink" href="#evaluate-latent-time-prediction-via-redefining-global-latent-time" title="Link to this heading">#</a></h1>
+<p>Before run this notebooks, please run <code class="docutils literal notranslate"><span class="pre">2_regvelo.ipynb</span></code>,<code class="docutils literal notranslate"><span class="pre">2_velovi.ipynb</span></code> and <code class="docutils literal notranslate"><span class="pre">2_velovi_td.ipynb</span></code> for three times to save the resulted anndata accordingly.</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mplscience</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIG_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_time_correlation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_csv from `anndata` is deprecated. Import anndata.io.read_csv instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_excel from `anndata` is deprecated. Import anndata.io.read_excel instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_hdf from `anndata` is deprecated. Import anndata.io.read_hdf instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_mtx from `anndata` is deprecated. Import anndata.io.read_mtx instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_text from `anndata` is deprecated. Import anndata.io.read_text instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_umi_tools from `anndata` is deprecated. Import anndata.io.read_umi_tools instead.
+  warnings.warn(msg, FutureWarning)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET1</span> <span class="o">=</span> <span class="s2">&quot;cell_cycle&quot;</span>
+<span class="n">DATASET2</span> <span class="o">=</span> <span class="s2">&quot;cell_cycle_rpe1&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_FIGURES</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="n">DATASET2</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">FIGURE_FORMATE</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">VELO_METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;regvelo&quot;</span><span class="p">,</span> <span class="s2">&quot;velovi&quot;</span><span class="p">,</span> <span class="s2">&quot;velovi_td&quot;</span><span class="p">,</span> <span class="s2">&quot;scvelo&quot;</span><span class="p">]</span>
+<span class="n">custom_palette</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;U2OS&quot;</span><span class="p">:</span> <span class="s2">&quot;#0072B2&quot;</span><span class="p">,</span>  <span class="c1"># Elegant blue (colorblind-friendly)</span>
+    <span class="s2">&quot;RPE1&quot;</span><span class="p">:</span> <span class="s2">&quot;#E69F00&quot;</span><span class="p">,</span>  <span class="c1"># Gold-orange (also friendly and high contrast)</span>
+<span class="p">}</span>
+<span class="n">METHOD</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;rgv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rgv_rep2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rgv_rep3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi_rep2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi_rep3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi_td&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi_td_rep2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velovi_td_rep3&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-functions">
+<h2>Define functions<a class="headerlink" href="#define-functions" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">GlobalTimeDPTordering</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">ad</span><span class="o">.</span><span class="n">AnnData</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute latent time using graph-based diffusion pseudotime (DPT) ordering.</span>
+
+<span class="sd">    This function temporarily replaces the expression matrix with the</span>
+<span class="sd">    fitted values, computes neighbors, diffusion maps, and diffusion</span>
+<span class="sd">    pseudotime, and then restores the original expression matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adata : ad.AnnData</span>
+<span class="sd">        Annotated data matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ad.AnnData</span>
+<span class="sd">        The AnnData object with `latent_time` stored in `adata.obs`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;GEX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;fit_t&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span> <span class="n">use_rep</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">diffmap</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;iroot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">dpt</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;latent_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;dpt_pseudotime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">adata</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;GEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">del</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;GEX&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="use-latent-time-layer-to-calculate-neighbor-graph-and-define-global-latent-time">
+<h2>Use latent time layer to calculate neighbor graph and define global latent time<a class="headerlink" href="#use-latent-time-layer-to-calculate-neighbor-graph-and-define-global-latent-time" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_time</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">METHOD</span><span class="p">:</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET1</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;adata_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.h5ad&quot;</span><span class="p">)</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">GlobalTimeDPTordering</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+    <span class="n">corr_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">get_time_correlation</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_cycle_position&quot;</span><span class="p">],</span> <span class="n">estimated</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;latent_time&quot;</span><span class="p">])</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;regvelo&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;scvelo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;velovi&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;velovi_td&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;spearman_corr&quot;</span><span class="p">:</span> <span class="n">corr_time</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df_rpe1</span> <span class="o">=</span> <span class="n">time_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">time_df_rpe1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>method</th>
+      <th>spearman_corr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>regvelo</td>
+      <td>0.455059</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>regvelo</td>
+      <td>0.481358</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>regvelo</td>
+      <td>0.453335</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>scvelo</td>
+      <td>0.332056</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>velovi</td>
+      <td>-0.341981</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>velovi</td>
+      <td>0.645073</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>velovi</td>
+      <td>-0.381067</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>velovi_td</td>
+      <td>-0.398513</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>velovi_td</td>
+      <td>0.197365</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>velovi_td</td>
+      <td>0.305876</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_time</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">METHOD</span><span class="p">:</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET2</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;adata_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.h5ad&quot;</span><span class="p">)</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">GlobalTimeDPTordering</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+    <span class="n">corr_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_time_correlation</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;fucci_time&quot;</span><span class="p">],</span> <span class="n">estimated</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;latent_time&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;regvelo&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;scvelo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;velovi&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;velovi_td&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;spearman_corr&quot;</span><span class="p">:</span> <span class="n">corr_time</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df_u2os</span> <span class="o">=</span> <span class="n">time_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">time_df_u2os</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>method</th>
+      <th>spearman_corr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>regvelo</td>
+      <td>0.325817</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>regvelo</td>
+      <td>0.338398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>regvelo</td>
+      <td>0.334311</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>scvelo</td>
+      <td>0.153472</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>velovi</td>
+      <td>-0.786511</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>velovi</td>
+      <td>-0.205858</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>velovi</td>
+      <td>-0.222118</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>velovi_td</td>
+      <td>0.223798</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>velovi_td</td>
+      <td>0.660562</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>velovi_td</td>
+      <td>0.288485</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df_u2os</span><span class="p">[</span><span class="s2">&quot;Dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;U2OS&quot;</span>
+<span class="n">time_df_rpe1</span><span class="p">[</span><span class="s2">&quot;Dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RPE1&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">time_df_u2os</span><span class="p">,</span> <span class="n">time_df_rpe1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot using the refined Cell-style palette</span>
+<span class="k">with</span> <span class="n">mplscience</span><span class="o">.</span><span class="n">style_context</span><span class="p">():</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;method&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;spearman_corr&quot;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">time_df</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span>
+        <span class="n">capsize</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">VELO_METHODS</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">palette</span><span class="o">=</span><span class="n">custom_palette</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;method&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;spearman_corr&quot;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">time_df</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span>
+        <span class="n">dodge</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">VELO_METHODS</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">jitter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove duplicate legends</span>
+    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+    <span class="n">unique</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">handles</span><span class="p">))</span>  <span class="c1"># remove duplicates</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">unique</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">unique</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;spearman_corr&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">SAVE_FIGURES</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="n">DATASET2</span> <span class="o">/</span> <span class="s2">&quot;time_compare.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/30f8b876ef73c2a23b15f87ede067b18de738c9a6b8837335c8eaed59c0b98cd.png" src="../_images/30f8b876ef73c2a23b15f87ede067b18de738c9a6b8837335c8eaed59c0b98cd.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-regvelo_test-py"
+        },
+        kernelOptions: {
+            name: "conda-env-regvelo_test-py",
+            path: "./cell_cycle_rpe1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="4_alpha_prediction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Benchmark transcription rate prediction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../pancreatic_endocrinogenesis/1_preprocessing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basic preprocessing of the pancreatic endocrine dataset</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions">Define functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-latent-time-layer-to-calculate-neighbor-graph-and-define-global-latent-time">Use latent time layer to calculate neighbor graph and define global latent time</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
