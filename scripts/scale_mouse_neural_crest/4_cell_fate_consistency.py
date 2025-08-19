@@ -1,6 +1,5 @@
 # %% [markdown]
 # # Evaluate consistency of velocity and cell fate probability across scale
-
 # %%
 import numpy as np
 import pandas as pd
@@ -74,7 +73,7 @@ TERMINAL_STATES_ALL = (
 # ## Classify sensory neurons into two
 
 # %%
-adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / f"adata_run_stage_2_regvelo_all_regulons.h5ad")
+adata = sc.read_h5ad(DATA_DIR / DATASET / "processed" / "adata_run_stage_2_regvelo_all_regulons.h5ad")
 
 # %%
 sc.pl.umap(adata, color="assignments")
@@ -131,7 +130,7 @@ for scale in [2, 3, 4, 5]:
     estimator = cr.estimators.GPCCA(kernel)
 
     n_states = 3
-    for nround in range(100):
+    for _nround in range(100):
         estimator.compute_macrostates(n_states=n_states, cluster_key="assignments")
         if len(set(np.unique(estimator.macrostates.tolist())).intersection(TERMINAL_STATES)) == 3:
             estimator.set_terminal_states(
@@ -170,7 +169,7 @@ for scale in [2, 3, 4, 5]:
     estimator = cr.estimators.GPCCA(kernel)
 
     n_states = 3
-    for nround in range(100):
+    for _nround in range(100):
         estimator.compute_macrostates(n_states=n_states, cluster_key="assignments")
         if len(set(np.unique(estimator.macrostates.tolist())).intersection(TERMINAL_STATES)) == 3:
             estimator.set_terminal_states(
@@ -235,8 +234,6 @@ for ct in ["Mesenchyme", "Sensory_1", "Sensory_2"]:
     )
     print("std:" + str(np.std(np.array(scale_consis)[rows, cols])))
 
-# %%
-import scipy
 
 # %%
 scipy.stats.ttest_ind(
