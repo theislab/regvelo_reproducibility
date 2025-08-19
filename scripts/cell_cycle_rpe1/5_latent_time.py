@@ -9,20 +9,16 @@
 # %%
 import numpy as np
 import pandas as pd
-import torch
-
-import anndata as ad
-import scvelo as scv
-from regvelo import REGVELOVI
-
-import scanpy as sc
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
+import anndata as ad
+import scanpy as sc
+
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import get_grn_auroc_cc, get_time_correlation, set_output
+from rgv_tools.benchmarking import get_time_correlation
 
 # %% [markdown]
 # ## Constants
@@ -104,7 +100,7 @@ time_df_rpe1
 
 # %%
 corr_time = []
-for i in method:
+for i in METHOD:
     adata = sc.read_h5ad(DATA_DIR / DATASET2 / "processed" / f"adata_{i}.h5ad")
     adata = GlobalTimeDPTordering(adata)
     corr_time.append(get_time_correlation(ground_truth=adata.obs["fucci_time"], estimated=adata.obs["latent_time"]))
