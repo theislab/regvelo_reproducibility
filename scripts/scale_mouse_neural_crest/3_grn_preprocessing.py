@@ -5,18 +5,18 @@
 
 # %% [markdown]
 # ## Library imports
-
 # %%
-import pandas as pd
 import numpy as np
+
+import pandas as pd
 
 import anndata as ad
 import scanpy as sc
 import scvelo as scv
 from velovi import preprocess_data
 
+from rgv_tools import DATA_DIR
 from rgv_tools.preprocessing import filter_genes, set_prior_grn
-from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## Constants
@@ -48,7 +48,7 @@ for i in range(1, 5):
     reg = reg.groupby(reg.index).sum()
     reg[reg != 0] = 1
 
-    TF = np.unique(list(map(lambda x: x.split("(")[0], reg.index.tolist())))
+    TF = np.unique([x.split("(")[0] for x in reg.index.tolist()])
     genes = np.unique(TF.tolist() + reg.columns.tolist())
 
     GRN = pd.DataFrame(0, index=genes, columns=genes)
