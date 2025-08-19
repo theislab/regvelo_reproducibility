@@ -2,23 +2,21 @@
 # # Benchmark transition from hub cells to terminal states
 #
 # For simplicity of demonstration, we present the analysis steps for scale-1; the analysis for the other scales is identical.
-
 # %%
+from itertools import chain
+from tqdm import tqdm
+
 import numpy as np
 import pandas as pd
-from scipy.stats import ttest_ind, ttest_rel
-from itertools import chain
+from scipy.stats import ttest_ind
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
-from matplotlib import rcParams
 
 import cellrank as cr
 import scanpy as sc
 import scvelo as scv
-import scvi
-from tqdm import tqdm
 
 from rgv_tools import DATA_DIR, FIG_DIR
 from rgv_tools.plotting._significance import add_significance, get_significance
