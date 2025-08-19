@@ -60,8 +60,7 @@ METHOD = [
 
 # %%
 def GlobalTimeDPTordering(adata: ad.AnnData):
-    """
-    Compute latent time using graph-based diffusion pseudotime (DPT) ordering.
+    """Compute latent time using graph-based diffusion pseudotime (DPT) ordering.
 
     This function temporarily replaces the expression matrix with the
     fitted values, computes neighbors, diffusion maps, and diffusion
