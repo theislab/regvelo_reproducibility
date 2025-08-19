@@ -7,28 +7,18 @@
 # ## Library imports
 
 # %%
-from tqdm import tqdm
-
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
-
 import scipy
-import anndata as ad
-import scanpy as sc
-import scvelo as scv
-from anndata import AnnData
-from velovi import preprocess_data
-
-from regvelo import REGVELOVI
 import torch
-
 from scipy.stats import ttest_ind
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
-from matplotlib.colors import to_hex
+
+import scanpy as sc
+from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
 from rgv_tools.plotting._significance import add_significance, get_significance
