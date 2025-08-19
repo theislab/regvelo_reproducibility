@@ -13,6 +13,7 @@ from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR
 from rgv_tools.benchmarking import set_output
+
 # %% [markdown]
 # ## General settings
 
