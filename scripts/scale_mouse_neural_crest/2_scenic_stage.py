@@ -6,20 +6,19 @@
 # %% [markdown]
 # ## Library imports
 
+import glob
+
 # %%
 # import dependencies
-import os
-import numpy as np
-import pandas as pd
-import scanpy as sc
+
 import loompy as lp
+
+import pandas as pd
+
 import anndata as ad
+import scanpy as sc
 
-import glob
-import loompy as lp
-import pandas as pd
-
-from rgv_tools import DATA_DIR, FIG_DIR
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## General settings
