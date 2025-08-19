@@ -6,11 +6,9 @@
 # %% [markdown]
 # ## Library imports
 
-import glob
-
 # %%
 # import dependencies
-
+import glob
 import loompy as lp
 
 import pandas as pd
