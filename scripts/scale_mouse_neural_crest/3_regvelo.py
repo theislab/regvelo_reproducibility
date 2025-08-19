@@ -5,16 +5,14 @@
 
 # %%
 import numpy as np
-import pandas as pd
+import torch
 
 import scanpy as sc
 import scvi
 from regvelo import REGVELOVI
-import torch
 
 from rgv_tools import DATA_DIR
 from rgv_tools.benchmarking import set_output
-
 # %% [markdown]
 # ## General settings
 
