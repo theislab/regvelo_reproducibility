@@ -4,6 +4,7 @@
 # For simplicity of demonstration, we present the analysis steps for scale-1; the analysis for the other scales is identical.
 # %%
 from itertools import chain
+
 from tqdm import tqdm
 
 import numpy as np
