@@ -5,17 +5,17 @@
 # ## Library imports
 
 # %%
-from collections import Counter
-
+import scvelo as scv
+import scanpy as sc
 import numpy as np
-import pandas as pd
+import anndata as ad
 
+import pandas as pd
 import matplotlib.pyplot as plt
 import mplscience
 
-import anndata as ad
-import scanpy as sc
-import scvelo as scv
+from collections import Counter
+import pandas as pd
 
 from rgv_tools import DATA_DIR, FIG_DIR
 
