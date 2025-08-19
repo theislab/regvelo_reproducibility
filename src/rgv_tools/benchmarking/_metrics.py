@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import scipy
 from numpy.typing import ArrayLike
-from scipy.stats import pearsonr, spearmanr
+from scipy.stats import spearmanr
 from sklearn.metrics import roc_auc_score
 
 def pearsonr(x: ArrayLike, y: ArrayLike, axis: int = 0) -> ArrayLike:
