@@ -12,7 +12,7 @@ parts:
           - file: scale_mouse_neural_crest/4_cbc.ipynb
           - file: scale_mouse_neural_crest/4_cell_fate_consistency.ipynb
           - file: scale_mouse_neural_crest/4_tsi.ipynb
-    - caption: Cell cycle
+    - caption: Cell cycle (U2OS)
       chapters:
           - file: cell_cycle/1_data_preparation.ipynb
           - file: cell_cycle/2_regvelo.ipynb
@@ -31,6 +31,13 @@ parts:
           - file: cell_cycle/3_comparison.ipynb
           - file: cell_cycle/3_grn_influence.ipynb
           - file: cell_cycle/3_grn_visualization.ipynb
+    - caption: Cell cycle (RPE1)
+      chapters:
+          - file: cell_cycle_rpe1/1_data_preparation_rpe1.ipynb
+          - file: cell_cycle_rpe1/2_regvelo.ipynb
+          - file: cell_cycle_rpe1/3_celldancer.ipynb
+          - file: cell_cycle_rpe1/4_alpha_prediction.ipynb
+          - file: cell_cycle_rpe1/5_latent_time.ipynb
     - caption: Pancreatic endocrinogenesis
       chapters:
           - file: pancreatic_endocrinogenesis/1_preprocessing.ipynb
