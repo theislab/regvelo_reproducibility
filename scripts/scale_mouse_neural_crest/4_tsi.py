@@ -9,7 +9,6 @@ from scipy.stats import ttest_ind
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
-from matplotlib import rcParams
 
 import cellrank as cr
 import scanpy as sc
@@ -17,8 +16,7 @@ import scvelo as scv
 import scvi
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import get_tsi_score, plot_tsi
-from rgv_tools.core import METHOD_PALETTE_TSI
+from rgv_tools.benchmarking import get_tsi_score
 from rgv_tools.plotting._significance import add_significance, get_significance
 
 # %% [markdown]
