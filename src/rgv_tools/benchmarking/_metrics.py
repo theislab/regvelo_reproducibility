@@ -7,6 +7,30 @@ from numpy.typing import ArrayLike
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import roc_auc_score
 
+def pearsonr(x: ArrayLike, y: ArrayLike, axis: int = 0) -> ArrayLike:
+    """Compute Pearson correlation between axes of two arrays.
+
+    Parameters
+    ----------
+    x
+        Input array.
+    y
+        Input array.
+    axis
+        Axis along which Pearson correlation is computed.
+
+    Returns
+    -------
+    Axis-wise Pearson correlations.
+    """
+    centered_x = x - np.mean(x, axis=axis, keepdims=True)
+    centered_y = y - np.mean(y, axis=axis, keepdims=True)
+
+    r_num = np.add.reduce(centered_x * centered_y, axis=axis)
+    r_den = np.sqrt((centered_x * centered_x).sum(axis=axis) * (centered_y * centered_y).sum(axis=axis))
+
+    return r_num / r_den
+
 
 def compute_average_correlations(matrices, method="p"):
     """Compute average correlations between pairs of matrices.
