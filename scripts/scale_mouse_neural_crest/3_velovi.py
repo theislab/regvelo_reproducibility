@@ -5,11 +5,9 @@
 # ## Library imports
 
 # %%
-import numpy as np
-
 import scanpy as sc
-from velovi import VELOVI
 import scvi
+from velovi import VELOVI
 
 from rgv_tools import DATA_DIR
 from rgv_tools.benchmarking import set_output
