@@ -61,7 +61,7 @@ METHOD = [
 # %%
 def GlobalTimeDPTordering(adata: ad.AnnData):
     # calculate latent time with graph-based ordering
-    
+
     adata.layers["GEX"] = adata.X.copy()
     adata.X = adata.layers["fit_t"].copy()
 
