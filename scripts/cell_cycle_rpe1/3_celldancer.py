@@ -10,10 +10,9 @@
 
 # %%
 import celldancer as cd
-import celldancer.cdplt as cdplt
-from celldancer.cdplt import colormap
 
 import scanpy as sc
+
 from rgv_tools import DATA_DIR
 
 # %% [markdown]
