@@ -13,16 +13,14 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 
+import matplotlib.pyplot as plt
+import mplscience
+
 import anndata as ad
 import scanpy as sc
 import scvelo as scv
 from anndata import AnnData
 from velovi import preprocess_data
-
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-from matplotlib.colors import to_hex
 
 from rgv_tools import DATA_DIR, FIG_DIR
 
