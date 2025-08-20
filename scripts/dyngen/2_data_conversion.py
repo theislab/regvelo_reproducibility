@@ -34,7 +34,7 @@ scv.settings.verbosity = 3
 
 # %%
 def define_uns_elems(adata: AnnData) -> None:
-    """Define prior regulation graph"""
+    """Define prior regulation graph."""
     grn = np.zeros([adata.n_vars, adata.n_vars])
     df = adata.uns["regulatory_network"][["regulator", "target", "effect"]].copy()  # extracts regulatory network data
 
