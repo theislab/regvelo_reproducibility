@@ -101,19 +101,20 @@ parts:
           - file: toy_grn/3_plot_toy_simulation_benchmark.ipynb
     - caption: Dyngen-simulated data
       chapters:
-          - file: dyngen/1_data_conversion.ipynb
-          - file: dyngen/2_regvelo.ipynb
-          - file: dyngen/2_scvelo.ipynb
-          - file: dyngen/2_velovi.ipynb
-          - file: dyngen/2_unitvelo.ipynb
-          - file: dyngen/2_velovae_fullvb.ipynb
-          - file: dyngen/2_velovae.ipynb
-          - file: dyngen/2_cell2fate.ipynb
-          - file: dyngen/2_celloracle.ipynb
-          - file: dyngen/2_grnboost2.ipynb
-          - file: dyngen/2_splicejac.ipynb
-          - file: dyngen/2_correlation.ipynb
-          - file: dyngen/3_comparison.ipynb
-          - file: dyngen/3_velovi_benchmark.ipynb
-          - file: dyngen/3_regvelo_benchmark.ipynb
-          - file: dyngen/3_robustness_evaluation.ipynb
+          - file: dyngen/1_simulation.ipynb
+          - file: dyngen/2_data_conversion.ipynb
+          - file: dyngen/3_regvelo.ipynb
+          - file: dyngen/3_scvelo.ipynb
+          - file: dyngen/3_velovi.ipynb
+          - file: dyngen/3_unitvelo.ipynb
+          - file: dyngen/3_velovae_fullvb.ipynb
+          - file: dyngen/3_velovae.ipynb
+          - file: dyngen/3_cell2fate.ipynb
+          - file: dyngen/3_celloracle.ipynb
+          - file: dyngen/3_grnboost2.ipynb
+          - file: dyngen/3_splicejac.ipynb
+          - file: dyngen/3_correlation.ipynb
+          - file: dyngen/4_comparison.ipynb
+          - file: dyngen/5_velovi_benchmark.ipynb
+          - file: dyngen/5_regvelo_benchmark.ipynb
+          - file: dyngen/5_robustness_evaluation.ipynb
