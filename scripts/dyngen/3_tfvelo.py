@@ -12,7 +12,6 @@ import sys
 import TFvelo as TFv
 
 import numpy as np
-
 import pandas as pd
 import scipy
 import torch
@@ -21,9 +20,7 @@ from sklearn.metrics import roc_auc_score
 import anndata as ad
 
 from rgv_tools import DATA_DIR
-from rgv_tools.benchmarking import (
-    get_velocity_correlation,
-)
+from rgv_tools.benchmarking import get_velocity_correlation
 
 sys.path.insert(0, "/lustre/groups/ml01/workspace/yifan.chen/TFvelo/")
 
