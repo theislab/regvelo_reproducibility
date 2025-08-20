@@ -1,0 +1,2369 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UniTVelo benchmark on dyngen data &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dyngen/3_unitvelo';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VeloVAE (fullvb) benchmark on dyngen data" href="3_velovae_fullvb.html" />
+    <link rel="prev" title="veloVI benchmark on dyngen data" href="3_velovi.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/4_alpha_prediction.html">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/5_latent_time.html">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_simulation.html">Simulate synthetic datasets with dyngen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/dyngen/3_unitvelo.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>UniTVelo benchmark on dyngen data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-setting">General setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-saving">Data saving</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="unitvelo-benchmark-on-dyngen-data">
+<h1>UniTVelo benchmark on dyngen data<a class="headerlink" href="#unitvelo-benchmark-on-dyngen-data" title="Link to this heading">#</a></h1>
+<p>Notebook benchmarks velocity and latent time inference using UniTVelo on dyngen-generated data.</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unitvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utv</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_velocity_correlation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Running UniTVelo 0.2.5.2)
+2025-04-29 09:06:35
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-29 11:07:21.673619: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1745917642.356194 4127427 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1745917642.712885 4127427 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1745917644.057376 4127427 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1745917644.057407 4127427 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1745917644.057410 4127427 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1745917644.057412 4127427 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-setting">
+<h2>General setting<a class="headerlink" href="#general-setting" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velo_config</span> <span class="o">=</span> <span class="n">utv</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Configuration</span><span class="p">()</span>
+<span class="n">velo_config</span><span class="o">.</span><span class="n">R2_ADJUST</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">velo_config</span><span class="o">.</span><span class="n">IROOT</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">velo_config</span><span class="o">.</span><span class="n">FIT_OPTION</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+<span class="n">velo_config</span><span class="o">.</span><span class="n">AGENES_R2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">velo_config</span><span class="o">.</span><span class="n">GPU</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TF_USE_LEGACY_KERAS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;dyngen&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">COMPLEXITY</span> <span class="o">=</span> <span class="s2">&quot;complexity_1&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="n">COMPLEXITY</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATASETS</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATASETS</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="n">COMPLEXITY</span> <span class="o">/</span> <span class="s2">&quot;trained_unitvelo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="velocity-pipeline">
+<h2>Velocity pipeline<a class="headerlink" href="#velocity-pipeline" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity_correlation</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="n">COMPLEXITY</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">suffix</span> <span class="o">!=</span> <span class="s2">&quot;.zarr&quot;</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="n">simulation_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;simulation_&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run </span><span class="si">{</span><span class="n">cnt</span><span class="si">}</span><span class="s2">, dataset </span><span class="si">{</span><span class="n">simulation_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_zarr</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;highly_variable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">utv</span><span class="o">.</span><span class="n">run_model</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">velo_config</span><span class="p">)</span>
+
+    <span class="c1"># save data</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">write_zarr</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="n">COMPLEXITY</span> <span class="o">/</span> <span class="s2">&quot;trained_unitvelo&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;trained_</span><span class="si">{</span><span class="n">simulation_id</span><span class="si">}</span><span class="s2">.zarr&quot;</span><span class="p">)</span>
+
+    <span class="n">velocity_correlation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">get_velocity_correlation</span><span class="p">(</span>
+            <span class="n">ground_truth</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;true_velocity&quot;</span><span class="p">],</span> <span class="n">estimated</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">],</span> <span class="n">aggregation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 0, dataset 29.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+Filtered out 83 genes that are detected 20 counts (shared).
+WARNING: Did not normalize X as it looks processed already. To enforce normalization, set `enforce=True`.
+WARNING: Did not normalize spliced as it looks processed already. To enforce normalization, set `enforce=True`.
+WARNING: Did not normalize unspliced as it looks processed already. To enforce normalization, set `enforce=True`.
+Skip filtering by dispersion since number of variables are less than `n_top_genes`.
+WARNING: adata.X seems to be already log-transformed.
+Logarithmized X.
+Extracted 279 highly variable genes.
+Computing moments for 279 genes with n_neighbors: 30 and n_pcs: 30
+computing moments based on connectivities
+    finished (0:00:00) --&gt; added 
+    &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># of velocity genes 276 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 276 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 276 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 17.883, (Spliced): 8.419, (Unspliced): 9.464:  87%|████████▋ | 10396/12000 [03:08&lt;00:28, 56.09it/s]/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/IPython/core/pylabtools.py:77: DeprecationWarning: backend2gui is deprecated since IPython 8.24, backends are managed in matplotlib and can be externally registered.
+  warnings.warn(
+</pre></div>
+</div>
+<img alt="../_images/aa20f0639ac669246b06cad973140b7faccba5c250cd0bde02e967abd13a7b24.png" src="../_images/aa20f0639ac669246b06cad973140b7faccba5c250cd0bde02e967abd13a7b24.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 17.883, (Spliced): 8.419, (Unspliced): 9.464:  87%|████████▋ | 10401/12000 [03:12&lt;00:29, 54.05it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 14.608, vgene loss 17.883
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "993437eecf2b4115a1798eb73005a005", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 1, dataset 14.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 659 highly variable genes.
+Computing moments for 659 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 610 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 610 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 610 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 383.393, (Spliced): 203.546, (Unspliced): 179.847:  93%|█████████▎| 11197/12000 [04:50&lt;00:19, 40.47it/s]
+</pre></div>
+</div>
+<img alt="../_images/22061935c8b0f1ced2809bda06c2dae267981224227f58c362adec88b9f4d95c.png" src="../_images/22061935c8b0f1ced2809bda06c2dae267981224227f58c362adec88b9f4d95c.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 383.393, (Spliced): 203.546, (Unspliced): 179.847:  93%|█████████▎| 11201/12000 [04:55&lt;00:21, 37.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 336.294, vgene loss 383.393
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "628a2e6bf4214e4b9b7f9dd113fd0a77", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 2, dataset 24.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 726 highly variable genes.
+Computing moments for 726 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 393 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 393 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 393 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 26753081.323, (Spliced): 13268335.389, (Unspliced): 13484745.934: 100%|█████████▉| 11997/12000 [04:53&lt;00:00, 37.32it/s]  
+</pre></div>
+</div>
+<img alt="../_images/d244a487b2b51ff8193e098bbbe581a4d5f013646406ab7f5bc9c5de47c56e20.png" src="../_images/d244a487b2b51ff8193e098bbbe581a4d5f013646406ab7f5bc9c5de47c56e20.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 26753081.323, (Spliced): 13268335.389, (Unspliced): 13484745.934: 100%|█████████▉| 11999/12000 [04:57&lt;00:00, 40.36it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 26753081.323, vgene loss 26753081.323
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ce45cc60c27c49459f4a30c7b1b49869", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 3, dataset 28.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 457 highly variable genes.
+Computing moments for 457 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 454 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 454 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 454 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 44.703, (Spliced): 21.389, (Unspliced): 23.315:  80%|████████  | 9600/12000 [03:15&lt;00:48, 49.95it/s] 
+</pre></div>
+</div>
+<img alt="../_images/9c59a1ea22953628805c29024d128adef02a68af7858213ffd3d0ded8e18fc59.png" src="../_images/9c59a1ea22953628805c29024d128adef02a68af7858213ffd3d0ded8e18fc59.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 44.703, (Spliced): 21.389, (Unspliced): 23.315:  80%|████████  | 9601/12000 [03:18&lt;00:49, 48.32it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 37.695, vgene loss 44.703
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c0360c56d0a64ffaaeb64a8cb83cbe5f", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 4, dataset 6.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 745 highly variable genes.
+Computing moments for 745 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 451 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 451 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 451 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 149047663.823, (Spliced): 73239404.417, (Unspliced): 75808259.406: 100%|█████████▉| 11996/12000 [05:00&lt;00:00, 37.27it/s] 
+</pre></div>
+</div>
+<img alt="../_images/ee42fce1768171e2596ffe1201afc50dc97aea83a03d01c834ed3de637a49128.png" src="../_images/ee42fce1768171e2596ffe1201afc50dc97aea83a03d01c834ed3de637a49128.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 149047663.823, (Spliced): 73239404.417, (Unspliced): 75808259.406: 100%|█████████▉| 11999/12000 [05:04&lt;00:00, 39.36it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 149047663.823, vgene loss 149047663.823
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2fc7f5204a544b3fa86d989348b667c8", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 5, dataset 21.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 442 highly variable genes.
+Computing moments for 442 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 392 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 392 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 392 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 475.306, (Spliced): 231.867, (Unspliced): 243.439:  87%|████████▋ | 10397/12000 [03:33&lt;00:32, 49.74it/s]
+</pre></div>
+</div>
+<img alt="../_images/af4dec8bd21ef595e87e262d22014e0f3fed80e1ce93b233974969ace506be29.png" src="../_images/af4dec8bd21ef595e87e262d22014e0f3fed80e1ce93b233974969ace506be29.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 475.306, (Spliced): 231.867, (Unspliced): 243.439:  87%|████████▋ | 10401/12000 [03:36&lt;00:33, 48.15it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 374.615, vgene loss 475.306
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0318a94c59f54208a47bc24495ffde13", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 6, dataset 15.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 430 highly variable genes.
+Computing moments for 430 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 414 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 414 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 414 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 80.207, (Spliced): 34.800, (Unspliced): 45.407:  73%|███████▎  | 8800/12000 [02:54&lt;01:03, 50.50it/s]  
+</pre></div>
+</div>
+<img alt="../_images/6e942a439cbb7ff3d35393118eae49088c045e43184f67c50fdcbfdd9d20daa1.png" src="../_images/6e942a439cbb7ff3d35393118eae49088c045e43184f67c50fdcbfdd9d20daa1.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 80.207, (Spliced): 34.800, (Unspliced): 45.407:  73%|███████▎  | 8801/12000 [02:57&lt;01:04, 49.45it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 72.159, vgene loss 80.207
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "550f6fa2395b47ee9a8f00df74913e6e", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 7, dataset 9.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 336 highly variable genes.
+Computing moments for 336 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 335 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 335 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 335 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 30.960, (Spliced): 20.727, (Unspliced): 10.233:  90%|████████▉ | 10797/12000 [03:26&lt;00:23, 52.28it/s]
+</pre></div>
+</div>
+<img alt="../_images/1a72da2c8d478649474a9fd2692b09f940317022a7c4d91603ce71e27e42e9a0.png" src="../_images/1a72da2c8d478649474a9fd2692b09f940317022a7c4d91603ce71e27e42e9a0.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 30.960, (Spliced): 20.727, (Unspliced): 10.233:  90%|█████████ | 10801/12000 [03:28&lt;00:23, 51.72it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 20.457, vgene loss 30.960
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8c40b83251ae4de48425d461c3279bf2", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 8, dataset 12.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 515 highly variable genes.
+Computing moments for 515 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 376 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 364 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 364 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 78624753.934, (Spliced): 38081184.352, (Unspliced): 40543569.582: 100%|█████████▉| 11999/12000 [04:07&lt;00:00, 44.44it/s] 
+</pre></div>
+</div>
+<img alt="../_images/224842f2309df89f897a79381c03f88f7e35481142dadacb700c3687d47b5e4c.png" src="../_images/224842f2309df89f897a79381c03f88f7e35481142dadacb700c3687d47b5e4c.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 78624753.934, (Spliced): 38081184.352, (Unspliced): 40543569.582: 100%|█████████▉| 11999/12000 [04:10&lt;00:00, 47.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 77444636.132, vgene loss 78624753.934
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ff6e9bed39594d2283cd83fc4cc8122a", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 9, dataset 19.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 233 highly variable genes.
+Computing moments for 233 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 232 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 232 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 232 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 59.264, (Spliced): 31.631, (Unspliced): 27.632:  90%|████████▉ | 10797/12000 [03:00&lt;00:20, 58.00it/s] 
+</pre></div>
+</div>
+<img alt="../_images/16c88ae2fae8e5b3a670df9ff5a87ca6dc446cc91314615e6a357096891174f6.png" src="../_images/16c88ae2fae8e5b3a670df9ff5a87ca6dc446cc91314615e6a357096891174f6.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 59.264, (Spliced): 31.631, (Unspliced): 27.632:  90%|█████████ | 10801/12000 [03:02&lt;00:20, 59.18it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 41.794, vgene loss 59.264
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "49ebd57b39b84deb9c9862ec5a3f88ac", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 10, dataset 4.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 403 highly variable genes.
+Computing moments for 403 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 401 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 401 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 401 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 44.620, (Spliced): 26.473, (Unspliced): 18.147:  90%|████████▉ | 10798/12000 [03:39&lt;00:23, 50.53it/s]
+</pre></div>
+</div>
+<img alt="../_images/bf2dfaa9913ed118f970a9162bd041f052287822456095a4860c11edea77428b.png" src="../_images/bf2dfaa9913ed118f970a9162bd041f052287822456095a4860c11edea77428b.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 44.620, (Spliced): 26.473, (Unspliced): 18.147:  90%|█████████ | 10801/12000 [03:42&lt;00:24, 48.48it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 35.070, vgene loss 44.620
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "de65ffa30ec144869fabee1fd65ee81f", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 11, dataset 13.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 394 highly variable genes.
+Computing moments for 394 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 393 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 393 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 393 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 47.101, (Spliced): 23.363, (Unspliced): 23.737:  80%|███████▉  | 9598/12000 [03:11&lt;00:47, 50.70it/s] 
+</pre></div>
+</div>
+<img alt="../_images/ab191d935d3205fc88ab770cae9da0ba64cfe1250508267da89c9408e1425369.png" src="../_images/ab191d935d3205fc88ab770cae9da0ba64cfe1250508267da89c9408e1425369.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 47.101, (Spliced): 23.363, (Unspliced): 23.737:  80%|████████  | 9601/12000 [03:14&lt;00:48, 49.35it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 42.355, vgene loss 47.101
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c70d62c7dbf9407b9d6d2fc55314439a", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 12, dataset 2.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 690 highly variable genes.
+Computing moments for 690 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 385 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 385 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 385 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 29240576.665, (Spliced): 14302426.099, (Unspliced): 14938150.566: 100%|█████████▉| 11998/12000 [04:47&lt;00:00, 38.02it/s] 
+</pre></div>
+</div>
+<img alt="../_images/fa6ad89881abcad794577aeae2a207bd3f6749db4194361ea7d8416215518072.png" src="../_images/fa6ad89881abcad794577aeae2a207bd3f6749db4194361ea7d8416215518072.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 29240576.665, (Spliced): 14302426.099, (Unspliced): 14938150.566: 100%|█████████▉| 11999/12000 [04:51&lt;00:00, 41.13it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 28514455.605, vgene loss 29240576.665
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5d0083806ca34d5eaceed53c074f0ba1", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 13, dataset 16.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 509 highly variable genes.
+Computing moments for 509 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 472 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 472 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 472 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 75.340, (Spliced): 43.423, (Unspliced): 31.917:  90%|████████▉ | 10799/12000 [03:52&lt;00:25, 47.62it/s]
+</pre></div>
+</div>
+<img alt="../_images/fcad8e974f80a4ed6fe282726e6875a7617d1d853670759fac5d1f6f03639a06.png" src="../_images/fcad8e974f80a4ed6fe282726e6875a7617d1d853670759fac5d1f6f03639a06.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 75.340, (Spliced): 43.423, (Unspliced): 31.917:  90%|█████████ | 10801/12000 [03:55&lt;00:26, 45.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 59.735, vgene loss 75.340
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "878d4c7485274afaa7f9ea46bcbb72d6", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 14, dataset 1.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 268 highly variable genes.
+Computing moments for 268 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 264 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 264 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 264 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 37.876, (Spliced): 19.851, (Unspliced): 18.025:  67%|██████▋   | 7998/12000 [02:15&lt;01:10, 56.72it/s] 
+</pre></div>
+</div>
+<img alt="../_images/da987f27b6e9bc5d2960cb15022701043df2b9d9f877b21d27656dda77ec076c.png" src="../_images/da987f27b6e9bc5d2960cb15022701043df2b9d9f877b21d27656dda77ec076c.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 37.876, (Spliced): 19.851, (Unspliced): 18.025:  67%|██████▋   | 8001/12000 [02:17&lt;01:08, 58.02it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 29.758, vgene loss 37.876
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8d536b48fb9b4b2a8d1458e999443596", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 15, dataset 18.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 335 highly variable genes.
+Computing moments for 335 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 307 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 307 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 307 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 349.261, (Spliced): 170.470, (Unspliced): 178.791:  80%|███████▉  | 9596/12000 [02:59&lt;00:45, 52.35it/s] 
+</pre></div>
+</div>
+<img alt="../_images/a3effa30d721ad77fe8e5e7174a3afb3e4b039772c184a12257e75d97f44366e.png" src="../_images/a3effa30d721ad77fe8e5e7174a3afb3e4b039772c184a12257e75d97f44366e.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 349.261, (Spliced): 170.470, (Unspliced): 178.791:  80%|████████  | 9601/12000 [03:01&lt;00:45, 52.89it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 246.523, vgene loss 349.261
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "26ce6cc8d87a4f74b7fb0acc1baead5e", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 16, dataset 5.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 226 highly variable genes.
+Computing moments for 226 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 226 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 226 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 226 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 28.367, (Spliced): 17.661, (Unspliced): 10.706:  90%|████████▉ | 10798/12000 [02:58&lt;00:20, 58.57it/s]
+</pre></div>
+</div>
+<img alt="../_images/06e613ce03cd2742b2a0656937fe6c87efa3033cf09db93f2578b8f12a54434f.png" src="../_images/06e613ce03cd2742b2a0656937fe6c87efa3033cf09db93f2578b8f12a54434f.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 28.367, (Spliced): 17.661, (Unspliced): 10.706:  90%|█████████ | 10801/12000 [03:00&lt;00:20, 59.93it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 18.587, vgene loss 28.367
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a0cc40395b4843ceb16eaaf5214060ca", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 17, dataset 10.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 547 highly variable genes.
+Computing moments for 547 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 279 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 279 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 279 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 105699203.211, (Spliced): 51480377.806, (Unspliced): 54218825.405:  93%|█████████▎| 11198/12000 [03:59&lt;00:19, 42.07it/s] 
+</pre></div>
+</div>
+<img alt="../_images/c1f50732c379209e7cb03ebe2aa56765405c114cf6bff99faddfda9a97c9a131.png" src="../_images/c1f50732c379209e7cb03ebe2aa56765405c114cf6bff99faddfda9a97c9a131.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 105699203.211, (Spliced): 51480377.806, (Unspliced): 54218825.405:  93%|█████████▎| 11201/12000 [04:02&lt;00:17, 46.25it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 93378281.061, vgene loss 105699203.211
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "049b35d3ee4e476aa629a02b6b27add9", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 18, dataset 8.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 382 highly variable genes.
+Computing moments for 382 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 326 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 326 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 326 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 66.943, (Spliced): 33.534, (Unspliced): 33.410:  80%|████████  | 9601/12000 [03:07&lt;04:28,  8.95it/s] 
+</pre></div>
+</div>
+<img alt="../_images/bb14fdedb289a802ad8e90e02aa988ddc648a632d4eb84b6cdb5bc922b77121a.png" src="../_images/bb14fdedb289a802ad8e90e02aa988ddc648a632d4eb84b6cdb5bc922b77121a.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 66.943, (Spliced): 33.534, (Unspliced): 33.410:  80%|████████  | 9601/12000 [03:10&lt;00:47, 50.50it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 53.973, vgene loss 66.943
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ec64e0b42fa6494084e0d685121a2af6", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 19, dataset 11.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 353 highly variable genes.
+Computing moments for 353 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 353 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 353 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 353 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 49.518, (Spliced): 27.798, (Unspliced): 21.720:  90%|████████▉ | 10799/12000 [03:30&lt;00:23, 51.80it/s] 
+</pre></div>
+</div>
+<img alt="../_images/9605066ea304066fedea963bdb334943a5872548f42cb921ad551097bc61f388.png" src="../_images/9605066ea304066fedea963bdb334943a5872548f42cb921ad551097bc61f388.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 49.518, (Spliced): 27.798, (Unspliced): 21.720:  90%|█████████ | 10801/12000 [03:33&lt;00:23, 50.57it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 36.883, vgene loss 49.518
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "50081a4e4f7d46dfa959a00a196e39a3", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 20, dataset 27.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 366 highly variable genes.
+Computing moments for 366 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 318 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 318 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 318 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 271.474, (Spliced): 126.483, (Unspliced): 144.991:  80%|████████  | 9600/12000 [03:06&lt;00:46, 51.25it/s] 
+</pre></div>
+</div>
+<img alt="../_images/11bddbb5454887e14838763293d6eee7aa4829dd0d3c0f1c752724f03c27afc6.png" src="../_images/11bddbb5454887e14838763293d6eee7aa4829dd0d3c0f1c752724f03c27afc6.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 271.474, (Spliced): 126.483, (Unspliced): 144.991:  80%|████████  | 9601/12000 [03:08&lt;00:47, 50.87it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 225.296, vgene loss 271.474
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "672ea208932845d68d2f8585d850ce5b", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 21, dataset 23.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 283 highly variable genes.
+Computing moments for 283 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 283 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 283 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 283 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 26.089, (Spliced): 16.948, (Unspliced): 9.142:  90%|█████████ | 10801/12000 [03:15&lt;00:22, 54.00it/s] 
+</pre></div>
+</div>
+<img alt="../_images/edcc15c9ad14c9175103f7f54f1f75c665d08a33a2406099fa276ba7bcae25ed.png" src="../_images/edcc15c9ad14c9175103f7f54f1f75c665d08a33a2406099fa276ba7bcae25ed.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 26.089, (Spliced): 16.948, (Unspliced): 9.142:  90%|█████████ | 10801/12000 [03:17&lt;00:21, 54.67it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 16.362, vgene loss 26.089
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "83d97c393a76473e994f5fd3d8d4f2ff", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 22, dataset 17.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 343 highly variable genes.
+Computing moments for 343 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 332 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 332 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 332 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 41.262, (Spliced): 19.837, (Unspliced): 21.425:  67%|██████▋   | 7998/12000 [02:28&lt;01:17, 51.75it/s] 
+</pre></div>
+</div>
+<img alt="../_images/f8dc387889fbb6a2aa3040bfae3dd9dba9d33f3dfda5e8d2f3df549481074ef8.png" src="../_images/f8dc387889fbb6a2aa3040bfae3dd9dba9d33f3dfda5e8d2f3df549481074ef8.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 41.262, (Spliced): 19.837, (Unspliced): 21.425:  67%|██████▋   | 8001/12000 [02:30&lt;01:15, 53.01it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 36.610, vgene loss 41.262
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1c4cb96ac6804ef2b576b4a09c48f245", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 23, dataset 30.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 464 highly variable genes.
+Computing moments for 464 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 399 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 399 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 399 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 2359.715, (Spliced): 1178.461, (Unspliced): 1181.254:  67%|██████▋   | 8000/12000 [02:42&lt;01:20, 49.96it/s] 
+</pre></div>
+</div>
+<img alt="../_images/9c78394dcb9988d7bfce0146cbd4cd35ca2df285c2f878fccbca4ca3e3e8f947.png" src="../_images/9c78394dcb9988d7bfce0146cbd4cd35ca2df285c2f878fccbca4ca3e3e8f947.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 2359.715, (Spliced): 1178.461, (Unspliced): 1181.254:  67%|██████▋   | 8001/12000 [02:45&lt;01:22, 48.33it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 2140.709, vgene loss 2359.715
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "82cffa1272a14c839295629f27ac5a76", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 24, dataset 22.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 273 highly variable genes.
+Computing moments for 273 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 271 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 271 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 271 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 29.155, (Spliced): 17.958, (Unspliced): 11.197:  90%|████████▉ | 10799/12000 [03:15&lt;00:21, 55.23it/s]
+</pre></div>
+</div>
+<img alt="../_images/5542d5af0ce5dfac26e3d88c947ee6275b3b19939ecbc53b363928fcf9d3e3e4.png" src="../_images/5542d5af0ce5dfac26e3d88c947ee6275b3b19939ecbc53b363928fcf9d3e3e4.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 29.155, (Spliced): 17.958, (Unspliced): 11.197:  90%|█████████ | 10801/12000 [03:17&lt;00:21, 54.73it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 19.384, vgene loss 29.155
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "37d212d98b124589a8fa930d3f1268ed", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 25, dataset 25.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 576 highly variable genes.
+Computing moments for 576 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 453 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 453 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 453 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 3124.003, (Spliced): 1497.846, (Unspliced): 1626.157: 100%|█████████▉| 11998/12000 [04:40&lt;00:00, 41.27it/s]
+</pre></div>
+</div>
+<img alt="../_images/9eea1430846d27a7863135b84a8feb935b2b168071740f1a09359afd2ec67a69.png" src="../_images/9eea1430846d27a7863135b84a8feb935b2b168071740f1a09359afd2ec67a69.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 3124.003, (Spliced): 1497.846, (Unspliced): 1626.157: 100%|█████████▉| 11999/12000 [04:44&lt;00:00, 42.17it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 3006.866, vgene loss 3124.003
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1eee8ecf5f6c47c988baa559dbfc341a", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 26, dataset 20.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 207 highly variable genes.
+Computing moments for 207 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 205 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 205 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 205 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 76.315, (Spliced): 37.650, (Unspliced): 38.666:  67%|██████▋   | 7996/12000 [02:06&lt;01:06, 60.04it/s] 
+</pre></div>
+</div>
+<img alt="../_images/205b1b1d544be177f1e7e4212b9ac10c71dd072a723ca3f9549233a108a7d256.png" src="../_images/205b1b1d544be177f1e7e4212b9ac10c71dd072a723ca3f9549233a108a7d256.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 76.315, (Spliced): 37.650, (Unspliced): 38.666:  67%|██████▋   | 8001/12000 [02:08&lt;01:03, 62.48it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 56.982, vgene loss 76.315
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dccc542528204e6da0e44331d0336464", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 27, dataset 7.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 479 highly variable genes.
+Computing moments for 479 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 348 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 348 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 348 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 2275.929, (Spliced): 1148.613, (Unspliced): 1127.316:  67%|██████▋   | 7998/12000 [02:41&lt;01:21, 49.07it/s] 
+</pre></div>
+</div>
+<img alt="../_images/0efd5f90a1129e1701b7032151aa759d6a374abead9def1690f1f51e951acf9d.png" src="../_images/0efd5f90a1129e1701b7032151aa759d6a374abead9def1690f1f51e951acf9d.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 2275.929, (Spliced): 1148.613, (Unspliced): 1127.316:  67%|██████▋   | 8001/12000 [02:44&lt;01:22, 48.53it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 2011.518, vgene loss 2275.929
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a8efbf055b944cff8085113bfb7cce66", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 28, dataset 3.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 208 highly variable genes.
+Computing moments for 208 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 172 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 172 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 172 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 85481448.186, (Spliced): 36976961.488, (Unspliced): 48504486.698: 100%|█████████▉| 11999/12000 [03:18&lt;00:00, 53.20it/s]  
+</pre></div>
+</div>
+<img alt="../_images/200ffd574a57f0583af9bf11b59c331fd05d283e953e855a92dddf089059fe21.png" src="../_images/200ffd574a57f0583af9bf11b59c331fd05d283e953e855a92dddf089059fe21.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 85481448.186, (Spliced): 36976961.488, (Unspliced): 48504486.698: 100%|█████████▉| 11999/12000 [03:19&lt;00:00, 60.07it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 82081738.419, vgene loss 85481448.186
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1278df98b29a486a9b8858f1f4e501f2", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Run 29, dataset 26.
+------&gt; Manully Specified Parameters &lt;------
+GPU:	-1
+------&gt; Model Configuration Settings &lt;------
+N_TOP_GENES:	2000
+LEARNING_RATE:	0.01
+FIT_OPTION:	1
+DENSITY:	SVD
+REORDER_CELL:	Soft_Reorder
+AGGREGATE_T:	True
+R2_ADJUST:	True
+GENE_PRIOR:	None
+VGENES:	basic
+IROOT:	None
+--------------------------------------------
+
+Current working dir is /ictstr01/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/notebooks/dyngen/complexity_1.
+Results will be stored in res folder
+WARNING: adata.X seems to be already log-transformed.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracted 399 highly variable genes.
+Computing moments for 399 genes with n_neighbors: 30 and n_pcs: 30
+
+# of velocity genes 398 (Criterion: positive regression coefficient between un/spliced counts)
+# of velocity genes 398 (Criterion: std of un/spliced reads should be moderate, w/o extreme values)
+# of velocity genes 398 (Criterion: genes have reads in more than 5% of total cells)
+No GPU device has been detected. Switch to CPU mode.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss (Total): 19.597, (Spliced): 8.786, (Unspliced): 10.811:  87%|████████▋ | 10401/12000 [03:32&lt;03:22,  7.91it/s] 
+</pre></div>
+</div>
+<img alt="../_images/dbe6df9b345864bbaabc6ab31d86c39b7ce9efaba48d6ca0df7ab71460f7d2e9.png" src="../_images/dbe6df9b345864bbaabc6ab31d86c39b7ce9efaba48d6ca0df7ab71460f7d2e9.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/yifan.chen/miniconda3/envs/regvelo-py310/lib/python3.10/site-packages/pandas/core/dtypes/cast.py:1641: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+  return np.find_common_type(types, [])
+Loss (Total): 19.597, (Spliced): 8.786, (Unspliced): 10.811:  87%|████████▋ | 10401/12000 [03:35&lt;00:33, 48.17it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total loss 17.686, vgene loss 19.597
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b4b5e510958f4437977a57c0e9836112", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;cluster&#39; as categorical
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-saving">
+<h2>Data saving<a class="headerlink" href="#data-saving" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="n">velocity_correlation</span><span class="p">})</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="n">COMPLEXITY</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;unitvelo_correlation.parquet&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "regvelo-py310"
+        },
+        kernelOptions: {
+            name: "regvelo-py310",
+            path: "./dyngen"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'regvelo-py310'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3_velovi.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">veloVI benchmark on dyngen data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3_velovae_fullvb.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">VeloVAE (fullvb) benchmark on dyngen data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-setting">General setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-pipeline">Velocity pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-saving">Data saving</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
