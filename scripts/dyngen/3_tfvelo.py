@@ -6,13 +6,13 @@
 # %% [markdown]
 # ## Library imports
 
+# %%
 import sys
 
 import TFvelo as TFv
 
 import numpy as np
 
-# %%
 import pandas as pd
 import scipy
 import torch
@@ -26,7 +26,6 @@ from rgv_tools.benchmarking import (
 )
 
 sys.path.insert(0, "/lustre/groups/ml01/workspace/yifan.chen/TFvelo/")
-
 
 # %% [markdown]
 # ## Function definitions
