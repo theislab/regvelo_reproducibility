@@ -3,9 +3,8 @@
 #
 # Notebook compares metrics for velocity, latent time and GRN inference across different methods applied to dyngen-generated data.
 
-import numpy as np
-
 # %%
+import numpy as np
 import pandas as pd
 from scipy.stats import ttest_rel
 
