@@ -12,19 +12,18 @@
 import contextlib
 import io
 
+# %%
+from pathlib import Path
+from typing import Callable, Union
+
 import numpy as np
 import pandas as pd
-import scipy
 import torch
+from numpy.typing import ArrayLike
 
 import anndata as ad
 import cell2fate as c2f
 import scanpy as sc
-
-from pathlib import Path
-
-from typing import Callable, Union
-from numpy.typing import ArrayLike
 
 # %%
 DATA_DIR = Path("/lustre/groups/ml01/workspace/yifan.chen/regvelo_reproducibility/data")
@@ -139,8 +138,6 @@ if SAVE_DATASETS:
 # %% [markdown]
 # ## Velocity pipeline
 
-# %%
-import os
 
 velocity_correlation = []
 
