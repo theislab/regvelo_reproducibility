@@ -3,10 +3,10 @@
 #
 # Notebook compares metrics for velocity, latent time and GRN inference across different methods applied to dyngen-generated data.
 
+import numpy as np
+
 # %%
 import pandas as pd
-import numpy as np
-from scipy.stats import ttest_ind
 from scipy.stats import ttest_rel
 
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ import mplscience
 import seaborn as sns
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.plotting._significance import add_significance, get_significance
+from rgv_tools.plotting._significance import get_significance
 
 # %% [markdown]
 # ## Constants
@@ -151,7 +151,7 @@ with mplscience.style_context():
         yticks=ax.get_yticks(),
     )
 
-    if SAVE_FIGURE:
+    if SAVE_FIGURES:
         fig.savefig(
             FIG_DIR / DATASET / "velocity_benchmark.svg",
             format="svg",
@@ -204,7 +204,7 @@ with mplscience.style_context():
         yticks=ax.get_yticks(),
     )
 
-    if SAVE_FIGURE:
+    if SAVE_FIGURES:
         fig.savefig(
             FIG_DIR / DATASET / "GRN_benchmark.svg",
             format="svg",
@@ -266,7 +266,7 @@ with mplscience.style_context():
         yticks=ax.get_yticks(),
     )
     ax.set_ylim(-0.3, 0.6)
-    if SAVE_FIGURE:
+    if SAVE_FIGURES:
         fig.savefig(
             FIG_DIR / DATASET / "time_benchmark.svg",
             format="svg",
