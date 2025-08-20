@@ -19,6 +19,10 @@ from typing import Callable, Union
 import numpy as np
 import pandas as pd
 import torch
+
+import anndata as ad
+import scanpy as sc
+
 from numpy.typing import ArrayLike
 
 import cell2fate as c2f
