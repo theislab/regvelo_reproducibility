@@ -7,19 +7,17 @@
 # ## Library imports
 
 # %%
-import cellrank as cr
-import scvelo as scv
-import scanpy as sc
-
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-
-import scipy
 import numpy as np
 import pandas as pd
 
-from rgv_tools import DATA_DIR, FIG_DIR
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import cellrank as cr
+import scanpy as sc
+import scvelo as scv
+
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## General setting
@@ -156,7 +154,7 @@ MELD_score = score_m.copy()
 
 # %%
 score_m_all = []
-for nrun in range(1000):
+for _nrun in range(1000):
     score_m = []
     for g in np.array(groups)[[i not in ["control"] for i in groups]]:
         filename = DATA_DIR / DATASET / "raw" / f"MELD_likelihood_raw/likelihood_{g}.csv"
