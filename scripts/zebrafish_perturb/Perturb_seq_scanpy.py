@@ -7,23 +7,19 @@
 # ## Library imports
 
 # %%
-import cellrank as cr
-import scvelo as scv
-import scanpy as sc
-import scanpy.external as sce
-
-import matplotlib.pyplot as plt
-import mplscience
-import seaborn as sns
-
 import faiss
-from collections import Counter
 
-import scipy
 import numpy as np
 import pandas as pd
 
-from rgv_tools import DATA_DIR, FIG_DIR
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import scanpy as sc
+import scanpy.external as sce
+import scvelo as scv
+
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## General setting
