@@ -6,8 +6,8 @@ from scipy.stats import ranksums, ttest_rel
 from sklearn.metrics import roc_auc_score
 
 import cellrank as cr
-from anndata import AnnData
 import dynamo as dyn
+from anndata import AnnData
 from scvelo import logging as logg
 
 from ._ptools import combine_elements
