@@ -5,22 +5,19 @@
 
 # %% [markdown]
 # ## Library imports
-
 # %%
-import pandas as pd
 import numpy as np
+
+import pandas as pd
 import scipy
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
-import scanpy as sc
-import scvelo as scv
 import scvi
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import perturb_prediction
 from rgv_tools.core import METHOD_PALETTE_PERTURBATION
 
 # %% [markdown]
