@@ -7,30 +7,24 @@
 # ## Library imports
 
 # %%
-import cellrank as cr
-import scvelo as scv
-import scanpy as sc
-
-import scipy
 import numpy as np
 import pandas as pd
 
-import scvi
-from anndata import AnnData
-from regvelo import REGVELOVI
-from typing import List
-
-from collections import Counter
-
-import mplscience
 import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import roc_auc_score
 
-from rgv_tools.perturbation import markov_density_simulation, delta_to_probability, smooth_score, density_likelihood
-from rgv_tools.perturbation import in_silico_block_simulation, split_elements
+import cellrank as cr
+import scanpy as sc
+import scvelo as scv
+import scvi
+from regvelo import REGVELOVI
+
+from rgv_tools import DATA_DIR
 from rgv_tools.benchmarking import set_output
-from rgv_tools import DATA_DIR, FIG_DIR
+from rgv_tools.perturbation import (
+    density_likelihood,
+    in_silico_block_simulation,
+    split_elements,
+)
 
 # %% [markdown]
 # ## General settings
