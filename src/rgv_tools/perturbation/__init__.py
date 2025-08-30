@@ -4,14 +4,19 @@ from ._ptools import (
     abundance_test,
     aggregate_model_predictions,
     combine_elements,
+    delta_to_probability,
+    density_likelihood,
     get_list_name,
     in_silico_block_simulation,
+    markov_density_simulation,
     Multiple_TFScanning,
+    smooth_score,
     split_elements,
     TFScanning,
 )
 from ._ptools_co import Multiple_TFScanning_perturbation_co, TFScanning_perturbation_co
 from ._ptools_dyn import (
+    density_likelihood_dyn,
     Multiple_TFScanning_KO_dyn,
     Multiple_TFScanning_perturbation_dyn,
     TFScanning_KO_dyn,
@@ -19,6 +24,11 @@ from ._ptools_dyn import (
 )
 
 __all__ = [
+    "density_likelihood",
+    "markov_density_simulation",
+    "delta_to_probability",
+    "smooth_score",
+    "density_likelihood_dyn",
     "TFScanning",
     "abundance_test",
     "get_list_name",
