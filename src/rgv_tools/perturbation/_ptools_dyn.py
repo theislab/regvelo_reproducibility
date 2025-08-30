@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from scipy.stats import ranksums
+from scipy.stats import ranksums,ttest_rel
 from sklearn.metrics import roc_auc_score
 
 import cellrank as cr
@@ -79,6 +79,152 @@ def abundance_test(prob_raw: pd.DataFrame, prob_pert: pd.DataFrame, method: str 
     table["FDR adjusted p-value"] = p_adjust_bh(table["p-value"].tolist())
     return table
 
+###########################
+## markov_density_simulation
+def markov_density_simulation(
+    adata : "AnnData",
+    T : np.ndarray, 
+    start_indices, 
+    terminal_indices, 
+    terminal_states,
+    n_steps : int = 100, 
+    n_simulations : int = 500, 
+    method: str = "stepwise", 
+    seed : int = 0,
+):
+
+    """
+    Simulate transitions on a velocity-derived Markov transition matrix.
+
+    Parameters
+    ----------
+    T : np.ndarray
+        Transition matrix of shape (n_cells, n_cells).
+    start_indices : array-like
+        Indices of starting cells.
+    terminal_indices : array-like
+        Indices of terminal (absorbing) cells.
+    n_steps : int, optional
+        Maximum number of steps per simulation (default: 100).
+    n_simulations : int, optional
+        Number of simulations per starting cell (default: 200).
+    method : {'stepwise', 'one-step'}, optional
+        Simulation method to use:
+        - 'stepwise': simulate trajectories step by step.
+        - 'one-step': sample directly from T^n.
+    seed : int, optional
+        Random seed for reproducibility (default: 0).
+
+    Returns
+    -------
+    arrivals : pd.Series
+        Total number of simulations that ended at each terminal cell.
+    arrivals_dens : pd.Series
+        Fraction of simulations that ended at each terminal cell.
+    """
+    np.random.seed(seed)
+    
+    T = np.asarray(T)
+    start_indices = np.asarray(start_indices)
+    terminal_indices = np.asarray(terminal_indices)
+    terminal_set = set(terminal_indices)
+    n_cells = T.shape[0]
+
+    arrivals_array = np.zeros(n_cells, dtype=int)
+
+    if method == "stepwise":
+        row_sums = T.sum(axis=1)
+        cum_T = np.cumsum(T, axis=1)
+
+        for start in start_indices:
+            for _ in range(n_simulations):
+                current = start
+                for _ in range(n_steps):
+                    if row_sums[current] == 0:
+                        break  # dead end
+                    r = np.random.rand()
+                    next_state = np.searchsorted(cum_T[current], r * row_sums[current])
+                    current = next_state
+                    if current in terminal_set:
+                        arrivals_array[current] += 1
+                        break
+
+    elif method == "one-step":
+        T_end = np.linalg.matrix_power(T, n_steps)
+        for start in start_indices:
+            x0 = np.zeros(n_cells)
+            x0[start] = 1
+            x_end = x0 @ T_end  # final distribution
+            if x_end.sum() > 0:
+                samples = np.random.choice(n_cells, size=n_simulations, p=x_end)
+                for s in samples:
+                    if s in terminal_set:
+                        arrivals_array[s] += 1
+            else:
+                raise ValueError(f"Invalid probability distribution: x_end sums to 0 for start index {start}")
+    else:
+        raise ValueError("method must be 'stepwise' or 'one-step'")
+
+    total_simulations = n_simulations * len(start_indices)
+    visits = pd.Series({tid: arrivals_array[tid] for tid in terminal_indices}, dtype=int)
+    visits_dens = pd.Series({tid: arrivals_array[tid] / total_simulations for tid in terminal_indices})
+
+    adata.obs[f"visits"] = np.nan
+    adata.obs[f"visits"].iloc[terminal_indices] = visits
+
+    dens_cum = []
+    for ts in terminal_states:
+        ts_cells = np.where(adata.obs["term_states_fwd"] == ts)[0]
+        density = visits_dens.loc[ts_cells].sum()
+        dens_cum.append(density)
+    
+    return visits, visits_dens
+
+
+###########################
+# density_likelihood_dyn
+def density_likelihood_dyn(adata,tf,start_indices,terminal_states,n_simulations = 500):
+    ## compute transition matrix
+    vk = cr.kernels.VelocityKernel(adata, attr="obsm", xkey="X_pca", vkey="velocity_pca")
+    vk.compute_transition_matrix()
+    
+    adata_target = adata.copy()
+    dyn.pd.KO(adata_target, tf, store_vf_ko=True)
+    ## perturb the regulations
+    vk_p = cr.kernels.VelocityKernel(adata_target, attr="obsm", xkey="X_pca", vkey="velocity_pca_KO")
+    vk_p.compute_transition_matrix()
+    
+    vkt = vk.transition_matrix.A
+    vkt_p = vk_p.transition_matrix.A
+    
+    terminal_indices = np.where(adata.obs["term_states_fwd"].isin(terminal_states))[0]
+    arrivals,_ = markov_density_simulation(adata, vkt,start_indices, terminal_indices,terminal_states,n_simulations = n_simulations)
+    arrivals_p,_ = markov_density_simulation(adata_target, vkt_p,start_indices, terminal_indices,terminal_states,n_simulations = n_simulations)
+    
+    cont_sim = []
+    pert_sim = []
+    for ts in terminal_states:
+        terminal_indices = np.where(adata.obs["term_states_fwd"].isin([ts]))[0]
+        #arrivals = simulate_markov_chain_from_velocity_graph(adata, vkt,start_indices, terminal_indices, n_steps=100,n_simulations = n_simulations,seed = 0)
+        #arrivals_p = simulate_markov_chain_from_velocity_graph(adata_perturb, vkt_p,start_indices, terminal_indices, n_steps=100,n_simulations = n_simulations,seed = 0)
+        terminal_indices_sub = np.where(adata.obs["term_states_fwd"].isin([ts]))[0]
+        arrivals = adata.obs["visits"].iloc[terminal_indices_sub]
+        arrivals_p = adata_target.obs["visits"].iloc[terminal_indices_sub]
+        
+        cont_sim.append(arrivals)
+        pert_sim.append(arrivals_p)
+    
+    #y = [0] * len(arrivals) + [1] * len(arrivals_p)
+    dl_score = []
+    dl_sig = []
+    for i in range(len(terminal_states)):
+        pred = cont_sim[i].tolist() + pert_sim[i].tolist()
+        #pred = cont_sim[i].tolist() + pert_sim[i].tolist()
+        _, p_value = ttest_rel(cont_sim[i], pert_sim[i])
+        dl_score.append(np.mean(pert_sim[i]) - np.mean(cont_sim[i]))
+        dl_sig.append(p_value)
+    
+    return dl_score,dl_sig,cont_sim,pert_sim
 
 ###########################
 # Function: TFScanning
