@@ -8,7 +8,6 @@
 import numpy as np
 import pandas as pd
 
-
 import dynamo as dyn
 import scanpy as sc
 from dynamo.preprocessing import Preprocessor
