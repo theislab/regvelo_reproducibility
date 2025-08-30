@@ -1,0 +1,1228 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dynamo-based perturbation analysis &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'zebrafish_perturb/3_dynamo';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CellOracle-based perturbation prediction" href="3_celloracle.html" />
+    <link rel="prev" title="Compute density depletion likelihood with RegVelo" href="3_regvelo_perturbation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/4_alpha_prediction.html">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/5_latent_time.html">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Smart-seq3 and perturb-seq combined analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_Perturb_seq_scanpy.html">Reannotation of pigment cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_perturb_seq_ts.html">Evaluate the cell fate perturbation significance on perturb-seq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_regvelo_perturbation.html">Compute density depletion likelihood with RegVelo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_benchmark.html">Benchmark perturbation prediction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_simulation.html">Simulate synthetic datasets with dyngen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/4_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/zebrafish_perturb/3_dynamo.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dynamo-based perturbation analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-by-dynamo">Processing by dynamo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-prediction">Perturbation prediction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gene-expression-perturbation">Gene expression perturbation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dynamo-based-perturbation-analysis">
+<h1>Dynamo-based perturbation analysis<a class="headerlink" href="#dynamo-based-perturbation-analysis" title="Link to this heading">#</a></h1>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dynamo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dyn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dynamo.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Preprocessor</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.perturbation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">delta_to_probability</span><span class="p">,</span>
+    <span class="n">density_likelihood_dyn</span><span class="p">,</span>
+    <span class="n">get_list_name</span><span class="p">,</span>
+    <span class="n">Multiple_TFScanning_perturbation_dyn</span><span class="p">,</span>
+    <span class="n">split_elements</span><span class="p">,</span>
+    <span class="n">TFScanning_perturbation_dyn</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_csv from `anndata` is deprecated. Import anndata.io.read_csv instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_excel from `anndata` is deprecated. Import anndata.io.read_excel instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_hdf from `anndata` is deprecated. Import anndata.io.read_hdf instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_mtx from `anndata` is deprecated. Import anndata.io.read_mtx instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_text from `anndata` is deprecated. Import anndata.io.read_text instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_umi_tools from `anndata` is deprecated. Import anndata.io.read_umi_tools instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/numba/np/ufunc/dufunc.py:344: NumbaWarning: <span class=" -Color -Color-Bold">Compilation requested for previously compiled argument types ((uint32,)). This has no effect and perhaps indicates a bug in the calling code (compiling a ufunc more than once for the same signature</span>
+  warnings.warn(msg, errors.NumbaWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/numba/np/ufunc/dufunc.py:344: NumbaWarning: <span class=" -Color -Color-Bold">Compilation requested for previously compiled argument types ((uint32,)). This has no effect and perhaps indicates a bug in the calling code (compiling a ufunc more than once for the same signature</span>
+  warnings.warn(msg, errors.NumbaWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/numba/np/ufunc/dufunc.py:344: NumbaWarning: <span class=" -Color -Color-Bold">Compilation requested for previously compiled argument types ((uint32,)). This has no effect and perhaps indicates a bug in the calling code (compiling a ufunc more than once for the same signature</span>
+  warnings.warn(msg, errors.NumbaWarning)
+/home/icb/weixu.wang/miniconda3/envs/dynamo/lib/python3.10/site-packages/anndata/utils.py:434: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+Matplotlib is building the font cache; this may take a moment.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;zebrafish&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">genes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nr2f5&quot;</span><span class="p">,</span> <span class="s2">&quot;sox9b&quot;</span><span class="p">,</span> <span class="s2">&quot;twist1b&quot;</span><span class="p">,</span> <span class="s2">&quot;ets1&quot;</span><span class="p">]</span>
+
+<span class="n">TERMINAL_STATES_KO</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;mNC_head_mesenchymal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_arch2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_hox34&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pigment_gch2&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">TERMINAL_STATES_PERTURB</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;mNC_head_mesenchymal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_arch2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mNC_hox34&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pigment&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rarga&quot;</span><span class="p">,</span> <span class="s2">&quot;rxraa&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f5&quot;</span><span class="p">,</span> <span class="s2">&quot;fli1a&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa&quot;</span><span class="p">,</span> <span class="s2">&quot;ets1&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f2&quot;</span><span class="p">,</span> <span class="s2">&quot;elf1&quot;</span><span class="p">,</span> <span class="s2">&quot;ebf3a&quot;</span><span class="p">]</span>
+<span class="n">multiple_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fli1a_elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec_mitfa_bhlhe40&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec_tfeb&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_preprocessed_cr.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="processing-by-dynamo">
+<h2>Processing by dynamo<a class="headerlink" href="#processing-by-dynamo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">Preprocessor</span><span class="p">()</span>
+<span class="n">preprocessor</span><span class="o">.</span><span class="n">preprocess_adata</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recipe</span><span class="o">=</span><span class="s2">&quot;monocle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; Running monocle preprocessing pipeline...
+|-----------&gt; filtered out 0 outlier cells
+|-----------&gt; filtered out 21 outlier genes
+|-----&gt; PCA dimension reduction
+|-----&gt; &lt;insert&gt; X_pca to obsm in AnnData Object.
+|-----&gt; [Preprocessor-monocle] completed [1.6919s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">dynamics</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; dynamics_del_2nd_moments_key is None. Using default value from DynamoAdataConfig: dynamics_del_2nd_moments_key=False
+|-----------&gt; removing existing M layers:[]...
+|-----------&gt; making adata smooth...
+|-----&gt; calculating first/second moments...
+|-----? layer X_velocity is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_latent_time_velovi is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_fit_t is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Mu is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Ms is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_latent_time_velovi is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_fit_t is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Mu is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Ms is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_latent_time_velovi is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_fit_t is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Mu is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----? layer X_Ms is not in any of the ([&#39;X_spliced&#39;, &#39;X_unspliced&#39;], [&#39;X_new&#39;, &#39;X_total&#39;], [&#39;X_uu&#39;, &#39;X_ul&#39;, &#39;X_su&#39;, &#39;X_sl&#39;]) groups, skipping...
+|-----&gt; [moments calculation] completed [12.0614s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>estimating gamma: 100%|██████████| 988/988 [00:04&lt;00:00, 228.75it/s]
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 697 × 988
+    obs: &#39;initial_size_unspliced&#39;, &#39;initial_size_spliced&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;, &#39;cell_type&#39;, &#39;stage&#39;, &#39;cell_type2&#39;, &#39;macrostates&#39;, &#39;cell_type_old&#39;, &#39;macrostates_fwd&#39;, &#39;term_states_fwd&#39;, &#39;term_states_fwd_probs&#39;, &#39;visits&#39;, &#39;nGenes&#39;, &#39;nCounts&#39;, &#39;pMito&#39;, &#39;pass_basic_filter&#39;, &#39;Size_Factor&#39;, &#39;initial_cell_size&#39;, &#39;spliced_Size_Factor&#39;, &#39;initial_spliced_cell_size&#39;, &#39;unspliced_Size_Factor&#39;, &#39;initial_unspliced_cell_size&#39;, &#39;Ms_Size_Factor&#39;, &#39;initial_Ms_cell_size&#39;, &#39;latent_time_velovi_Size_Factor&#39;, &#39;initial_latent_time_velovi_cell_size&#39;, &#39;fit_t_Size_Factor&#39;, &#39;initial_fit_t_cell_size&#39;, &#39;Mu_Size_Factor&#39;, &#39;initial_Mu_cell_size&#39;, &#39;velocity_Size_Factor&#39;, &#39;initial_velocity_cell_size&#39;, &#39;ntr&#39;
+    var: &#39;Accession&#39;, &#39;Chromosome&#39;, &#39;End&#39;, &#39;Start&#39;, &#39;Strand&#39;, &#39;gene_count_corr&#39;, &#39;is_tf&#39;, &#39;TF&#39;, &#39;velocity_genes&#39;, &#39;fit_beta&#39;, &#39;fit_gamma&#39;, &#39;fit_scaling&#39;, &#39;nCells&#39;, &#39;nCounts&#39;, &#39;pass_basic_filter&#39;, &#39;frac&#39;, &#39;use_for_pca&#39;, &#39;ntr&#39;, &#39;beta&#39;, &#39;gamma&#39;, &#39;half_life&#39;, &#39;alpha_b&#39;, &#39;alpha_r2&#39;, &#39;gamma_b&#39;, &#39;gamma_r2&#39;, &#39;gamma_logLL&#39;, &#39;delta_b&#39;, &#39;delta_r2&#39;, &#39;bs&#39;, &#39;bf&#39;, &#39;uu0&#39;, &#39;ul0&#39;, &#39;su0&#39;, &#39;sl0&#39;, &#39;U0&#39;, &#39;S0&#39;, &#39;total0&#39;, &#39;use_for_dynamics&#39;
+    uns: &#39;_scvi_manager_uuid&#39;, &#39;_scvi_uuid&#39;, &#39;coarse_fwd&#39;, &#39;eigendecomposition_fwd&#39;, &#39;macrostates_colors&#39;, &#39;macrostates_fwd_colors&#39;, &#39;neighbors&#39;, &#39;network&#39;, &#39;regulators&#39;, &#39;schur_matrix_fwd&#39;, &#39;skeleton&#39;, &#39;targets&#39;, &#39;pp&#39;, &#39;feature_selection&#39;, &#39;PCs&#39;, &#39;explained_variance_ratio_&#39;, &#39;pca_mean&#39;, &#39;dynamics&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;, &#39;macrostates_fwd_memberships&#39;, &#39;schur_vectors_fwd&#39;, &#39;term_states_fwd_memberships&#39;
+    layers: &#39;Ms&#39;, &#39;Mu&#39;, &#39;ambiguous&#39;, &#39;fit_t&#39;, &#39;latent_time_velovi&#39;, &#39;matrix&#39;, &#39;spliced&#39;, &#39;unspliced&#39;, &#39;velocity&#39;, &#39;X_Ms&#39;, &#39;X_latent_time_velovi&#39;, &#39;X_fit_t&#39;, &#39;X_spliced&#39;, &#39;X_Mu&#39;, &#39;X_velocity&#39;, &#39;X_unspliced&#39;, &#39;M_u&#39;, &#39;M_uu&#39;, &#39;M_s&#39;, &#39;M_us&#39;, &#39;M_ss&#39;, &#39;velocity_S&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;, &#39;moments_con&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">reduceDimension</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; retrieve data for non-linear dimension reduction...
+|-----? adata already have basis umap. dimension reduction umap will be skipped! 
+set enforce=True to re-performing dimension reduction.
+|-----&gt; [UMAP] completed [0.0102s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">cell_velocities</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.5041s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1790s]
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 697 × 988
+    obs: &#39;initial_size_unspliced&#39;, &#39;initial_size_spliced&#39;, &#39;initial_size&#39;, &#39;n_counts&#39;, &#39;cell_type&#39;, &#39;stage&#39;, &#39;cell_type2&#39;, &#39;macrostates&#39;, &#39;cell_type_old&#39;, &#39;macrostates_fwd&#39;, &#39;term_states_fwd&#39;, &#39;term_states_fwd_probs&#39;, &#39;visits&#39;, &#39;nGenes&#39;, &#39;nCounts&#39;, &#39;pMito&#39;, &#39;pass_basic_filter&#39;, &#39;Size_Factor&#39;, &#39;initial_cell_size&#39;, &#39;spliced_Size_Factor&#39;, &#39;initial_spliced_cell_size&#39;, &#39;unspliced_Size_Factor&#39;, &#39;initial_unspliced_cell_size&#39;, &#39;Ms_Size_Factor&#39;, &#39;initial_Ms_cell_size&#39;, &#39;latent_time_velovi_Size_Factor&#39;, &#39;initial_latent_time_velovi_cell_size&#39;, &#39;fit_t_Size_Factor&#39;, &#39;initial_fit_t_cell_size&#39;, &#39;Mu_Size_Factor&#39;, &#39;initial_Mu_cell_size&#39;, &#39;velocity_Size_Factor&#39;, &#39;initial_velocity_cell_size&#39;, &#39;ntr&#39;
+    var: &#39;Accession&#39;, &#39;Chromosome&#39;, &#39;End&#39;, &#39;Start&#39;, &#39;Strand&#39;, &#39;gene_count_corr&#39;, &#39;is_tf&#39;, &#39;TF&#39;, &#39;velocity_genes&#39;, &#39;fit_beta&#39;, &#39;fit_gamma&#39;, &#39;fit_scaling&#39;, &#39;nCells&#39;, &#39;nCounts&#39;, &#39;pass_basic_filter&#39;, &#39;frac&#39;, &#39;use_for_pca&#39;, &#39;ntr&#39;, &#39;beta&#39;, &#39;gamma&#39;, &#39;half_life&#39;, &#39;alpha_b&#39;, &#39;alpha_r2&#39;, &#39;gamma_b&#39;, &#39;gamma_r2&#39;, &#39;gamma_logLL&#39;, &#39;delta_b&#39;, &#39;delta_r2&#39;, &#39;bs&#39;, &#39;bf&#39;, &#39;uu0&#39;, &#39;ul0&#39;, &#39;su0&#39;, &#39;sl0&#39;, &#39;U0&#39;, &#39;S0&#39;, &#39;total0&#39;, &#39;use_for_dynamics&#39;, &#39;use_for_transition&#39;
+    uns: &#39;_scvi_manager_uuid&#39;, &#39;_scvi_uuid&#39;, &#39;coarse_fwd&#39;, &#39;eigendecomposition_fwd&#39;, &#39;macrostates_colors&#39;, &#39;macrostates_fwd_colors&#39;, &#39;neighbors&#39;, &#39;network&#39;, &#39;regulators&#39;, &#39;schur_matrix_fwd&#39;, &#39;skeleton&#39;, &#39;targets&#39;, &#39;pp&#39;, &#39;feature_selection&#39;, &#39;PCs&#39;, &#39;explained_variance_ratio_&#39;, &#39;pca_mean&#39;, &#39;dynamics&#39;, &#39;grid_velocity_pca&#39;
+    obsm: &#39;X_pca&#39;, &#39;X_umap&#39;, &#39;macrostates_fwd_memberships&#39;, &#39;schur_vectors_fwd&#39;, &#39;term_states_fwd_memberships&#39;, &#39;velocity_pca&#39;
+    layers: &#39;Ms&#39;, &#39;Mu&#39;, &#39;ambiguous&#39;, &#39;fit_t&#39;, &#39;latent_time_velovi&#39;, &#39;matrix&#39;, &#39;spliced&#39;, &#39;unspliced&#39;, &#39;velocity&#39;, &#39;X_Ms&#39;, &#39;X_latent_time_velovi&#39;, &#39;X_fit_t&#39;, &#39;X_spliced&#39;, &#39;X_Mu&#39;, &#39;X_velocity&#39;, &#39;X_unspliced&#39;, &#39;M_u&#39;, &#39;M_uu&#39;, &#39;M_s&#39;, &#39;M_us&#39;, &#39;M_ss&#39;, &#39;velocity_S&#39;
+    obsp: &#39;connectivities&#39;, &#39;distances&#39;, &#39;moments_con&#39;, &#39;pearson_transition_matrix&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dyn</span><span class="o">.</span><span class="n">vf</span><span class="o">.</span><span class="n">VectorField</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; VectorField reconstruction begins...
+|-----&gt; Retrieve X and V based on basis: PCA. 
+        Vector field will be learned in the PCA space.
+|-----&gt; Learning vector field with method: sparsevfc.
+|-----&gt; [SparseVFC] begins...
+|-----&gt; Sampling control points based on data velocity magnitude...
+|-----&gt; [SparseVFC] completed [0.4913s]
+|-----&gt; [VectorField] completed [0.5661s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_perturb</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="perturbation-prediction">
+<h2>Perturbation prediction<a class="headerlink" href="#perturbation-prediction" title="Link to this heading">#</a></h2>
+<p>Function based perturbation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_ko</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">)</span>
+<span class="n">single_ko</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;NPB_nohox&quot;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cand_list</span> <span class="o">=</span> <span class="n">single_ko</span> <span class="o">+</span> <span class="n">multiple_ko</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dl_score_all</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">dl_sig_all</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">TF</span> <span class="ow">in</span> <span class="n">cand_list</span><span class="p">:</span>
+    <span class="n">TF_list</span> <span class="o">=</span> <span class="n">split_elements</span><span class="p">([</span><span class="n">TF</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dl_score</span><span class="p">,</span> <span class="n">dl_sig</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">density_likelihood_dyn</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span> <span class="n">TF_list</span><span class="p">,</span> <span class="n">start_indices</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">,</span> <span class="n">n_simulations</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="p">)</span>
+    <span class="n">dl_score_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_score</span><span class="p">)</span>
+    <span class="n">dl_sig_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_sig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3154a51752694f88865ab1015407f3b4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fadb3fcccfc84b8a827e045043f3a231", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;elk3&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1830s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1614s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d1d10125b0f64c5c97d01e8b3539e08d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a0af53c1c04049b1a06533c36ffe74eb", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3f8b41ed495741abac47a77b4f1377ee", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d1de64b363184db3a14350b99229d35e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;fli1a&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1929s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1777s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f7a14200576b4278a92707aca257da4f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a11d814e8be04fe0a0d4175e4985cd1f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6697637147fc473c902f652d6ef95b20", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8e0fc29105ad47aeb8b901434e0809c5", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;mitfa&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1754s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1566s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ca9a1178997d4421be401b883a6f711d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "41ff9d21a5cb4e90bdc10d7002ea53bd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3fa74464d6f242c5af11f54c394d5612", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "11fe924377eb4ffabf3742127114c225", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;tfec&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1990s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1816s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "707bfc7b016d4da49b84b0704607a3f9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "38ed333f0e264d3c85067680bab16c1c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0b54eed366744f10a025219c3a326f5d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c14da8e5945148c6a8cd9d8d74219302", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;elf1&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1930s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1771s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "68956222569d434d8488b8fc38eb50ab", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c0048b54b7c8421390154969b9931ab5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba559220e0a14ec1876f6301442340bf", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "855c9d588cbe40f491fa1bcbe933996e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;ebf3a&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.2008s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1818s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e6d90d5133fc4a5b998230e14193db2b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0b719c2b4e0f4d4ab4309f6e18def395", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bb2296bea1904427b3cff176acc0454a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a4fbe8d0b08d4124860ac65f23313627", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;rarga&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.2157s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1597s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "98d5a5c5676e464ca7b4ad0ff1da3098", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f129837be0e542dc9856b19ee9049cb9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e7b68185454248ac936267593a2387a2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b20e6bef2d124820b1b6c2312b1ee2c9", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;rxraa&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1826s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1610s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "126d77d5c18c40b994f531172e17a7f2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6b27196118664746b015322d9f2c8d12", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e17835f543e546948177bb3635409bc0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0f80fe59235e483a8eb0d9094cb7f94c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;nr2f5&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1766s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1600s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f39af46635c433194f84637a44216db", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fd6c1880585b4f198d75cc021058a08e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "92d2185a33e64bbbae059944f14cdd37", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "73b5756a05724d31b7476c1d6a158011", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;nr2f2&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1904s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1636s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e35808f956fc42d28ac2b51e1a4398b0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "71b8ff0d9f484b48a9e5861e9b132cde", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "964b82dc67ed4721bbcf6772990784c5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "45e5ee4c319a4649802f5ee6b9a4829e", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;ets1&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1896s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1666s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3e8ef3cc140a449e9753c772b2916c44", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b5bf594a93c94fd08f59458a8c0ac55b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a718a909966b4c17952a0fdca473a063", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a16312fcaa9b48fabe24677a8afa7f55", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;fli1a&#39;, &#39;elk3&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1789s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1572s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8eb2405a90f04d3983113e6aacbb8155", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1c7264c9308446b1acbf268abf443c25", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "14b11eae3d9645a19af587cbd47b9202", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "de7b23492c8a450fb191603f62923073", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;tfec&#39;, &#39;mitfa&#39;, &#39;bhlhe40&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.2098s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1844s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9f3c1ca1a8ff4722be88e2e84e8d7d44", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "218723db53634dff8ac5fdb8c076f8e9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1a3ae1a0857d41b5853b395c2c3cff81", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ec67ee8d34cc4183a6f067e0770cc258", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;mitfa&#39;, &#39;tfec&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1818s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1600s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8acc9468482f4657b55a46bd3d239f56", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f842483ad594f3583ebee811c274cea", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "cef891a3e66c4c22a6e9c435e64e7350", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e669c5f6aed048809772db41e17492bd", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico knockout [&#39;mitfa&#39;, &#39;tfec&#39;, &#39;tfeb&#39;]
+|-----&gt; Project the high dimensional vector field after KO to umap.
+|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] in progress: 100.0000%|-----&gt; [calculating transition matrix via pearson kernel with sqrt transform.] completed [0.1791s]
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1591s]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bf5ceeeeee754ec0a4415cfcdf43429b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2a99c1f39e014726a486b1c285fdce61", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_m_single</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_score_all</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)]),</span> <span class="n">index</span><span class="o">=</span><span class="n">cand_list</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="n">TERMINAL_STATES_KO</span>
+<span class="p">)</span>
+<span class="n">pred_m_multiple</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_score_all</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:]),</span> <span class="n">index</span><span class="o">=</span><span class="n">cand_list</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">TERMINAL_STATES_KO</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pval_m_single</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_sig_all</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)]),</span> <span class="n">index</span><span class="o">=</span><span class="n">cand_list</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="n">TERMINAL_STATES_KO</span>
+<span class="p">)</span>
+<span class="n">pval_m_multiple</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_sig_all</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:]),</span> <span class="n">index</span><span class="o">=</span><span class="n">cand_list</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">TERMINAL_STATES_KO</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Perform KO single screening using function based perturbation</span>
+<span class="n">coef_KO</span> <span class="o">=</span> <span class="n">delta_to_probability</span><span class="p">(</span><span class="n">pred_m_single</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+
+<span class="c1">## Perform KO multiple screening using function based perturbation</span>
+<span class="n">coef_KO_multiple</span> <span class="o">=</span> <span class="n">delta_to_probability</span><span class="p">(</span><span class="n">pred_m_multiple</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coef_KO</span> <span class="o">=</span> <span class="n">coef_KO</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">single_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">]</span>
+<span class="n">coef_KO_multiple</span> <span class="o">=</span> <span class="n">coef_KO_multiple</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">multiple_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">]</span>
+
+<span class="n">pval_KO</span> <span class="o">=</span> <span class="n">pval_m_single</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">single_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">]</span>
+<span class="n">pval_KO_multiple</span> <span class="o">=</span> <span class="n">pval_m_multiple</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">multiple_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gene-expression-perturbation">
+<h2>Gene expression perturbation<a class="headerlink" href="#gene-expression-perturbation" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Dynamo (perturbation)</span>
+<span class="n">perturbation_dyn</span> <span class="o">=</span> <span class="n">TFScanning_perturbation_dyn</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">,</span> <span class="n">single_ko</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>calculating Jacobian for each cell: 100%|██████████| 697/697 [00:00&lt;00:00, 223828.95it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; project the pca perturbation vector to low dimensional space....
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1890s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done elk3
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1608s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done fli1a
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1661s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done mitfa
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1639s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done tfec
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1635s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done elf1
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1640s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done ebf3a
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1735s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done rarga
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1654s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done rxraa
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1777s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done nr2f5
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1496s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done nr2f2
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1694s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;pca_perturbation&#39;) to visualize the perturbation vector
+Done ets1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Dynamo (perturbation) in multiple</span>
+<span class="n">multiple_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mitfa_tfec_tfeb&quot;</span><span class="p">,</span> <span class="s2">&quot;fli1a_elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec_mitfa_bhlhe40&quot;</span><span class="p">]</span>
+<span class="n">multiple_ko_list</span> <span class="o">=</span> <span class="n">split_elements</span><span class="p">(</span><span class="n">multiple_ko</span><span class="p">)</span>
+<span class="n">perturbation_dyn_multiple</span> <span class="o">=</span> <span class="n">Multiple_TFScanning_perturbation_dyn</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">TERMINAL_STATES_KO</span><span class="p">,</span> <span class="n">multiple_ko_list</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1630s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;umap_perturbation&#39;) to visualize the perturbation vector
+Done mitfa_tfec_tfeb
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1442s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;umap_perturbation&#39;) to visualize the perturbation vector
+Done fli1a_elk3
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1471s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;umap_perturbation&#39;) to visualize the perturbation vector
+Done mitfa_tfec
+|-----&gt; In silico perturbation of single-cells and prediction of cell fate after perturbation...
+|-----&gt; Retrive X_pca, PCs, pca_mean...
+|-----&gt; Calculate perturbation effect matrix via \delta Y = J \dot \delta X....
+|-----&gt; project the pca perturbation vector to low dimensional space....
+|-----&gt; [projecting velocity vector to low dimensional embedding] in progress: 100.0000%|-----&gt; [projecting velocity vector to low dimensional embedding] completed [0.1543s]
+|-----&gt; you can use dyn.pl.streamline_plot(adata, basis=&#39;umap_perturbation&#39;) to visualize the perturbation vector
+Done tfec_mitfa_bhlhe40
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Perform KO screening using function based perturbation</span>
+<span class="n">coef_perturb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perturbation_dyn</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">]))</span>
+<span class="n">coef_perturb</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">perturbation_dyn</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+<span class="n">coef_perturb</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">perturbation_dyn</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">coef_perturb</span> <span class="o">=</span> <span class="n">coef_perturb</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">single_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_PERTURB</span><span class="p">]</span>
+
+<span class="c1">## Perform perturbation screening using gene expression based perturbation</span>
+<span class="n">coef_perturb_multiple</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perturbation_dyn_multiple</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">]))</span>
+<span class="n">coef_perturb_multiple</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">perturbation_dyn_multiple</span><span class="p">[</span><span class="s2">&quot;TF&quot;</span><span class="p">]</span>
+<span class="n">coef_perturb_multiple</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">get_list_name</span><span class="p">(</span><span class="n">perturbation_dyn_multiple</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">coef_perturb_multiple</span> <span class="o">=</span> <span class="n">coef_perturb_multiple</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">multiple_ko</span><span class="p">,</span> <span class="n">TERMINAL_STATES_PERTURB</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="n">coef_KO</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_KO_single.csv&quot;</span><span class="p">)</span>
+    <span class="n">coef_KO_multiple</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_KO_multiple.csv&quot;</span><span class="p">)</span>
+    <span class="n">pval_KO</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_KO_single_pval.csv&quot;</span><span class="p">)</span>
+    <span class="n">pval_KO_multiple</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_KO_multiple_pval.csv&quot;</span><span class="p">)</span>
+
+    <span class="n">coef_perturb</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_perturb_single.csv&quot;</span><span class="p">)</span>
+    <span class="n">coef_perturb_multiple</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="s2">&quot;dynamo_perturb_multiple.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-dynamo-py"
+        },
+        kernelOptions: {
+            name: "conda-env-dynamo-py",
+            path: "./zebrafish_perturb"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-dynamo-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3_regvelo_perturbation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Compute density depletion likelihood with RegVelo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3_celloracle.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CellOracle-based perturbation prediction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-by-dynamo">Processing by dynamo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-prediction">Perturbation prediction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gene-expression-perturbation">Gene expression perturbation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

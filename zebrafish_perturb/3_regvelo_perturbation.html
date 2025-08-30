@@ -1,0 +1,979 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Compute density depletion likelihood with RegVelo &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'zebrafish_perturb/3_regvelo_perturbation';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dynamo-based perturbation analysis" href="3_dynamo.html" />
+    <link rel="prev" title="Evaluate the cell fate perturbation significance on perturb-seq" href="2_perturb_seq_ts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/4_alpha_prediction.html">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/5_latent_time.html">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Smart-seq3 and perturb-seq combined analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_Perturb_seq_scanpy.html">Reannotation of pigment cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_perturb_seq_ts.html">Evaluate the cell fate perturbation significance on perturb-seq</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Compute density depletion likelihood with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_benchmark.html">Benchmark perturbation prediction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_simulation.html">Simulate synthetic datasets with dyngen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/4_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/zebrafish_perturb/3_regvelo_perturbation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Compute density depletion likelihood with RegVelo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repeats-run-regvelo">Repeats run regvelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-data">Save data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="compute-density-depletion-likelihood-with-regvelo">
+<h1>Compute density depletion likelihood with RegVelo<a class="headerlink" href="#compute-density-depletion-likelihood-with-regvelo" title="Link to this heading">#</a></h1>
+<p>Using regvelo to predict the density change likelihood</p>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cellrank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">regvelo</span><span class="w"> </span><span class="kn">import</span> <span class="n">REGVELOVI</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.benchmarking</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_output</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools.perturbation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">density_likelihood</span><span class="p">,</span>
+    <span class="n">in_silico_block_simulation</span><span class="p">,</span>
+    <span class="n">split_elements</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;svg.fonttype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scvi</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[rank: 0] Seed set to 0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;zebrafish&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rarga&quot;</span><span class="p">,</span> <span class="s2">&quot;rxraa&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f5&quot;</span><span class="p">,</span> <span class="s2">&quot;fli1a&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa&quot;</span><span class="p">,</span> <span class="s2">&quot;ets1&quot;</span><span class="p">,</span> <span class="s2">&quot;nr2f2&quot;</span><span class="p">,</span> <span class="s2">&quot;elf1&quot;</span><span class="p">,</span> <span class="s2">&quot;ebf3a&quot;</span><span class="p">]</span>
+<span class="n">multiple_ko</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fli1a_elk3&quot;</span><span class="p">,</span> <span class="s2">&quot;tfec_mitfa_bhlhe40&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec&quot;</span><span class="p">,</span> <span class="s2">&quot;mitfa_tfec_tfeb&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mNC_arch2&quot;</span><span class="p">,</span> <span class="s2">&quot;mNC_head_mesenchymal&quot;</span><span class="p">,</span> <span class="s2">&quot;mNC_hox34&quot;</span><span class="p">,</span> <span class="s2">&quot;Pigment&quot;</span><span class="p">]</span>
+<span class="n">terminal_states_compare</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mNC_arch2&quot;</span><span class="p">,</span> <span class="s2">&quot;mNC_head_mesenchymal&quot;</span><span class="p">,</span> <span class="s2">&quot;mNC_hox34&quot;</span><span class="p">,</span> <span class="s2">&quot;Pigment_gch2&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_preprocessed.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;perturb_repeat_runs&quot;</span> <span class="o">/</span> <span class="s2">&quot;rgv_model_0&quot;</span><span class="p">,</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;perturb_repeat_runs&quot;</span> <span class="o">/</span> <span class="s2">&quot;rgv_model_1&quot;</span><span class="p">,</span>
+    <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;perturb_repeat_runs&quot;</span> <span class="o">/</span> <span class="s2">&quot;rgv_model_2&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="n">nrun</span><span class="p">]</span>
+    <span class="n">vae</span> <span class="o">=</span> <span class="n">REGVELOVI</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span>
+    <span class="n">set_output</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">vae</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">n_obs</span><span class="p">)</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;control.h5ad&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">TF</span> <span class="ow">in</span> <span class="n">single_ko</span> <span class="o">+</span> <span class="n">multiple_ko</span><span class="p">:</span>
+        <span class="n">TF_list</span> <span class="o">=</span> <span class="n">split_elements</span><span class="p">([</span><span class="n">TF</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">adata_target_perturb</span><span class="p">,</span> <span class="n">reg_vae_perturb</span> <span class="o">=</span> <span class="n">in_silico_block_simulation</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="n">TF_list</span><span class="p">)</span>
+        <span class="n">adata_target_perturb</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TF</span><span class="si">}</span><span class="s2">.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_0/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_1/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+<span class=" -Color -Color-Blue">INFO    </span> File <span class=" -Color -Color-Magenta">/lustre/groups/ml01/workspace/weixu.wang/regvelo_revision/Perturb_seq/data/rgv_model_2/</span>model.pt      
+         already downloaded                                                                                        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="repeats-run-regvelo">
+<h2>Repeats run regvelo<a class="headerlink" href="#repeats-run-regvelo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dl_all_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">dl_sig_all_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;control.h5ad&quot;</span><span class="p">)</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type_old&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;NPB_nohox&quot;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">annotation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;annotation.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sl</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;pigment_annotation&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pigment_gch2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-1&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">],</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pigment_gch2&quot;</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cell_type_colors&quot;</span><span class="p">]</span>
+
+    <span class="n">vk</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">VelocityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+    <span class="n">vk</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
+    <span class="n">ck</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ConnectivityKernel</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span><span class="o">.</span><span class="n">compute_transition_matrix</span><span class="p">()</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">vk</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">ck</span>
+    <span class="c1"># kernel = vk</span>
+
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">estimators</span><span class="o">.</span><span class="n">GPCCA</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">compute_macrostates</span><span class="p">(</span><span class="n">n_states</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">cluster_key</span><span class="o">=</span><span class="s2">&quot;cell_type_old&quot;</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">set_terminal_states</span><span class="p">(</span><span class="n">terminal_states</span><span class="p">)</span>
+
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">][</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pigment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">][</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pigment&quot;</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">][</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pigment&quot;</span><span class="p">]</span>
+
+    <span class="n">dl_all</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dl_sig_all</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">TF</span> <span class="ow">in</span> <span class="n">single_ko</span> <span class="o">+</span> <span class="n">multiple_ko</span><span class="p">:</span>
+        <span class="n">adata_perturb</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TF</span><span class="si">}</span><span class="s2">.h5ad&quot;</span><span class="p">)</span>
+        <span class="n">adata_perturb</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;term_states_fwd&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">dl_score</span><span class="p">,</span> <span class="n">dl_sig</span><span class="p">,</span> <span class="n">cont_sim</span><span class="p">,</span> <span class="n">pert_sim</span> <span class="o">=</span> <span class="n">density_likelihood</span><span class="p">(</span>
+            <span class="n">adata</span><span class="p">,</span> <span class="n">adata_perturb</span><span class="p">,</span> <span class="n">start_indices</span><span class="p">,</span> <span class="n">terminal_states_compare</span><span class="p">,</span> <span class="n">n_simulations</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="p">)</span>
+        <span class="n">dl_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_score</span><span class="p">)</span>
+        <span class="n">dl_sig_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_sig</span><span class="p">)</span>
+
+    <span class="n">dl_all_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_all</span><span class="p">)</span>
+    <span class="n">dl_sig_all_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl_sig_all</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9692f3e6339f4771be772a23bb6005e8", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "83176136f59b44d9836dddc110fa565c", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-29 22:02:27,500 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6e8025ce23a44508b7c06bc225e472ee", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8f880a2766054ddc8c365be3dc32483a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "31ec3c8ed9b34aaa97b8673a4cf50458", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "42b71286a31b4088aa4b98ef3e0533c0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8d092b21675f403c996c09083dbc2382", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "653c5168a5664a4cae38c1a1ab42372d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2d0e3f64c3df4450b18840b3ccb6f9a5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0e8ebb377fc74bd5a0c6c2f6da43c7a5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "864eeb216d0242329b888266e2b8dc15", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "974254846a944e21a72efd5adfe71888", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "276419783f0b40d8bb81041e5fb55daa", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "864f55e1cf444e6fa64e3e3e1b6bf009", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2088d362963a4ece8f22719c2c4faa20", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ef13c57c183e4c098b42bbb3d4e83344", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bfc47e2417ef41f1b6368b7aadf67fd5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "df19519b57b64a59af7f1e133ef7f20b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d35c34a527a6465baca19923b2c538b7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3f8cbc7c9ce14b96972c9686852b9e52", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "728e4bd6149c419e9307df5d0a8ac9de", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "de96d41484794b3db1d0e5a16e2cac4d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e1e1a6a9acb8452cb976ad4385459ec7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "40b3dbd2c6144e04889fd3e933c01552", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "26c2bb3ad35844958643aa879e30c528", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "73ccf866d89d487e9eab1f7454964593", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "8888989ddb734610b7f109278a13ebec", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b729dcf3c26b4c3d899649c561c1090c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2bb8bf8503b042bca3ae8f8cd65a6fde", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a45f86f42cae45aabfad6cd03f8ea773", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b7d84ab4b40d440781156245db33933d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3c668e4f22e94460882df3241356025f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e61eb8af54394137a9a86b88b3d4edb3", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dcd55596131e48c6adb34ab6124953d0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba3454deaafc4f4ba641f9d9483ea143", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dfd16229f3de497dac160850384f2c11", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1b58d3ed547d4908bcd7c512731c7013", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9a8f8f1a172f4ac1aa26fb60668885af", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dfb7d9349a9a46ee9ca799ab82abb653", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "fd4281367b864312b3d361010c8c9000", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a4d5ef8f9ee447c39a8ea705d753420a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b2bfe6704eaa4b908640484cbed11259", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "7354daad7826453ebe0d12d1b75e5ba0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "78527ae329c14e2790a4f76ecae0d14b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a3ca2afe8add486787d928c3584d5f25", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "71767727b9e34f5289ef984fc7af3ce9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bff264d575024d189c06bee10835dc73", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0bc311e845b542649c9d145fbd1ed1e7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "56d1e2f451474b2680ee5c0be79b12d2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "123f3e615b2e4737b91360ab72ccf279", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6e0d7621b72f469e983863b80796500a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5b61e1b1ad5047288d7ad9fa5b137d19", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a45c74c41d744670bcf28ee7ae483394", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ccff44914abf48198ebd6bdc254a2669", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2bf6d82195684cb1a6dfb131ea838547", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "031c93bf9eb844bcbd4fd42ea1f083df", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "397110284d72475ab1487603751705e0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dc5c2e3704394c0d95db4fd63d32f357", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ec899d0de12f491e878d2b7a08131828", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3c213fe8a3f54e9d9647dfa489678fd0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "702000daff834692afd505a65da87f08", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ecf389f08b474729abff83a5687acdcf", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "54708893de374d10ad349d3a091b71a4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "04d8dfc5ca6e44a9a4c6b9a7f129acd1", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-29 22:07:54,262 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "64a51ed60bac41fea3fc715bffdf9730", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a2c6d1b0c52544798e163e26710f5b5d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "264958183fce43fc935a16d043297e8e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4ee5849d6c7c4307bc4dfc09f12a9812", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a43e8cb71abd4a2aa43e8884ec451b91", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f0b366c2eea4548a2f9d2d2bd2325b6", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5d56e969b161404eae45f11e63387448", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d76bb26e43004986b2d1ca06762f0ac4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "50b2890a8a9649708c36fc23e61ad0e4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0b5f6ed24f43465d8f9bb0ea4bea2297", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3be13975148240c8b511f634dd3b44d0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "aa0376f6d370479882325b548207efe7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "cd234a1d94c64f86829642a8eefd32d2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a77c75b0b6334f48975b670f3a444e03", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3da36abb0bb54f4f91ff73a58fd9e5c7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "96f5935045ea4449abe1c149af6699d4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b73772e902f24488bee3f55d04a15802", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5fb7402a11ae4350829f9efd80f9a330", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9bf8ad539b7045d2a6f31bf9cb4ec159", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d65df6d8bcc14549aeff03a2e191eeb0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba0d512911cb4271a51e4106d4031bef", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3f07299ce5b146199493c3c280f93d8b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e3bb4b12dd29438dba8d51c6a3ca0db3", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4d7bd7037ebb4da4a9ac6849a5537511", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "c540316ead94453c991c969ff79cb6a5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f78e2d7dd03946c8acc68415080676bd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dc4439487ad64f649ba2f29083a531b4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f0558237b220469685b815208f80f8ca", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dadc1cf484944edf904aa51e2453afe3", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "925726f314f8401694dd9319a73d9f27", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "de72e28b529149889fcb4a92021a9802", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b2cb66391dcb4f80884b7512c942949f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "25f0e814559646ab97b5442272952bed", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "283117fad0fc49b0977a3a2fca54afdd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "97cd14c79a104771a9e918c07f302463", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e1389ef3b0b84ecab5f91f8899328cca", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "91aaa8beb36648fbb50db0ff075335ce", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5aa48880d5a54819909c8248ef362b14", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "eceddc39ec2f4be6b65bd0002ac092ed", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f3e0f29a40b74324a70062ae1fb86f60", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3a90676d06c64c0dba6c8e8d31b28f6e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "beb1204c21244ccc8dd1cde43178c158", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "22d4f7999ac3430184965627e0b6ff45", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "91bc402b0a1b4dd895d8c73adb411d6e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ed667a8451344dcbaceea103aede64ea", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5fd9e3d313774b57bd61e0d58c66f1b2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d6a376ccf90a4dd59e764e9d7672bbb7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "309053bfe3744b27be1754983e3ebb0e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5a919858a5834943b9c32ac42e3596c0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "56ffa143ba874dd58f3f88bac42c7ffb", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a9b5572a8f884ad0b1d954263126ccc0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "23abe26dd6e641b6926289f7227674e8", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "556ec20aa5304b05afcbdb79866b08cc", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f2ffab72393141caa21e5dc3aa915fe2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d89b89e73d4749bbb922bfbb6b5e01e5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "29d0d9e2506e4ea781f00eceaefc45e4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "09fe6bd3c0c44ea1a2c45ab9201c732e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "db9c2d0ec0dc49698f39f731488fe6fc", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ec27fa74016941878e8b14b6c04237c3", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "50ac8e6438c3496880556523183a9a53", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0ba70db56a424f2bbcc1c7cac357176b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bc1c4d53c5c34a08890bf8e4f3d11b1b", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Unable to import `petsc4py` or `slepc4py`. Using `method=&#39;brandts&#39;`
+WARNING: For `method=&#39;brandts&#39;`, dense matrix is required. Densifying
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-29 22:13:28,768 - INFO - Using pre-computed Schur decomposition
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cbc7011541c44615a4febb8a05cb2a86", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "51b45d054bb449acbd42c1016329db87", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "242bc513e6484cf2b7f5488b1020131f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "445ea34540d14138b0b6a4d35bc0c20d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "01c0b09f7b51471b8b01407e3a20c6fa", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "afd6d1657fbd421aaa34570248fb4325", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2220f5c17b9347ddaa0d732dda1e1954", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "dfba6523cc6540ef9e77550b0b2d4eef", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "7b2b3174b38c4bbb84142cdf80495265", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e2cf123ba2d74a75ad459dc6a1305f9f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "60250d6582b64653a527632ff7f99ea2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4f42f479d59d434d9362b7c4ededaf08", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bedbb5038e714f0995ab39356693b3d9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "7bc5b8f2c96444c28c6fb3d7c45a5b0e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "21146e1857a149d186f847bc781f17c0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "aec9bc71cfcf4e9d97a51802bd77872a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "90b890728a7e4a61b202b088119c583b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "63189ae717de404a9846fd87145c2cdd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "94c3f32076f241f4b5312636a6124c9d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "94ede371dbe34b8cbf9d8b56f6c895b4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e16910e097c94398aca0f242c404efa1", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "eb94f54cb2594bb5b03c617df1d6bbc1", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "08bd83736d6349fea80342815f3b618c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "131aa9f216514688ab83c968df0e5f80", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "753edbb9eadc44139873e6873716a1f4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "78414c1eb31d4eb390900f691596317b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1e3a4b39a544483689919436cae0bedd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "701d8547c6e24a3ba56dbf3c6dbcfcc9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "92fe9c2bab0f4ac0838397492583d3b4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "772a9a048fbb42828ca8c4438140b83c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "015e3ac5fd3045b295d7653d3951eee2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2dac87495eaf43b680a4783c951fe6a7", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d6c6712a9b7c4c18a094f0f89b7f5acd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "5af01b5a5a654ce4ae6ae7a14e58792a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "d7c883bad535473f9491c2a6076ee6d4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e9ef2d7496d342b3a152fc6831a90848", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "daff8da43b5c41d6b3700b6cbb34487f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3d3b4456e0274515b984436eaefaf197", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6a3f44843c214053b5a392856d0c75ff", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b874386bbb1b4652afc1320ab272667e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "aea12f334ca0488c843a490acb188f79", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "121dc4fb5c4043b58b6765d2c2ab125b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "9564b37342d64f7ab49fb63c22c2e79f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "76055c6a9d0f4c8283e09adbc7098700", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba42f73b79044802bddfee57f14f4210", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2b8d3d3428844ee49fec7b2dacfe5480", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "13c640dff6354c38a20eb233f80d35d1", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "1d0bd70186a048e79e05cced26e6fa0c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "020211e48d29413ea2c35292ba825f5e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "52a9741296154c69959755cc74268bd9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "4a67dbe7240946e4ae89249d09836442", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a29fa426df5041d1a7663ba582cdb3c2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0f236561c781412d9560723a6570f7dd", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ac03283133304134b5184fa97a908a86", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "40c66fbb8d5b4fda89d2bf5ded734691", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "17ee90e1223e42bd915a3e42e5573d52", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "78b2c0624e6f4184a399d14948e2b5d3", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "f94568bd787643b49d0868e801cdaedb", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "80f7137d67d34703a43158452fdbd12c", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "3c22a80c74074f2dbf43a106c7be03ad", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="save-data">
+<h2>Save data<a class="headerlink" href="#save-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">nrun</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dl_all_list</span><span class="p">)):</span>
+    <span class="n">dl_all</span> <span class="o">=</span> <span class="n">dl_all_list</span><span class="p">[</span><span class="n">nrun</span><span class="p">]</span>
+    <span class="n">dl_sig_all</span> <span class="o">=</span> <span class="n">dl_sig_all_list</span><span class="p">[</span><span class="n">nrun</span><span class="p">]</span>
+
+    <span class="n">pred_m_single</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_all</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)]),</span> <span class="n">index</span><span class="o">=</span><span class="n">single_ko</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">terminal_states_compare</span><span class="p">)</span>
+    <span class="n">pred_m_multiple</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_all</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:]),</span> <span class="n">index</span><span class="o">=</span><span class="n">multiple_ko</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">terminal_states_compare</span>
+    <span class="p">)</span>
+    <span class="n">pval_m_single</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_sig_all</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)]),</span> <span class="n">index</span><span class="o">=</span><span class="n">single_ko</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">terminal_states_compare</span>
+    <span class="p">)</span>
+    <span class="n">pval_m_multiple</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dl_sig_all</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">single_ko</span><span class="p">)</span> <span class="p">:]),</span> <span class="n">index</span><span class="o">=</span><span class="n">multiple_ko</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">terminal_states_compare</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+        <span class="n">pred_m_single</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;regvelo_single.csv&quot;</span><span class="p">)</span>
+        <span class="n">pred_m_multiple</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;regvelo_multiple.csv&quot;</span><span class="p">)</span>
+        <span class="n">pval_m_single</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;regvelo_single_pval.csv&quot;</span><span class="p">)</span>
+        <span class="n">pval_m_multiple</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;results&quot;</span> <span class="o">/</span> <span class="p">(</span><span class="s2">&quot;runs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nrun</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="s2">&quot;regvelo_multiple_pval.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_preprocessed_cr.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-dynamo-py"
+        },
+        kernelOptions: {
+            name: "conda-env-dynamo-py",
+            path: "./zebrafish_perturb"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-dynamo-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_perturb_seq_ts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Evaluate the cell fate perturbation significance on perturb-seq</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3_dynamo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Dynamo-based perturbation analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repeats-run-regvelo">Repeats run regvelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-data">Save data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
