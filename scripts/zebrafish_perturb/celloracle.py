@@ -13,17 +13,15 @@ import pandas as pd
 import celloracle as co
 import scanpy as sc
 import scvelo as scv
-from celloracle.applications import Gradient_calculator, Oracle_development_module
-from scvelo import logging as logg
+from celloracle.applications import Gradient_calculator
 
 from rgv_tools import DATA_DIR
 from rgv_tools.perturbation import (
-    split_elements,
-    combine_elements,
-    TFScanning_perturbation_co,
+    get_list_name,
     Multiple_TFScanning_perturbation_co,
+    split_elements,
+    TFScanning_perturbation_co,
 )
-from rgv_tools.perturbation import get_list_name
 
 # %% [markdown]
 # ## Constants
