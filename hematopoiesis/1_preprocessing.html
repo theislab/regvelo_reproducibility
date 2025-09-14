@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Preprocessing of the human hematopoiesis dataset &#8212; RegVelo&#39;s reproducibility repository</title>
+    <title>Basic preprocessing and analysis of the human hematopoiesis dataset &#8212; RegVelo&#39;s reproducibility repository</title>
   
   
   
@@ -240,7 +240,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Preprocessing of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basic preprocessing and analysis of the human hematopoiesis dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
@@ -472,7 +472,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Preprocessing of the human hematopoiesis dataset</h1>
+    <h1>Basic preprocessing and analysis of the human hematopoiesis dataset</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -501,9 +501,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="preprocessing-of-the-human-hematopoiesis-dataset">
-<h1>Preprocessing of the human hematopoiesis dataset<a class="headerlink" href="#preprocessing-of-the-human-hematopoiesis-dataset" title="Link to this heading">#</a></h1>
-<p>Notebook for preprocessing human hematopoiesis dataset.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="basic-preprocessing-and-analysis-of-the-human-hematopoiesis-dataset">
+<h1>Basic preprocessing and analysis of the human hematopoiesis dataset<a class="headerlink" href="#basic-preprocessing-and-analysis-of-the-human-hematopoiesis-dataset" title="Link to this heading">#</a></h1>
+<p>Notebook for preprocessing human hematopoiesis dataset</p>
 <section id="library-imports">
 <h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -566,7 +566,7 @@ document.write(`
 <h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;hematopoiesis&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;hematopoiesis_revision&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -651,7 +651,15 @@ Extracted 2000 highly variable genes.
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing neighbors
     using &#39;X_pca&#39; with n_pcs = 30
-    finished (0:00:06)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-26 01:41:29.076266: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1742949690.276976  477642 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1742949690.947660  477642 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    finished (0:01:20)
 </pre></div>
 </div>
 </div>
@@ -724,12 +732,19 @@ Extracted 2000 highly variable genes.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity_genes</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## We keep the genes that pass the filtering criteria</span>
+<span class="c1">## min_max_scaling will include 13 new velocity genes, we only consider the velocity genes that is shared before and after scaling</span>
+<span class="n">velocity_genes</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_max_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">keep_genes</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">velocity_genes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">keep_genes</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">velocity_genes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computing velocities
+    finished (0:00:00) --&gt; added 
+    &#39;velocity&#39;, velocity vectors for each individual cell (adata.layers)
+computing velocities
     finished (0:00:00) --&gt; added 
     &#39;velocity&#39;, velocity vectors for each individual cell (adata.layers)
 </pre></div>
@@ -748,7 +763,7 @@ Extracted 2000 highly variable genes.
 <p>Select genes that are either part of the transcription factor (TF) list or <code class="docutils literal notranslate"><span class="pre">velocity_genes</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;tf&quot;</span><span class="p">]],</span> <span class="n">velocity_genes</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;tf&quot;</span><span class="p">]],</span> <span class="n">keep_genes</span><span class="p">)</span>
 <span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[:,</span> <span class="n">var_mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -774,7 +789,7 @@ Extracted 2000 highly variable genes.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## focus on velocity genes to ensure calculation stability of scvelo and veloVI</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># focus on velocity genes to ensure calculation stability of scvelo and veloVI</span>
 <span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;velocity_genes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">velocity_genes</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -803,16 +818,16 @@ Extracted 2000 highly variable genes.
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "conda-env-regvelo_test-py"
         },
         kernelOptions: {
-            name: "python3",
+            name: "conda-env-regvelo_test-py",
             path: "./hematopoiesis"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
 
                 </article>
               
