@@ -30,7 +30,7 @@ scvi.settings.seed = 0
 # ## Constants
 
 # %%
-DATASET = "hematopoiesis"
+DATASET = "hematopoiesis_revision"
 
 # %%
 SAVE_DATA = True
@@ -57,11 +57,11 @@ W = adata.uns["skeleton"].copy()
 W = torch.tensor(np.array(W)).int()
 
 ## prepare TF
-TF = adata.var_names[adata.var["TF"]]
+TF = adata.var_names[adata.var["tf"]]
 
 # %%
 ### repeat run the model to get aggregate performance
-terminal_states = ["Meg", "Mon", "Bas", "Ery"]
+terminal_states = ["Meg", "Mon", "Bas", "Ery", "Neu"]
 for nrun in range(0, 15):
     print("training model...")
     REGVELOVI.setup_anndata(adata, spliced_layer="Ms", unspliced_layer="Mu")
@@ -86,7 +86,7 @@ for nrun in range(0, 15):
 
     while True:
         try:
-            perturb_screening = TFScanning(model, adata, 6, "cell_type", terminal_states, TF, 0)
+            perturb_screening = TFScanning(model, adata, 7, "cell_type", terminal_states, TF, 0)
             coef = pd.DataFrame(np.array(perturb_screening["coefficient"]))
             coef.index = perturb_screening["TF"]
             coef.columns = get_list_name(perturb_screening["coefficient"][0])
@@ -113,3 +113,5 @@ for nrun in range(0, 15):
             vae.train()
             print("save model...")
             vae.save(model)
+
+# %%
