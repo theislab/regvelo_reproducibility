@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Preprocessing of the human hematopoiesis dataset
+# # Basic preprocessing and analysis of the human hematopoiesis dataset
 #
-# Notebook for preprocessing human hematopoiesis dataset.
+# Notebook for preprocessing human hematopoiesis dataset
 
 # %% [markdown]
 # ## Library imports
@@ -35,7 +35,7 @@ plt.rcParams["svg.fonttype"] = "none"
 # ## Constants
 
 # %%
-DATASET = "hematopoiesis"
+DATASET = "hematopoiesis_revision"
 
 # %%
 SAVE_DATA = True
@@ -100,7 +100,11 @@ if SAVE_DATA:
 adata = set_prior_grn(adata, gt_net)
 
 # %%
-velocity_genes = preprocess_data(adata.copy()).var_names.tolist()
+## We keep the genes that pass the filtering criteria
+## min_max_scaling will include 13 new velocity genes, we only consider the velocity genes that is shared before and after scaling
+velocity_genes = preprocess_data(adata, min_max_scale=False).var_names.tolist()
+keep_genes = preprocess_data(adata.copy()).var_names.tolist()
+velocity_genes = set(keep_genes).intersection(velocity_genes)
 
 # %%
 tf_grn = adata.var_names[adata.uns["skeleton"].T.sum(0) != 0].tolist()
@@ -111,7 +115,7 @@ adata.var["tf"] = adata.var_names.isin(tf)
 # Select genes that are either part of the transcription factor (TF) list or `velocity_genes`
 
 # %%
-var_mask = np.union1d(adata.var_names[adata.var["tf"]], velocity_genes)
+var_mask = np.union1d(adata.var_names[adata.var["tf"]], keep_genes)
 adata = adata[:, var_mask].copy()
 
 # %%
@@ -125,7 +129,7 @@ skeleton = adata.uns["skeleton"].loc[adata.var_names.tolist(), adata.var_names.t
 adata.uns.update({"skeleton": skeleton, "regulators": adata.var_names.tolist(), "targets": adata.var_names.tolist()})
 
 # %%
-## focus on velocity genes to ensure calculation stability of scvelo and veloVI
+# focus on velocity genes to ensure calculation stability of scvelo and veloVI
 adata.var["velocity_genes"] = adata.var_names.isin(velocity_genes)
 
 # %% [markdown]
@@ -134,3 +138,5 @@ adata.var["velocity_genes"] = adata.var_names.isin(velocity_genes)
 # %%
 if SAVE_DATA:
     adata.write_h5ad(DATA_DIR / DATASET / "processed" / "adata_preprocessed.h5ad")
+
+# %%
