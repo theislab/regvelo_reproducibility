@@ -511,10 +511,9 @@ def TFScanning(
 
     ## define reference terminal states
     ct_indices = {
-                ct: adata.obs["term_states_fwd"][adata.obs["term_states_fwd"] == ct].index.tolist()
-                for ct in terminal_states
-            }
-            
+        ct: adata.obs["term_states_fwd"][adata.obs["term_states_fwd"] == ct].index.tolist() for ct in terminal_states
+    }
+
     coef = []
     pvalue = []
     for tf in TF:
