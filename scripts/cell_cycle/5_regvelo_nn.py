@@ -49,6 +49,20 @@ nn_levels = [10, 30, 50, 70, 90, 100]
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
+    """Compute the velocity confidence for a given AnnData object.
+
+    Parameters
+    ----------
+    adata : AnnData
+        Annotated data matrix (single-cell data) containing layers for velocity analysis.
+    vkey : str, optional (default="velocity")
+        Key in adata.layers corresponding to the velocity matrix.
+
+    Returns
+    -------
+    g_df : pandas.DataFrame
+        DataFrame containing the velocity confidence scores for each cell.
+    """
     adata.layers[vkey]
     scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
     scv.tl.velocity_confidence(adata, vkey=vkey)
