@@ -48,18 +48,17 @@ nn_levels = [10, 30, 50, 70, 90, 100]
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
-    """
-    Compute the velocity confidence for a given AnnData object.
+    """Compute the velocity confidence for a given AnnData object.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     adata : AnnData
         Annotated data matrix (single-cell data) containing layers for velocity analysis.
     vkey : str, optional (default="velocity")
         Key in adata.layers corresponding to the velocity matrix.
 
-    Returns:
-    --------
+    Returns
+    -------
     g_df : pandas.DataFrame
         DataFrame containing the velocity confidence scores for each cell.
     """
