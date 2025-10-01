@@ -7,20 +7,16 @@
 # ## Library imports
 
 # %%
-import numpy as np
 import pandas as pd
-import torch
 
 import anndata as ad
-import scvi
-
 import scanpy as sc
 import scvelo as scv
-from cellrank.kernels import VelocityKernel
+import scvi
 from velovi import VELOVI
 
 from rgv_tools import DATA_DIR
-from rgv_tools.benchmarking import get_grn_auroc_cc, get_time_correlation, set_output
+from rgv_tools.benchmarking import set_output
 
 # %% [markdown]
 # ## General settings
@@ -52,7 +48,22 @@ nn_levels = [10, 30, 50, 70, 90, 100]
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
-    velo = adata.layers[vkey]
+    """
+    Compute the velocity confidence for a given AnnData object.
+
+    Parameters:
+    -----------
+    adata : AnnData
+        Annotated data matrix (single-cell data) containing layers for velocity analysis.
+    vkey : str, optional (default="velocity")
+        Key in adata.layers corresponding to the velocity matrix.
+
+    Returns:
+    --------
+    g_df : pandas.DataFrame
+        DataFrame containing the velocity confidence scores for each cell.
+    """
+    adata.layers[vkey]
     scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
     scv.tl.velocity_confidence(adata, vkey=vkey)
 
