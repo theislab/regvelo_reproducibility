@@ -31,6 +31,10 @@ parts:
           - file: cell_cycle/3_comparison.ipynb
           - file: cell_cycle/3_grn_influence.ipynb
           - file: cell_cycle/3_grn_visualization.ipynb
+          - file: cell_cycle/4_data_preparation_nn.ipynb
+          - file: cell_cycle/5_regvelo_nn.ipynb
+          - file: cell_cycle/5_velovi_nn.ipynb
+          - file: cell_cycle/6_comparison_nn.ipynb
     - caption: Cell cycle (RPE1)
       chapters:
           - file: cell_cycle_rpe1/1_data_preparation_rpe1.ipynb
