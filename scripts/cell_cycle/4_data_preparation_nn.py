@@ -7,11 +7,7 @@
 # ## Library imports
 
 # %%
-from tqdm import tqdm
-
 import numpy as np
-import pandas as pd
-from scipy.sparse import csr_matrix
 
 import anndata as ad
 import scanpy as sc
