@@ -7,20 +7,17 @@
 # ## Library imports
 
 # %%
-import numpy as np
 import pandas as pd
 import torch
 
 import anndata as ad
-import scvi
 import scanpy as sc
-
 import scvelo as scv
-from cellrank.kernels import VelocityKernel
+import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR
-from rgv_tools.benchmarking import get_grn_auroc_cc, get_time_correlation, set_output
+from rgv_tools.benchmarking import set_output
 
 # %% [markdown]
 # ## General settings
@@ -52,7 +49,7 @@ nn_levels = [10, 30, 50, 70, 90, 100]
 
 # %%
 def compute_confidence(adata, vkey="velocity"):
-    velo = adata.layers[vkey]
+    adata.layers[vkey]
     scv.tl.velocity_graph(adata, vkey=vkey, n_jobs=1)
     scv.tl.velocity_confidence(adata, vkey=vkey)
 
