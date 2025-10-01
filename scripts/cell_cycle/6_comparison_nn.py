@@ -7,18 +7,14 @@
 # ## Library imports
 
 # %%
-import pandas as pd
 import numpy as np
-
-from scipy.stats import ttest_ind
+import pandas as pd
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.core import METHOD_PALETTE
-from rgv_tools.plotting._significance import add_significance, get_significance
 
 # %% [markdown]
 # ## General settings
