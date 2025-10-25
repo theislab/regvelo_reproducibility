@@ -82,7 +82,7 @@ def GlobalTimeDPTordering(adata: ad.AnnData):
     sc.pp.neighbors(adata, n_neighbors=30, metric="correlation", use_rep="X")
     sc.tl.diffmap(adata)
 
-    adata.uns["iroot"] = np.argmin(np.mean(adata.X, axis=1))
+    adata.uns["iroot"] = (adata.layers["fit_t"] ** 2).mean(1).argmin()
     sc.tl.dpt(adata)
 
     adata.obs["latent_time"] = adata.obs["dpt_pseudotime"].copy()
