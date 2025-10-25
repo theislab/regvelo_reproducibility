@@ -72,7 +72,6 @@ MODEL = DATA_DIR / DATASET / "processed" / "rgv_model"
 # %% [markdown]
 # ## Define function
 
-
 # %%
 def shuffle_binary_grn(GRN: pd.DataFrame, TFs: list) -> pd.DataFrame:
     """
@@ -95,7 +94,7 @@ def shuffle_binary_grn(GRN: pd.DataFrame, TFs: list) -> pd.DataFrame:
     -------
     pd.DataFrame
         GRN with TF row labels shuffled and all column labels shuffled.
-        
+
     """
     new_row_labels = list(GRN.index)
     new_col_labels = list(GRN.columns)
