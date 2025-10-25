@@ -8,6 +8,7 @@
 import copy
 
 from inferelator.postprocessing.model_metrics import RankSummaryPR, RankSummingMetric
+
 import numpy as np
 import pandas as pd
 import sklearn
@@ -50,8 +51,7 @@ RankSummingMetricCopy = copy.deepcopy(RankSummingMetric)
 
 
 def get_calibration_score(to_eval, gold_standard, filter_method="overlap", method="auroc"):
-    """
-    Compute a calibration score comparing predictions to a gold standard.
+    """Compute a calibration score comparing predictions to a gold standard.
 
     Parameters
     ----------
