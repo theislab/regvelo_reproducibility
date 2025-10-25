@@ -5,30 +5,20 @@
 # ## Library import
 
 # %%
-import numpy as np
-import pandas as pd
-import torch
-from sklearn.metrics import roc_auc_score
-import scanpy as sc
-
-import sklearn
 import copy
 
-import anndata as ad
+from inferelator.postprocessing.model_metrics import RankSummaryPR, RankSummingMetric
+import numpy as np
+import pandas as pd
+import sklearn
+
+from matplotlib import pyplot as plt
+
+import scanpy as sc
 import scvi
 from regvelo import REGVELOVI
 
-import mplscience
-import seaborn as sns
-from matplotlib import pyplot as plt
-
 from rgv_tools import DATA_DIR, FIG_DIR
-
-from itertools import product, permutations
-from operator import pos
-
-import copy
-from inferelator.postprocessing.model_metrics import RankSummingMetric, RankSummaryPR
 
 # %% [markdown]
 # ## General setting
@@ -60,6 +50,25 @@ RankSummingMetricCopy = copy.deepcopy(RankSummingMetric)
 
 
 def get_calibration_score(to_eval, gold_standard, filter_method="overlap", method="auroc"):
+    """
+    Compute a calibration score comparing predictions to a gold standard.
+
+    Parameters
+    ----------
+    to_eval : list or DataFrame
+        Predictions or scores to evaluate.
+    gold_standard : list or DataFrame
+        True labels for evaluation.
+    filter_method : str, optional
+        Method for filtering data before scoring (default is "overlap").
+    method : str, optional
+        Scoring metric: "auroc" or "auprc" (default is "auroc").
+
+    Returns
+    -------
+    float
+        Area under the ROC or PR curve as the calibration score.
+    """
     metrics = RankSummingMetricCopy([to_eval], gold_standard, filter_method)
 
     if method == "auprc":
