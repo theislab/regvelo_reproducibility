@@ -6,14 +6,12 @@
 
 # %%
 import pandas as pd
-from scipy.stats import ttest_ind
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.core import METHOD_PALETTE
 
 # %% [markdown]
 # ## Constants
