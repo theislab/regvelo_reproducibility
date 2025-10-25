@@ -75,9 +75,12 @@ MODEL = DATA_DIR / DATASET / "processed" / "rgv_model"
 
 # %%
 def shuffle_binary_grn(GRN: pd.DataFrame, TFs: list) -> pd.DataFrame:
-    """Shuffle a binary GRN matrix by randomizing:
+    """
+    Shuffle a binary GRN matrix by randomizing:
+
       - Only the TF (row) labels among themselves.
       - All column (target gene) labels.
+
     The GRN matrix values remain unchanged.
 
     Parameters
@@ -93,7 +96,6 @@ def shuffle_binary_grn(GRN: pd.DataFrame, TFs: list) -> pd.DataFrame:
     -------
     pd.DataFrame
         GRN with TF row labels shuffled and all column labels shuffled.
-
     """
     new_row_labels = list(GRN.index)
     new_col_labels = list(GRN.columns)
