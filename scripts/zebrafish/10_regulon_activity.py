@@ -4,18 +4,17 @@
 # %% [markdown]
 # ## Library import
 
-# %%
-import scanpy as sc
-import scvelo as scv
-
-import cellrank as cr
-import pandas as pd
-import numpy as np
-
 import decoupler as dc
 
-from rgv_tools import DATA_DIR, FIG_DIR
+import numpy as np
+import pandas as pd
+
 import matplotlib.pyplot as plt
+
+import cellrank as cr
+import scanpy as sc
+
+from rgv_tools import DATA_DIR, FIG_DIR
 
 # %% [markdown]
 # ## General settings
