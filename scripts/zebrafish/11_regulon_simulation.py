@@ -4,31 +4,28 @@
 # %% [markdown]
 # ## Library imports
 
+
 # %%
 import numpy as np
 import pandas as pd
 import scipy
 import torch
-import random
-import anndata as ad
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
-import sklearn
 
+import anndata as ad
 import cellrank as cr
 import scanpy as sc
 import scvi
-import regvelo
 from regvelo import REGVELOVI
-import regvelo as rgv
 
 from rgv_tools import DATA_DIR, FIG_DIR
 from rgv_tools.benchmarking import set_output
-from rgv_tools.perturbation import in_silico_block_simulation
-from rgv_tools.perturbation import inferred_GRN, abundance_test
-from rgv_tools.perturbation import get_list_name, TFScanning
+from rgv_tools.perturbation import (
+    in_silico_block_simulation,
+)
 
 # %% [markdown]
 # ## General settings
@@ -77,14 +74,14 @@ MODEL = DATA_DIR / DATASET / "processed" / "rgv_model"
 
 # %%
 def cosine_similarity(vector_a, vector_b):
-    """
-    Calculate the cosine similarity between two vectors.
+    """Calculate the cosine similarity between two vectors.
 
     Args:
         vector_a (np.array): First vector.
         vector_b (np.array): Second vector.
 
-    Returns:
+    Returns
+    -------
         float: Cosine similarity between vector_a and vector_b.
     """
     dot_product = np.dot(vector_a, vector_b)
