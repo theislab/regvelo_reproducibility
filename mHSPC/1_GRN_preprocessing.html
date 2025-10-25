@@ -1,0 +1,1135 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Preprocess mHSPC datasets &#8212; RegVelo&#39;s reproducibility repository</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'mHSPC/1_GRN_preprocessing';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Run RegVelo on mHSPC datasets" href="2_regvelo.html" />
+    <link rel="prev" title="Evaluate latent time prediction via redefining global latent time" href="../cell_cycle_rpe1/5_latent_time.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">RegVelo's reproducibility repository</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    RegVelo’s reproducibility repository
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Complexity scale analysis with mouse neural crest and Schwann cell datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/1_split_scaling.html">Split mouse neural crest data into different scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/2_scenic_stage.html">Construct pySCENIC GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_grn_preprocessing.html">Preprocess GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_regvelo.html">RegVelo-based analysis on murine NCC cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_scvelo.html">scVelo application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/3_velovi.html">veloVI application on murine neural crest data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cbc.html">Benchmark transition from hub cells to terminal states</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_cell_fate_consistency.html">Evaluate consistency of velocity and cell fate probability across scale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scale_mouse_neural_crest/4_tsi.html">Benchmark Terminal State Identification</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (U2OS)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/1_data_preparation.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_scvelo.html">scVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovi.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_tfvelo.html">TFvelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_unitvelo.html">UniTVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae_fullvb.html">veloVAE (fullvb) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_velovae.html">veloVAE (VAE) benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_cell2fate.html">cell2fate benchmark on cell cycle data</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_dpt.html">DPT benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_celloracle.html">CellOracle benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_grnboost2.html">GRNBoost2 benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_splicejac.html">SpliceJAC benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/2_correlation.html">Correlation benchmark on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_comparison.html">Performance comparison of inference on cell cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_influence.html">GRN influence on velocity inference with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/3_grn_visualization.html">Visualize GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/4_data_preparation_nn.html">Prepare datasets with different neighborhood size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/5_regvelo_nn.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/5_velovi_nn.html">veloVI benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle/6_comparison_nn.html">Performance comparison of inference on cell cycle</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cell cycle (RPE1)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/1_data_preparation_rpe1.html">Cell cycle data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/2_regvelo.html">RegVelo benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/3_celldancer.html">CellDancer benchmark on cell cycle data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/4_alpha_prediction.html">Benchmark transcription rate prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cell_cycle_rpe1/5_latent_time.html">Evaluate latent time prediction via redefining global latent time</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">mouse hematopoietic stem and progenitor cell (mHSPC)</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Preprocess mHSPC datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_regvelo.html">Run RegVelo on mHSPC datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_tfvelo.html">Run TFvelo on mHSPC datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_GRN_benchmark.html">Run other GRN inference methods on mHSPC dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_GRN_performance_evaluation.html">Benchmark GRN inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_uncertainty_estimate.html">GRN calibration evaluation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pancreatic endocrinogenesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/1_preprocessing.html">Basic preprocessing of the pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_regvelo.html">RegVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/2_scvelo.html">scVelo-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/3_comparison_tsi.html">TSI comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_cell_fate_analysis.html">Pancreatic endocrine cell fate analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/4_test_gene_regulation.html">Regulation is important for terminal state identification in pancreatic endocrine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/5_cell_cycle_analysis.html">E2f1 perturbation on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/6_e2f1_targets_analysis.html">Evaluate RegVelo predicted E2f1 downstream targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/7_repeat_regvelo.html">Robustness of RegVelo’s perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/8_perturbation_screening.html">Perturbation prediction on pancreatic endocrine via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/9_repeat_velovi.html">veloVI-based analyis of pancreatic endocrine data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/10_benchmark_identifiability.html">Benchmark cell fate and velocity identifiability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_neurod2_analysis.html">Analyzing perturbation simulation results on pancreatic endocrine dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pancreatic_endocrinogenesis/11_screening_neurod2_targets.html">Neurod2 target analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hematopoiesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/1_preprocessing.html">Basic preprocessing and analysis of the human hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo.html">Regularized RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_regvelo_unregularized.html">RegVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_scvelo.html">scVelo-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/2_velovi.html">veloVI-based analysis of hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_gene_ranking.html">Comparing lineage-associated gene rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_uncertainty.html">Comparing uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/3_comparison_velocity.html">Performance comparison of inference on hematopoiesis dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_dynamo.html">Dynamo-based drivers analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/4_perturbation.html">Perturbation prediction on hematopoiesis dataset via RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/5_comparison_drivers.html">Comparison of driver TF ranking performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/6_cell_fate_motif.html">PU.1 and GATA1 perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/7_robustness.html">Repeat run RegVelo and veloVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hematopoiesis/8_comparison_robustness.html">Compare estimated velocity robustness between RegVelo and veloVI</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Zebrafish neural crest</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/1_ss3_analysis.html">Basic preprocessing and analysis of the zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_regvelo.html">RegVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_scvelo.html">scVelo-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/2_velovi.html">veloVI-based analyis of zebrafish data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/3_tsi_comparison.html">Terminal state identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_driver_prediction.html">Early driver perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/4_perturbation.html">TFs perturbation prediction with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/5_driver_prediction_comparison.html">Driver ranking benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/6_regvelo_perturbation.html">Using RegVelo to predict perturbation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/7_perturbation_benchmark.html">Perturbation prediction benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/8_perturb_seq_analysis.html">Perturb-seq data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/9_elf1_motif_analysis.html">elf1 perturbation simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/10_regulon_activity.html">Visualize regulon activity and expression dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/11_regulon_simulation.html">Run simple simulation via perturb nr2f5 targets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish/12_regvelo_ablation.html">Perform ablation study to the regvelo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Smart-seq3 and perturb-seq combined analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/1_Perturb_seq_scanpy.html">Reannotation of pigment cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/2_perturb_seq_ts.html">Evaluate the cell fate perturbation significance on perturb-seq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/3_regvelo_perturbation.html">Compute density depletion likelihood with RegVelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/3_dynamo.html">Dynamo-based perturbation analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/3_celloracle.html">CellOracle-based perturbation prediction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zebrafish_perturb/4_benchmark.html">Benchmark perturbation prediction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Toy GRN data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/1_simulation.html">Simulation of toy GRN and cellular dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_regvelo.html">RegVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_scvelo.html">scVelo benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_velovi.html">veloVI benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_dpt.html">DPT benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_celloracle.html">CellOracle benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_grnboost2.html">GRNBoost2 benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/2_correlation.html">Correlation benchmark on toy GRN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_comparison.html">Performance comparison of inference on toy GRN data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../toy_grn/3_plot_toy_simulation_benchmark.html">Plot the results of Toy simulate results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dyngen-simulated data</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/1_simulation.html">Simulate synthetic datasets with dyngen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/2_data_conversion.html">Dyngen data preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_regvelo.html">RegVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_scvelo.html">scVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovi.html">veloVI benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_unitvelo.html">UniTVelo benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae_fullvb.html">VeloVAE (fullvb) benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_velovae.html">VeloVAE benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_cell2fate.html">cell2fate benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_celloracle.html">CellOracle benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_grnboost2.html">GRNBoost2 benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_splicejac.html">spliceJAC benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/3_correlation.html">Correlation benchmark on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/4_comparison.html">Performance comparison of inference on dyngen data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_velovi_benchmark.html">Using veloVI as baseline for RegVelo identifiability test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_regvelo_benchmark.html">Prior GRN sensitivity evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dyngen/5_robustness_evaluation.html">Plot downstream metrics</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/theislab/regvelo_reproducibility" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/mHSPC/1_GRN_preprocessing.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Preprocess mHSPC datasets</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-dataset">Processing Dataset</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="preprocess-mhspc-datasets">
+<h1>Preprocess mHSPC datasets<a class="headerlink" href="#preprocess-mhspc-datasets" title="Link to this heading">#</a></h1>
+<section id="library-imports">
+<h2>Library imports<a class="headerlink" href="#library-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scvelo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">velovi</span><span class="w"> </span><span class="kn">import</span> <span class="n">preprocess_data</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rgv_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_csv from `anndata` is deprecated. Import anndata.io.read_csv instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_excel from `anndata` is deprecated. Import anndata.io.read_excel instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_hdf from `anndata` is deprecated. Import anndata.io.read_hdf instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_loom from `anndata` is deprecated. Import anndata.io.read_loom instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_mtx from `anndata` is deprecated. Import anndata.io.read_mtx instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_text from `anndata` is deprecated. Import anndata.io.read_text instead.
+  warnings.warn(msg, FutureWarning)
+/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/anndata/utils.py:429: FutureWarning: Importing read_umi_tools from `anndata` is deprecated. Import anndata.io.read_umi_tools instead.
+  warnings.warn(msg, FutureWarning)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="general-settings">
+<h2>General settings<a class="headerlink" href="#general-settings" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s2">&quot;mHSPC&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SAVE_DATA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-loading">
+<h2>Data loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_loom</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;raw&quot;</span> <span class="o">/</span> <span class="s2">&quot;Nestorowa.loom&quot;</span><span class="p">)</span>
+<span class="n">adata_p</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;raw&quot;</span> <span class="o">/</span> <span class="s2">&quot;adata_nestorowa.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_p</span><span class="o">.</span><span class="n">obs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cell_IDs</th>
+      <th>cell_types_IDs</th>
+      <th>cell_types_broad</th>
+      <th>cell_types_fine</th>
+      <th>cell_types_broad_cleaned</th>
+      <th>n_counts</th>
+      <th>n_genes</th>
+      <th>mito_ratio</th>
+      <th>initial_size_spliced</th>
+      <th>initial_size_unspliced</th>
+      <th>initial_size</th>
+      <th>size_factors_x</th>
+      <th>size_factors_s</th>
+      <th>size_factors_u</th>
+      <th>leiden</th>
+      <th>velocity_self_transition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>SRR3558184</th>
+      <td>HSPC_001_rep</td>
+      <td>HSPC</td>
+      <td>MPP_broad, STHSC_broad</td>
+      <td>None</td>
+      <td>MPP_broad</td>
+      <td>1404060.0</td>
+      <td>5826</td>
+      <td>0.0</td>
+      <td>1404060</td>
+      <td>224383</td>
+      <td>1404060.0</td>
+      <td>2.722215</td>
+      <td>2.722215</td>
+      <td>2.770269</td>
+      <td>1</td>
+      <td>0.113736</td>
+    </tr>
+    <tr>
+      <th>SRR3558185</th>
+      <td>HSPC_002_rep</td>
+      <td>HSPC</td>
+      <td>LTHSC_broad</td>
+      <td>LTHSC</td>
+      <td>LTHSC_broad</td>
+      <td>130334.0</td>
+      <td>4730</td>
+      <td>0.0</td>
+      <td>130334</td>
+      <td>19788</td>
+      <td>130334.0</td>
+      <td>0.242590</td>
+      <td>0.242590</td>
+      <td>0.211278</td>
+      <td>1</td>
+      <td>0.106622</td>
+    </tr>
+    <tr>
+      <th>SRR3558186</th>
+      <td>HSPC_003_rep</td>
+      <td>HSPC</td>
+      <td>MPP_broad, MPP3_broad</td>
+      <td>None</td>
+      <td>MPP_broad</td>
+      <td>627148.0</td>
+      <td>6372</td>
+      <td>0.0</td>
+      <td>627148</td>
+      <td>84188</td>
+      <td>627148.0</td>
+      <td>1.043037</td>
+      <td>1.043037</td>
+      <td>1.068530</td>
+      <td>3</td>
+      <td>0.022092</td>
+    </tr>
+    <tr>
+      <th>SRR3558187</th>
+      <td>HSPC_004_rep</td>
+      <td>HSPC</td>
+      <td>LMPP_broad</td>
+      <td>LMPP</td>
+      <td>LMPP_broad</td>
+      <td>317301.0</td>
+      <td>5536</td>
+      <td>0.0</td>
+      <td>317301</td>
+      <td>54361</td>
+      <td>317301.0</td>
+      <td>0.548139</td>
+      <td>0.548139</td>
+      <td>0.602953</td>
+      <td>0</td>
+      <td>0.158245</td>
+    </tr>
+    <tr>
+      <th>SRR3558189</th>
+      <td>HSPC_006_rep</td>
+      <td>HSPC</td>
+      <td>LMPP_broad</td>
+      <td>LMPP</td>
+      <td>LMPP_broad</td>
+      <td>335563.0</td>
+      <td>6270</td>
+      <td>0.0</td>
+      <td>335563</td>
+      <td>62426</td>
+      <td>335563.0</td>
+      <td>0.612579</td>
+      <td>0.612579</td>
+      <td>0.806794</td>
+      <td>0</td>
+      <td>0.147797</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>SRR3560099</th>
+      <td>Prog_848_rep</td>
+      <td>Prog</td>
+      <td>GMP_broad</td>
+      <td>GMP</td>
+      <td>GMP_broad</td>
+      <td>194009.0</td>
+      <td>5750</td>
+      <td>0.0</td>
+      <td>194009</td>
+      <td>39021</td>
+      <td>194009.0</td>
+      <td>0.340196</td>
+      <td>0.340196</td>
+      <td>0.453426</td>
+      <td>9</td>
+      <td>0.174135</td>
+    </tr>
+    <tr>
+      <th>SRR3560100</th>
+      <td>Prog_849_rep</td>
+      <td>Prog</td>
+      <td>CMP_broad</td>
+      <td>CMP</td>
+      <td>CMP_broad</td>
+      <td>240624.0</td>
+      <td>5787</td>
+      <td>0.0</td>
+      <td>240624</td>
+      <td>32157</td>
+      <td>240624.0</td>
+      <td>0.442644</td>
+      <td>0.442644</td>
+      <td>0.396637</td>
+      <td>6</td>
+      <td>0.084609</td>
+    </tr>
+    <tr>
+      <th>SRR3560101</th>
+      <td>Prog_850_rep</td>
+      <td>Prog</td>
+      <td>MEP_broad</td>
+      <td>None</td>
+      <td>MEP_broad</td>
+      <td>608044.0</td>
+      <td>7619</td>
+      <td>0.0</td>
+      <td>608044</td>
+      <td>41827</td>
+      <td>608044.0</td>
+      <td>0.868808</td>
+      <td>0.868808</td>
+      <td>0.641310</td>
+      <td>2</td>
+      <td>0.010177</td>
+    </tr>
+    <tr>
+      <th>SRR3560102</th>
+      <td>Prog_851_rep</td>
+      <td>Prog</td>
+      <td>CMP_broad</td>
+      <td>CMP</td>
+      <td>CMP_broad</td>
+      <td>323195.0</td>
+      <td>6473</td>
+      <td>0.0</td>
+      <td>323195</td>
+      <td>86099</td>
+      <td>323195.0</td>
+      <td>0.534781</td>
+      <td>0.534781</td>
+      <td>1.087060</td>
+      <td>6</td>
+      <td>0.129851</td>
+    </tr>
+    <tr>
+      <th>SRR3560103</th>
+      <td>Prog_852_rep</td>
+      <td>Prog</td>
+      <td>MEP_broad</td>
+      <td>MEP</td>
+      <td>MEP_broad</td>
+      <td>516834.0</td>
+      <td>7249</td>
+      <td>0.0</td>
+      <td>516834</td>
+      <td>35891</td>
+      <td>516834.0</td>
+      <td>0.788027</td>
+      <td>0.788027</td>
+      <td>0.523927</td>
+      <td>4</td>
+      <td>0.212272</td>
+    </tr>
+  </tbody>
+</table>
+<p>1772 rows × 16 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;onefilepercell_SRR3556264Aligned_and_others_KPB9A:SRR3556264Aligned.out.bam&#39;,
+       &#39;onefilepercell_SRR3556264Aligned_and_others_KPB9A:SRR3556265Aligned.out.bam&#39;,
+       &#39;onefilepercell_SRR3556264Aligned_and_others_KPB9A:SRR3556266Aligned.out.bam&#39;,
+       &#39;onefilepercell_SRR3556264Aligned_and_others_KPB9A:SRR3556267Aligned.out.bam&#39;,
+       &#39;onefilepercell_SRR3556264Aligned_and_others_KPB9A:SRR3556268Aligned.out.bam&#39;],
+      dtype=&#39;object&#39;, name=&#39;CellID&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;onefilepercell_SRR3556264Aligned_and_others_KPB9A:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span>
+<span class="p">]</span>
+<span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Aligned.out.bam&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span> <span class="o">=</span> <span class="n">adata_velo</span><span class="p">[</span><span class="n">adata_p</span><span class="o">.</span><span class="n">obs_names</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="n">adata_p</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;cell_IDs&quot;</span><span class="p">]</span>
+<span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_rep&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;HSPC_001&#39;, &#39;HSPC_002&#39;, &#39;HSPC_003&#39;, &#39;HSPC_004&#39;, &#39;HSPC_006&#39;, &#39;HSPC_008&#39;,
+       &#39;HSPC_009&#39;, &#39;HSPC_011&#39;, &#39;HSPC_012&#39;, &#39;HSPC_013&#39;,
+       ...
+       &#39;Prog_843&#39;, &#39;Prog_844&#39;, &#39;Prog_845&#39;, &#39;Prog_846&#39;, &#39;Prog_847&#39;, &#39;Prog_848&#39;,
+       &#39;Prog_849&#39;, &#39;Prog_850&#39;, &#39;Prog_851&#39;, &#39;Prog_852&#39;],
+      dtype=&#39;object&#39;, length=1772)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">var_names_make_unique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">proportions</span><span class="p">(</span><span class="n">adata_velo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e03c50cda00a2bc8aaff863654b1f6325bcef218886e55266c1b464171aa9201.png" src="../_images/e03c50cda00a2bc8aaff863654b1f6325bcef218886e55266c1b464171aa9201.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_and_normalize</span><span class="p">(</span><span class="n">adata_velo</span><span class="p">,</span> <span class="n">min_shared_counts</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filtered out 18356 genes that are detected 20 counts (shared).
+Normalized count data: X, spliced, unspliced.
+Extracted 3000 highly variable genes.
+Logarithmized X.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/weixu.wang/miniconda3/envs/regvelo_test/lib/python3.10/site-packages/scvelo/preprocessing/utils.py:705: DeprecationWarning: `log1p` is deprecated since scVelo v0.3.0 and will be removed in a future version. Please use `log1p` from `scanpy.pp` instead.
+  log1p(adata)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="processing-dataset">
+<h2>Processing Dataset<a class="headerlink" href="#processing-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata_subset</span> <span class="o">=</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1">## set annotation</span>
+<span class="n">adata_p</span><span class="o">.</span><span class="n">obs_names</span> <span class="o">=</span> <span class="n">adata_velo</span><span class="o">.</span><span class="n">obs_names</span>
+<span class="n">adata_subset</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="n">adata_p</span><span class="o">.</span><span class="n">obs</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">)</span>
+
+<span class="c1">## Velocity pipeline</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_pcs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">scv</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">)</span>
+<span class="n">adata_subset</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">,</span> <span class="n">filter_on_r2</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">SAVE_DATA</span><span class="p">:</span>
+    <span class="n">adata_subset</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">/</span> <span class="n">DATASET</span> <span class="o">/</span> <span class="s2">&quot;processed&quot;</span> <span class="o">/</span> <span class="s2">&quot;mHSC_ExpressionData.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 1772 × 3000
+    obs: &#39;cell_IDs&#39;, &#39;cell_types_IDs&#39;, &#39;cell_types_broad&#39;, &#39;cell_types_fine&#39;, &#39;cell_types_broad_cleaned&#39;, &#39;n_counts&#39;, &#39;n_genes&#39;, &#39;mito_ratio&#39;, &#39;initial_size_spliced&#39;, &#39;initial_size_unspliced&#39;, &#39;initial_size&#39;, &#39;size_factors_x&#39;, &#39;size_factors_s&#39;, &#39;size_factors_u&#39;, &#39;leiden&#39;, &#39;velocity_self_transition&#39;
+    var: &#39;Accession&#39;, &#39;Chromosome&#39;, &#39;End&#39;, &#39;Start&#39;, &#39;Strand&#39;, &#39;gene_count_corr&#39;, &#39;means&#39;, &#39;dispersions&#39;, &#39;dispersions_norm&#39;, &#39;highly_variable&#39;
+    uns: &#39;log1p&#39;
+    layers: &#39;matrix&#39;, &#39;ambiguous&#39;, &#39;spanning&#39;, &#39;spliced&#39;, &#39;unspliced&#39;
+computing PCA
+    with n_comps=50
+    finished (0:00:02)
+computing neighbors
+    using &#39;X_pca&#39; with n_pcs = 30
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-10-25 11:03:55.896387: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1761383037.019661 1275922 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1761383037.440171 1275922 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    finished (0:01:55)
+computing moments based on connectivities
+    finished (0:00:00) --&gt; added 
+    &#39;Ms&#39; and &#39;Mu&#39;, moments of un/spliced abundances (adata.layers)
+computing velocities
+    finished (0:00:00) --&gt; added 
+    &#39;velocity&#39;, velocity vectors for each individual cell (adata.layers)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-regvelo_test-py"
+        },
+        kernelOptions: {
+            name: "conda-env-regvelo_test-py",
+            path: "./mHSPC"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-regvelo_test-py'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../cell_cycle_rpe1/5_latent_time.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Evaluate latent time prediction via redefining global latent time</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2_regvelo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Run RegVelo on mHSPC datasets</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-imports">Library imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-settings">General settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-dataset">Processing Dataset</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Weixu Wang, Philipp Weiler
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
