@@ -4,7 +4,6 @@
 # %% [markdown]
 # ## Library imports
 
-
 # %%
 import numpy as np
 import pandas as pd
@@ -23,9 +22,7 @@ from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
 from rgv_tools.benchmarking import set_output
-from rgv_tools.perturbation import (
-    in_silico_block_simulation,
-)
+from rgv_tools.perturbation import in_silico_block_simulation
 
 # %% [markdown]
 # ## General settings
