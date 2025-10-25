@@ -10,29 +10,26 @@
 # %% [markdown]
 # ## Library imports
 
+
 # %%
 import numpy as np
 import pandas as pd
-import scipy
 import torch
-import random
+from sklearn.metrics import roc_auc_score
 
 import matplotlib.pyplot as plt
 import mplscience
 import seaborn as sns
 
-import cellrank as cr
 import scanpy as sc
 import scvi
-import regvelo
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.benchmarking import set_output
-from rgv_tools.perturbation import in_silico_block_simulation
-from rgv_tools.perturbation import inferred_GRN
-from rgv_tools.perturbation import get_list_name, TFScanning
-from sklearn.metrics import roc_auc_score
+from rgv_tools.perturbation import (
+    get_list_name,
+    TFScanning,
+)
 
 # %% [markdown]
 # ## General settings
