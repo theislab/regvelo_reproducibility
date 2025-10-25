@@ -42,7 +42,7 @@ parts:
           - file: cell_cycle_rpe1/3_celldancer.ipynb
           - file: cell_cycle_rpe1/4_alpha_prediction.ipynb
           - file: cell_cycle_rpe1/5_latent_time.ipynb
-    - caption: mouse hematopoietic stem and progenitor cell (mHSPC) 
+    - caption: mouse hematopoietic stem and progenitor cell (mHSPC)
       chapters:
           - file: mHSPC/1_GRN_preprocessing.ipynb
           - file: mHSPC/2_regvelo.ipynb
