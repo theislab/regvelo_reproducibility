@@ -5,20 +5,15 @@
 # ## Library imports
 
 # %%
+from itertools import permutations, product
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
-from arboreto.algo import grnboost2
+
 import celloracle as co
-
-from itertools import product, permutations
-from operator import pos
-
-import numpy as np
-
 import scanpy as sc
-
-import anndata as ad
+from arboreto.algo import grnboost2
 
 from rgv_tools import DATA_DIR
 
@@ -47,10 +42,10 @@ if SAVE_DATA:
 
 # %%
 def unsigned(true_edges: pd.DataFrame, pred_edges: pd.DataFrame, type: str = "alledges") -> tuple[float, float, float]:
-    """
-    Compare true vs predicted edges (unsigned) and compute precision/recall metrics.
+    """Compare true vs predicted edges (unsigned) and compute precision/recall metrics.
 
-    Returns:
+    Returns
+    -------
         tuple: (eprec, erec, eprec_ratio)
     """
     true_edges_copy = true_edges.copy()
@@ -83,7 +78,7 @@ def unsigned(true_edges: pd.DataFrame, pred_edges: pd.DataFrame, type: str = "al
 
     pred_edges_copy["Edges"] = pred_edges_copy["Gene1"] + "|" + pred_edges_copy["Gene2"]
     pred_edges_copy = pred_edges_copy[pred_edges_copy["Edges"].isin(true_edges_dict)]
-    pred_edges_copy_copy = pred_edges_copy.copy()
+    pred_edges_copy.copy()
 
     if not pred_edges_copy.shape[0] == 0:
         pred_edges_copy.loc[:, "EdgeWeight"] = pred_edges_copy.EdgeWeight.round(6).abs()
@@ -114,10 +109,10 @@ def unsigned(true_edges: pd.DataFrame, pred_edges: pd.DataFrame, type: str = "al
 
 
 def calculate_auroc(inferred_scores_df: pd.DataFrame, ground_truth_df: pd.DataFrame) -> float:
-    """
-    Calculate AUROC comparing inferred edge scores against ground truth.
+    """Calculate AUROC comparing inferred edge scores against ground truth.
 
-    Returns:
+    Returns
+    -------
         float: AUROC score.
     """
     ground_truth_set = set(zip(ground_truth_df["Gene1"], ground_truth_df["Gene2"]))
