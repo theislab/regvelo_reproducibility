@@ -3,8 +3,6 @@
 
 # %% [markdown]
 # ## Library import
-
-# %%
 import scanpy as sc
 import scvelo as scv
 
