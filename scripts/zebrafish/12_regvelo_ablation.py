@@ -26,10 +26,7 @@ import scvi
 from regvelo import REGVELOVI
 
 from rgv_tools import DATA_DIR, FIG_DIR
-from rgv_tools.perturbation import (
-    get_list_name,
-    TFScanning,
-)
+from rgv_tools.perturbation import get_list_name, TFScanning
 
 # %% [markdown]
 # ## General settings
@@ -79,6 +76,7 @@ MODEL = DATA_DIR / DATASET / "processed" / "rgv_model"
 # %%
 def shuffle_binary_grn(GRN: pd.DataFrame, TFs: list) -> pd.DataFrame:
     """
+    
     Shuffle a binary GRN matrix by randomizing:
       - Only the TF (row) labels among themselves.
       - All column (target gene) labels.
