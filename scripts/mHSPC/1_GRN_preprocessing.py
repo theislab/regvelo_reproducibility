@@ -7,10 +7,9 @@
 # %%
 import scanpy as sc
 import scvelo as scv
-import pandas as pd
-
 from velovi import preprocess_data
-from rgv_tools import DATA_DIR, FIG_DIR
+
+from rgv_tools import DATA_DIR
 
 # %% [markdown]
 # ## General settings
