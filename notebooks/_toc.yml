@@ -91,6 +91,9 @@ parts:
           - file: zebrafish/7_perturbation_benchmark.ipynb
           - file: zebrafish/8_perturb_seq_analysis.ipynb
           - file: zebrafish/9_elf1_motif_analysis.ipynb
+          - file: zebrafish/10_regulon_activity.ipynb
+          - file: zebrafish/11_regulon_simulation.ipynb
+          - file: zebrafish/12_regvelo_ablation.ipynb
     - caption: Smart-seq3 and perturb-seq combined analysis
       chapters:
           - file: zebrafish_perturb/1_Perturb_seq_scanpy.ipynb
