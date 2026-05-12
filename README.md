@@ -1,6 +1,6 @@
 # RegVelo's reproducibility repository
 
-This repository contains the jupyter notebooks to reproduce results shown in [RegVelo: gene-regulatory-informed dynamics of single cells](https://doi.org/10.1101/2024.12.11.627935) and has been rendered as a Jupyter book [here](https://theislab.github.io/regvelo_reproducibility/index.html).
+This repository contains the jupyter notebooks to reproduce results shown in [RegVelo: gene-regulatory-informed dynamics of single cells](https://www.cell.com/cell/fulltext/S0092-8674(26)00457-5) and has been rendered as a Jupyter book [here](https://theislab.github.io/regvelo_reproducibility/index.html).
 All datasets are freely available via a [FigShare project](https://figshare.com/projects/RegVelo_reproducibility_datasets/226860).
 
 ## Installation
